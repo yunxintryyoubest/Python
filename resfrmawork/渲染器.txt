@@ -1,0 +1,2 @@
+render_class=[JSONRender]
+只返回的是json的格式的字符串

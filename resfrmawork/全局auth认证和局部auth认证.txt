@@ -1,0 +1,62 @@
+url：    
+url(r'^Bookview/$',views.Bookview.as_view()),
+
+
+
+from    rest_framework  import exceptions
+##rest_frmae专门的异常处理
+from   rest_framework.authentication import   BaseAuthentication
+#######父类里面有封装这个header方法##在这里定制了一个认证的类
+class TokenAuth(BaseAuthentication):
+    def  authenticate(self, request):
+        pwd=request.GET.get('token')##这个是get的请求方式
+        toeke=Token.objects.filter(pwd=pwd).first()
+        print('token是',toeke)
+        if   toeke:
+            return   toeke,toeke
+        else:
+            raise  exceptions.AuthenticationFailed('验证失败')
+
+    # def  authenticate_header(self,request):
+    #     pass
+
+
+class Bookview(APIView):
+    authentication_classes = [TokenAuth,]
+    # permission_classes = []
+    # throttle_classes = []
+    #频率
+
+
+
+
+
+
+
+
+当进行这个全局的auth认证的时候
+
+
+
+在settings里面配置这个静态方法：
+
+
+##全局配置认证组件
+REST_FRAMEWORK={
+    'DEFAULT_AUTHENTICATION_CLASS':['app01.views.TokenAuth',]
+
+}
+##自己配置这个路径，后面的这个列表时这样处理的auth()     for  atuh  in  self.authentication_classes，得到的是一个实例对象，TokenAuth()
+'''
+self.authenticte  [TokenAuth(),TokenAuth(),TokenAuth(),TokenAuth()..]一个一个的认证对象
+
+'''
+
+
+当配置了全局的认证的组件的时候：
+class Bookview(APIView):
+    #authentication_classes = [TokenAuth,]
+下面的这个局部的认证的组件就不用加上去了,默认会执行全局的认证组件
+
+
+

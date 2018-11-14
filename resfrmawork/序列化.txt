@@ -1,0 +1,124 @@
+序列化的方式：
+第一种：
+将对象转化为字符串
+json.dumps
+
+
+list（obj）这个可以序列化操作
+
+第二种方式：
+from  django.forms.models  import  model_to_dict
+model_to_dict(obj)
+将对象转化为其他形式
+
+
+注意：在前后端的时候，会进行前后端的分离，之间进行的交流都会是字符串的时候，已经序列化好的数据
+
+
+
+注明一下，queryset是不能序列化的对象
+有的类型是不能被序列化操作的
+
+
+可以被序列化的：
+字典，列表，等，对象（类，函数）
+
+
+不能被序列化：
+queryset对象
+
+
+
+
+
+第四种：djaon里面的序列化的组件
+from  django.core  import serializers
+book_objs=Book.objects.all()
+
+print(type(book_objs))
+print(book_objs)
+
+# book_objs=serializers.serialize('json',book_objs)##第一个参数是json的类型，第二个是要传入的字符串,注意，只能是一个对象,queryset不能,对象不能被序列化
+# # 元祖形式的不能被序列化（这个会和转化相对的，后面不能values_list，元祖的形式
+#
+
+
+
+
+
+
+
+重点：resframework自带的序列化的组件
+第三种：
+resfamework里面自带的组件：
+obj=Book.objects.all()
+from  rest_framework import serializers
+from  django.views  import  View
+
+创建一个序列化的对象
+class  PublishSerializer(serializers.Serializer):
+    ##这个是res里面的序列话的组件
+    name=serializers.CharField()
+    email=serializers.CharField()
+
+    ##做序列化使用的
+    
+
+
+
+    
+after_seriver=PublishSerializer(obj)
+##序列化之后的结果
+
+PublishSerializer（queryset，many=true）可以多个
+PublishSerializer(model_obj)默认是false
+
+
+
+
+queryset是可以迭代的，后面要加many=true
+对象是不可以迭代的，后面不能加这个many=true
+
+
+
+
+第一种基于queryset来序列化的：
+# obj=Book.objects.all()
+# after_seriver=PublishSerializer(obj,many=True)
+# print(after_seriver.data)
+# '''[OrderedDict([('book_name', 'python'), ('author', 'alex')]), OrderedDict([('book_name', 'go'), ('author', 'yunxin')])]'''
+# print(after_seriver.data[1]['author'])
+
+
+
+第二种是基于对象来序列化的：
+after_seriver=PublishSerializer(Book)##后面是告诉他允许多个
+##序列化之后的结果
+print(after_seriver.data)
+##有序的字典orderdicr
+####拿到这个序列化对象下面的会进行序列化的字段
+
+
+有序的字典：
+'''
+dict=([('name',''),('email','323'))]
+相当于是{'name','','email','weaf'}
+
+'''
+
+
+
+
+'''{'book_name': '<django.db.models.query_utils.DeferredAttribute object at 0x0000021278D11438>', 'author': '<django.db.models.fields.related_descriptors.ForwardManyToOneDescriptor object at 0x0000021278D110F0>'}
+'''
+
+
+
+
+
+
+
+
+
+
+

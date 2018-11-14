@@ -1,0 +1,74 @@
+有点类似于modelform的写法
+
+
+
+
+
+
+ class  BookModelSerizter(serializers.ModelSerializer):
+    class Meta:
+        model=Book
+        fields='__all__'
+####如果是外键的话，取的是主键的名字
+
+
+
+
+
+下面是自定制create和字段的部分，可以不加，就用默认的
+
+####下面是基于modelserizter的自定制，对那个字段进行自定制
+    book_name=serializers.CharField()
+    author=serializers.CharField(source='author.pk')
+    # publish=serializers.SerializerMethodField()
+
+    def   create(self, validated_data):
+        print('全部的数据',validated_data)
+        ##全部的数据 {'book_name': 'julia', 'author': {'author_name': 'alex'}, 'publish': [<Publish: 上海出版社>], 'book_price': [<Price: 1231.21>]}
+        Book.objects.create(book_name=validated_data['book_name'],author_id=validated_data['author']['pk'])##当不是manytomany的时候，就可以直接创建，外键有的时候，可以是author_id=validated_data['author_id']来创建
+        Book.publish.add(*validated_data['publish'])##因为是manytomany的关系，是列表的形式，要加*
+        Book.book_price.add(*validated_data['book_price'])####manytomany的关系是这样写的，是add 把数据添加进去
+        # return  Book
+        return  Response(validated_data)
+
+
+
+create讲解：
+当自己定制了create的方法的时候，就可以用自己的
+注明一下，这个字段的自定制不能用source，等方法，的自定制create才可以进行创建数据到数据库里面,保存起来
+
+
+
+
+
+
+
+
+
+
+
+
+get拿到的是全部的信息，post拿到的是提交的数据
+
+from  rest_framework.views import   APIView
+from  django.utils.safestring import  mark_safe
+from   rest_framework.response import   Response###导入这个response的模块
+class  publishview_api(APIView):
+    def get(self, request):##这个是get的请求方式的时候
+        book_list=Book.objects.all()#拿到这个queryset的对象集合，queryset对象
+
+        Book_ser=BookModelSerizter(book_list,many=True)
+        print(Book_ser.data)
+        # return  HttpResponse(Book_ser.data)##作为字符串返回了，这个response是django自己的
+        return   Response(Book_ser.data)##这个是resframework里面的response,这个是resfrmework的response，使用这个的时候，会有一个页面出来
+
+
+    def  post(self,request):
+        data=BookModelSerizter(data=request.data)####前面要加data，这样才可以提交数据进行校验
+        ###后面是post请求的数据
+        if  data.is_valid():###进行校验判断
+            print('suc')
+            data.save()#保存数据进数据库,看父类源码，里面有creare的方法
+            return  Response('suc')
+        else:
+            return  Response(data.errors)

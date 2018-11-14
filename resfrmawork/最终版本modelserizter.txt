@@ -1,0 +1,17 @@
+最后的这种方法可以直接调用这个父类
+在父类里面已经封装好了这个方法
+
+外键是请求的方式
+method  get，post等请求的方式
+action是url路由里面的请求的方法
+
+handler=getattr(self,action)
+从前面那这个请求方法
+
+for method,action  in action.items:
+setattr(self,method,handler)
+将后面的额这个请求的实例化对象当成是属性赋值给里面
+self.method=handler
+
+
+dispath这个是最终返回的数据

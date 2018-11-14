@@ -1,0 +1,61 @@
+url(r'^Login/$',views.Login.as_view()),
+
+
+
+
+def   get_random_str(user):
+    import   hashlib,time
+    ctime=str(time.time())
+
+    md5=hashlib.md5(bytes(user,encoding='utf-8'))##加盐处理，保证不一样的登入，每一个用户不一样加盐处理
+    md5.update(bytes(ctime,encoding='utf-8'))
+
+    return  md5.hexdigest()
+##最终返回的这个值是经过md5和加盐处理的数据,就算是不同用户不同数据也保证了不一样的加密处理
+
+class   Login(APIView):
+##原生post的方法
+    def  post(self,request):
+        name=request.POST.get('name')##这个是在post请求表单里面的key值，相对应的要匹配上
+        pwd=request.POST.get('pwd')
+        res={'status_code':1000,'msg':None}
+
+
+
+        print(name)
+        print(pwd)
+        user=Token.objects.filter(user=name,pwd=pwd).first()
+        print('这个用户',user)
+
+        if  user:
+
+            print('存在此用户')
+            randow_str=get_random_str(user.pwd)
+            print('randoe_str',randow_str)##下面的user是上面的对象
+            token=Token.objects.update_or_create(user=user,defaults={'pwd':randow_str})##注明一下，这个user是上面的user，里面是一个对象
+            ##如果有的话，就更新数据,后面加一个token加密处理的方法，登录成功的话的处理操作,并把后面给更新了，就是加密的值给更新一下，没有的话就创建数据
+            print('这个token是',token)##josn不能序列化处理
+            '''
+            如果这个用户存在的话，而且没有加密，执行的是创建的操作True，否则的话就创更新据pwd的操作false,意识是当进行了后面的加密处理处理的时候
+            就是true,defaults={'pwd':randow_str})当成参数穿进去
+            '''
+
+
+            res['token']=str(token)##把这个token传进去res里面
+        else:
+            print('不存在此用户')
+            res['status_code']=1001
+
+        # return  Response(json.dumps(res))
+        return  Response(res)
+##字符串形式
+'''"{\"status_code\": 1000, \"msg\": null, \"token\": \"(<Token: Token object (2)>, False)\"}"'''
+
+
+#下面是没有经过josn序列话处理的数据字典的形式
+'''
+{
+    "status_code": 1000,
+    "msg": null,
+    "token": "(<Token: Token object (2)>, False)"
+}

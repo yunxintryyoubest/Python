@@ -1,0 +1,39 @@
+from  
+
+midins.ListModelMixin
+
+
+
+class  persom(raise_execption=True)
+当没有错误的话，就继续往下面走，当错误
+的话就抛出异常
+
+
+
+继承的话是依左向右
+**kwargs是字典的形式
+
+**kwargs
+(a=1,b=3)的方式传进来的,最终是字典的形式
+
+
+**{'a':5}
+这个相当于传了2个参数进来
+
+
+
+setattr相当于是给自己的实例方法赋值
+setattr(self,a,b)  self.a=b
+a被赋值
+后面的b也被赋值
+
+
+for method,action  in actions.items()
+handler=getattr(self,action)##取到这个函数下面的action方法
+setaattr(slef,method,hanlder)设置这个self.method的属性
+self.method  是请求的方法
+handler 
+
+self.method=handler
+
+

@@ -1,0 +1,87 @@
+'''
+讲解一下：
+当是普通字段的话，就直接是后面的部分
+当是外键的话，就可以是外键字段（这个是相对应的表对象）
+当时manytomany的话，是对象集合
+注意细节：当下面有自定义的字段的时候要在fields里面放值进去，否则会出错，就是说下面有多少个字段，就要放多少值进fields里面
+注意这个细节，传入的obj是某个数据对象，不是表对象，是某条数据对象
+'''
+
+from  rest_framework      import serializers
+class coursedetailserializer(serializers.ModelSerializer):
+    course_name = serializers.CharField(source='course_name.course_name')
+    relatedcourse=serializers.SerializerMethodField()
+    related_capacter=serializers.SerializerMethodField()
+    class Meta:
+        model = CourseDetail
+        fields=['course_name','relatedcourse','related_capacter']
+    ######拿到所有相关联的表的章节
+    def   get_related_capacter(self,obj):
+        all_obj = obj.course_name.chapter_set.all()
+        return   [{'章节':row.num,'章节名字':row.name}  for  row in all_obj]
+    ###注意一下，这个下面传过来的是是一个对象，是那一条数据的对象
+    def   get_relatedcourse(self,obj):
+#         ###第一种方式，三元运算符
+        return   [{"id":item.id,'related_name':item.course_name}  for  item  in  obj.remmod_course.all() ]
+# ###第二种方式
+        # temp = []
+        # for  item  in  obj.remmod_course.all():
+        #     dic = {}
+        #     dic['id']=item.pk
+        #     dic['related_name']=item.course_name
+        #     temp.append(dic)
+        # return   temp
+
+
+
+
+url部分：
+    url(r'^course/$', views.course.as_view({'get':'listall'})),
+    url(r'^course/(?P<pk>\d+)$', views.course.as_view({'get':'retrieve'})),
+
+
+
+
+下面部分：
+##第二种方法，上面是get，post，put，patch方法，这种是list，retrieve，destory等方法
+from   rest_framework.generics import    GenericAPIView
+from    rest_framework.viewsets import   ViewSetMixin,GenericViewSet
+
+class  course(ViewSetMixin,APIView):
+
+    ##注明一下，这个名字不是固定的，就是说在哪里url可以知道个地址访问那个路径
+    def   listall(self,requets,*args,**kwargs):
+        ##全部的数据
+        res = {'code': None, 'msg': None}
+        try:
+            all_data = Course.objects.all()
+            hander = courseserializer(instance=all_data, many=True)##全部的数据，拿到
+            res['code'] = 200
+            res['msg'] = hander.data  # 这个是已经处理好的对象
+
+        except Exception as e:
+            res['code'] = 400
+            res['msg'] = None
+        return Response(res)
+
+
+
+    def retrieve(self,request,*args,**kwargs):
+        res = {'code': None, 'msg': None}
+        try:
+            pk = kwargs.get('pk')
+            print('打印出这个pk是:',pk)
+            ##单条数据进行查询,自动将参数放在**kwargs里面
+            one_data_obj = CourseDetail.objects.filter(id=pk).first()
+            print('on_data_obj是',one_data_obj)
+            hander = coursedetailserializer(one_data_obj)##处理单条数据
+            res['code']=200
+            res['msg']=hander.data
+            print('单条数据是:',hander.data)
+
+        except Exception as e:
+            res['code'] = 400
+            res['msg'] = None
+            return Response(res)
+
+        return   Response(res)

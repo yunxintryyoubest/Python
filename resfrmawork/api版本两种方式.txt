@@ -1,0 +1,98 @@
+第一种：request.version
+QueryParameterVersioning
+通过在后面地址栏加上参数进行配置
+?version=v1
+
+
+
+
+# from   rest_framework.versioning import  QueryParameterVersioning
+
+局部配置：
+##这个主要目的是为了拿到这个版本号，在这里面的值出来，可能位置不同，这个api版本
+class  CourseView(APIView):
+    versioning_class =QueryParameterVersioning
+    def get(self,request,*args,**kwargs):
+        # print(self.dispatch())
+        print(request.version)
+        return   Response(request.version)
+
+
+访问路径是：
+在你访问的地址栏后面加上?version=v1
+就可以得到这个api的版本号，v1
+
+
+
+##当你配置了这个的话，在url里面加上version，就可以拿到这个版本号?version=v1，v1就是版本号
+
+
+    ##如果配置了verioning的haul，就执行你的QueryParameterVersioning
+
+全局配置：
+在settings里面进行配置这个：
+# REST_FRAMEWORK={
+# 'ALLOWED_VERSIONS':['v1','v2'],##允许的版本的号码
+#     'VERSION_PARAM':'version',#默认参数
+#     'DEFAULT_VERSION':'v1',##默认版本号
+# 'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.QueryParameterVersioning'
+#
+# }
+#
+
+
+
+
+
+
+
+
+
+
+
+第二种方式：request.version
+通过放在访问路径里面拿到这个命名名称的api版本
+(?P<version>\w+)
+
+
+这个api版本的位置可以自己放在那里：
+from   rest_framework.versioning import   URLPathVersioning
+
+
+##这个主要目的是为了拿到这个版本号，在这里面的值出来，可能位置不同，这个api版本
+class  CourseView(APIView):
+    versioning_class = URLPathVersioning##相对应的版本url路径
+    def get(self,request,*args,**kwargs):
+        # print(self.dispatch())
+
+        print(request.version)
+        return   Response(request.version)
+
+
+访问的url的配置：
+urlpatterns = [
+
+
+    # url(r'^(?P<version>[v1|v2]+)/course/',course.CourseView.as_view()),##调用的是view里面的as_view方法
+    url(r'^(?P<version>\w+)/course/', course.CourseView.as_view()),  ##命名分组，后面传的是version
+
+]
+
+
+
+
+
+
+全局配置：
+REST_FRAMEWORK={
+'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.URLPathVersioning'#当你访问了那个api版本的时候，就可以拿到这个相对应的版本号，requets.version，已经封装在这里面了
+}
+在view里面就不用设置局部版本了
+
+
+
+
+
+
+
+
