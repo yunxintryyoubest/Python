@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+<div id="app01">{{reverseStr}}
+    {{msg}}
+
+    <!-- {{msg.split('').reverse().join('')}} -->
+    <!--反转，将上面的值反转一下，顺序反一下-->
+<button  @click='handler()'>点击</button>
+
+</div>
+
+
+
+<script type="text/javascript"  src="vue.js"></script>
+<script>
+
+    //面向对象
+
+    var  com=new  Vue({
+        el:"#app01",
+        data:{
+            msg:'hello'
+        },
+
+        methods:{
+            
+            handler(){
+                console.log(this.msg)
+//上面是当被调用的时候，被使用getatr的方法
+//下面的是当被赋值的时候，被调用，set方法
+                this.reverseStr='hel'//当点击的时候，这个触发再发个reverseStr的方法，msg的值就会发生改变computed方法是固定的，不能修改名字
+            }
+        },
+        //字典的形式
+        //默认下面的computed只有getattr的方法
+        computed:{
+                //这个computd里面只有getattr的方法,这个方法被挂载到实例对象里面去
+                reverseStr:{
+                //setatr
+                        set:function(newvalue){
+                            this.msg=newvalue
+                        },
+
+                        get:function(value){
+                        alert(value)
+
+                        }
+                // return  this.msg.split('').reverse().join('');
+                        //也可以在这里面进行反转，得到结果
+                }}
+          
+
+
+    })
+
+
+
+
+
+
+/*
+讲解：
+在这个计算属性里面，监听这个计算属性，当这个msg的值发生改变的时候，上面的值有发生改变，watch
+想到与是这个计算属性里面会立马监听你修改的值，上面的值也会立马发生改变
+                        */
+//get是当赋值的时候，就被调用，就是this.reverseStr的时候就会被调用,在methods里面
+
+
+//new的时候，是在（）里面，当是函数的时候，在括号后面
+</script>
+
+
+</body>
+</html>

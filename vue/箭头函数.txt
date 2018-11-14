@@ -1,0 +1,123 @@
+箭头函数就是将function转化成=>的形式
+
+一个参数的时候：
+        var   a=num =>num1;
+
+    var  a=function (num1) {
+        return  num1
+    }
+
+多个参数的时候：
+
+    var  a=(num1,num2)=>  num1+num2;
+
+    var   a=function (num1,num2) {
+        return  num1=num2
+    }
+
+
+
+caonst常量
+let局部作用域
+
+
+
+
+
+
+字变量创建对象：
+    //定义一个变量，里面加一个函数进来,字变量创建对象
+var   person={
+        name:'alex',
+    age:30,
+    fav:function () {
+        console.log('lalds')
+    }
+
+}
+//直接进行调用
+person.fav()
+
+  //箭头函数是将这个function改成=>
+
+
+
+
+
+
+
+
+箭头函数的一个误区：
+    var  a=12//这个也被挂载到window上，使用对象也是window
+var   person={
+        name:'alex',
+    age:30,
+    fav: () =>{
+        console.log(this)
+        console.log(this.name)
+        //this定义时所使用的对象，定义person的时候所使用的对象,window
+     //箭头函数是将这个function改成=>
+    }
+}
+var   person={
+        name:'alex',
+    age:30,
+    fav: function(){
+        console.log(this)//使用时定义的对象
+        console.log(this.name)
+        //this是使用这个fav的对象,这个可以打印出来
+
+     //箭头函数是将这个function改成=>
+
+    }
+
+
+}
+//直接进行调用
+person.fav()
+
+
+
+
+
+
+讲解：
+当时用箭头函数的时候，在里面定义了一个函数，当调用他的时候
+这个this是使用外层的函数的window
+
+
+当是function的时候，这个this是这个调用的这个函数的部分
+
+
+argument：
+可以不用传参数进来，直接进行打印所传进的参数
+    var  person3={
+        fun3:function f1() {
+            console.log(arguments)
+        }
+
+    }
+    person3.fun3('3232','efdsdsf')
+结果就是后面的值：
+
+
+
+第二个坑：
+argument不能使用（箭头函数）
+
+
+注意：
+使用箭头函数的时候，this会有问题，作用域的问题
+
+
+es6
+
+
+
+
+this的指向会发生改变
+argument  这个可以不用传形参进来，但是箭头函数不能打印出来
+function可以打印出来
+
+
+

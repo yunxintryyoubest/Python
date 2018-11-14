@@ -1,0 +1,31 @@
+var   person4={
+    name:'alex',
+    age:'14',
+    //单体模式，不是：的形式
+    fun1(){
+        console.log(this)//这个this就是外面的全部的值
+    }
+}
+person4.fun1()
+
+
+
+
+
+基于构造函数的创建对象：
+//如果是大写的话，就是一个构造函数，如果是小写的话，就是一个函数
+function Ania(name,age) {//必须要大写，才知道是一个构造函数
+    this.name=name
+    this.age=age
+    console.log(name)
+}
+//prototype这个是原型，可以调用这个函数里面的方法,showName这个是方法，可以自己随便定制,上面的相当于是一个类，下面的相当于是一个函数（也就是方法）
+Ania.prototype.showName=function () {
+    console.log(this.age)
+}
+
+var   ad=new Ania('aex',18)
+//基于构造函数的创建对象
+
+
+

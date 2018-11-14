@@ -1,0 +1,15 @@
+var的话
+会在打印之前声明这个变量
+
+console.log(b)
+var  b=12
+
+结果;undefine
+讲解：这个b会在打印之前就声明，所以结果为undefine
+var  b
+console.log(b)
+var b=12
+
+
+var存在变量提升的情况
+let不存在这种情况，会报错

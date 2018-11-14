@@ -1,0 +1,79 @@
+npm i element-ui -S
+
+
+i是安装install
+-S是--save  大写
+
+
+例子：
+<button  class="btn   success"></button>
+
+
+class="btn   success"的实现原理
+自己封装这个属性（标签），返回相对应的页面：
+
+
+
+vnotebtn模块文件：（父类）
+<template>
+
+<button   class='btn'  :class='createbtn'>
+<slot>按钮</slot>
+</button>
+
+</template>
+
+
+
+
+
+<script>
+export  default{
+name='vnotebtn'
+data(){
+
+}
+
+
+props:{//第一步验证一下，这个vnotebtn标签的type类型,当验证过的话就执行下面的computed方法
+typed:Strig
+},
+
+computed:{
+createbtn(){
+return  {
+
+'btn-success':this.type=='delete' ? true :false
+//在这里进行判断，如果存入的值type是delete的话，就返回到绑定事件的class里面
+}
+}
+}
+}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+在另外一个文件里面：（子类，调用父类）
+<template>
+<vnotebtn   typed="delete">删除</vnotebtn>
+</template>
+这个想到与是调用了一个文件下面的button,对应了一个模块下面的name
+
+
+在这里面已经挂载了组件vnotebtn进来，谁可以直接你进行调用使用
+
+
+<script>
+componts:{
+"vnotebtn"
+//可以直接进行调用，在html上面渲染出来
+}
+</script>

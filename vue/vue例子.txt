@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>title</title>
+</head>
+<body>
+<h1>进入vue1......</h1>
+<div  id="app01">
+    <!-- 差值语法出来if，else都可以插值进去-->
+<h1>{{msg}}</h1>
+<h2>{{1>2?"真的":"加的"}}</h2>
+<div v-if="show">显示</div>
+<button v-on:click="clickhandler">切换</button>
+
+<!--运算函都可以数值是已经声明的变量<h1>{{1232}}</h1>-->
+</div>
+<!--v-if拿到这个数据，对当前的dom进行操作-->
+
+
+<!-- 指令系统，有自己的实例化对象，  MVM模式     model（数据）,view（视图）,viewmodel:指令系统控制属性，当前的div显示隐藏 -->
+<script  type="text/javascript"  src="vue.js"></script>
+<script  type="text/javascript" ></script>
+<script>
+    //`tab上面的符号`{{}}`
+
+    var  app=new  Vue({
+        ele:"#app01",
+        //下面的data是固定的，是model，数据,下面得data都挂载在实例化对象app上面，调用就用上面的实例化对象来进行调用
+        data:{
+            msg:"vew",
+            show:false
+            //解析的时候默认会加一个$，在msg的前面有一个$符号，所以当调用他的时候，要加一个$的符号进行调用
+        },
+        //所有的属性放在methods里面
+        methods:{
+            //clickhandler=(a)=>a
+            clickhandler:function(){
+                    console.log(this)//当期那的实例化对象，this  
+                    this.show=true   
+                    this.show=! this.show//这个！可以拿到这个反向的数据                 
+
+                }
+
+        }
+    })
+
+    console.log(app.$ele)//取这个ele的值，默认是有一个$的符号的
+    console.log(app.$data.msg)
+    console.log(app.msg)//拿到这个app下面的数据里面的app，如果要从data外面那数据的话，要加$符号进行那数据
+    console.log(app.$methods)//拿外面的东西
+
+
+
+</script>

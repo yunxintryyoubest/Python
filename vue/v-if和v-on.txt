@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <style>
+    .box{
+        width: 100px;
+        height: 100px;
+        background: red;
+    }
+
+    .box2{
+        width: 100px;
+        height: 100px;
+        background:yellow;
+    }
+    
+    </style>
+</head>
+<body>
+<!--
+
+    流程：
+    往下面执行的时候，看到>知道是一个判断的标识
+    当点击某个按钮的时候，可以切换到某个dom函数
+
+
+
+-->
+
+
+<div id="app01">
+<h1>{{msg}}</h1>
+<div>{{1>2?'整的':'加的'}}</div>
+<!-- //判断 -->
+<div  v-if='show'>显示</div>
+<button v-on:click=handler();>切换</button>
+<!--
+绑定下面的属性，实现动态效果
+-->
+
+
+<h1 v-show='show' v-bind:title='title' >hello</h1>
+<!-- 绑定下面的属性，实现切换的效果 -->
+<!-- <h1  v-show="isshow">展示</h1> -->
+<img  v-bind:src="imgsrc" v-bind:alt="time">
+<!-- 绑定下面的图片，在data里面渲染出来 -->
+
+
+<!--上面的指令是声明是的指令，声明一个东西就可以运行下去
+命令式的，只要取得dom元素就可以执行相对应的操作
+在对css进行设置，就可以发生相对应的改变-->
+
+<div  class="box"  v-bind:class='{box2:isyellow}'></div>
+<!--上面的是'符号，不是tab上面的符号,当下面的数据属性为true的话，就会在这个class后面添加一个box2，
+就会显示出其他的样式出来，当为true的时候，可以显示出来isyellow是指令系统，下面的data是相对应的数据属性-->
+<button  @click='changecolor'>切换颜色</button>
+<!-- 事件的调用 -->
+
+
+<button  v-on:click='count+=1'>加{{count}}</button>
+<!--on是对是发生改变，实时更新,当这个里面couunt的值改变的时候，下面的数据属性也发生改变,后面的count也发生改变,数据驱动视图-->
+
+
+
+
+
+<!--固定的Mathrandom()的用法，下面的方法随机省的下面的标签，这个没有绑定数据属性，随机生成的-->
+<div v-if='Math.random() > 0.5'><h1>大于0.5</h1></div>
+
+<div v-else>
+    小于0.5
+</div>
+
+
+
+</div>
+
+<!--
+注明一下，上面的后面的是指令系统，绑定下面的什么属性，找下面的数据属性,methods
+
+
+-->
+
+<!--数据驱动视图,mvvm模式  view  viewmodel  model
+
+
+数据驱动着视图，视图也驱动着数据-->
+
+
+
+<script  src="vue.js"></script>
+<script>
+
+//注明一下，这个重点，后面的new的对象是Vue，不能更改
+    var  app=new  Vue({
+el:'#app01',
+data:{
+
+    msg:'view',
+    show:false,
+    title:'标题',
+    imgsrc:'alex.jpg',
+    time:`页面加载于${new  Date().toLocaleString()}`,
+    isyellow:false,
+    count:0,//在这里写一个默认的数据属性
+    
+},
+
+//click是方法属性，而上面的是show是数据
+/*
+下面methods的作用是绑定上面的data里面的数据的，this的作用域是app，所以
+this.msg
+和this.$(data).msg是一样的，前面默认会有一个$，加上去
+
+
+下面的methods是事件绑定
+*/
+methods:{
+    handler:function(){
+console.log('打印'),
+this.show=! this.show//绑定上面的show
+    },
+    //当你点击一下，这个按钮的时候，可以为true，那么这个class后面就会添加一个属性上去，就会改变颜色
+    changecolor:function(){
+        console.log('change')
+        // this.isyellow=true
+        this.isyellow=!this.isyellow
+    }
+
+//主要看上面的声明式的指令系统绑定了哪些下面的事件属性
+
+
+    
+
+
+
+    // show:true,
+    // isshow:false    
+
+}
+
+
+
+    })
+
+
+
+class   A{
+constructor(nme,age){
+    this.name=nme,
+    this.afge=age
+}
+//单体模式
+fun(){
+    console.log(this.name)
+}
+// fun=()=>this.age
+}
+
+
+    var obj=new  A('aex',2)
+    obj.fun()
+
+
+
+</script>
+
+</body>
+
+</html>

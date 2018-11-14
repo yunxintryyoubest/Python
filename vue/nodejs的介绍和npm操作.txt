@@ -1,0 +1,114 @@
+安装：
+兼容性
+vue不支持一下版本
+，因为vue使用IE8无法模拟的ECMAScrpit特性
+
+
+
+
+箭头函数=>
+var  cl{
+name:'alex',
+fun1:function(){
+}
+//单体模式
+fav(){
+}
+}
+
+箭头函数和function的区别：
+var cla=function(a){
+return  a
+}
+
+
+var cla=(a)=>a
+
+
+
+
+
+在es6的类的创建对象的时候，不用加,
+
+class cla{
+controtor(a,b){
+this.a=a,
+this.b=this.b
+}//后面不用加,
+
+fun1(){
+}
+
+}
+
+
+一个js文件就是一个模块
+export  default  a
+import  a from  b
+
+wepack
+打包机，他能将我们的html，css,js,pn，font
+进行打包，交给服务器
+
+
+
+loader 加载器 插件
+插件：一个功能（一个js文件）
+组件：bootstrap组件，包含js，css，html
+组件是包含插件
+html压缩
+css进行压缩
+js进行压缩
+图片压缩
+
+grunt，gulp前身 是这个
+
+nodejs+wepack之后是这个
+当你运行的时候，会自动起来，自动刷新（实时监听）
+
+热重载
+
+
+npm  run  dev
+
+node js 服务器
+
+npm     init包管理系统
+
+npm   init  --yes
+
+
+
+
+
+
+wepack有助于项目开发的工具
+nmp  install jquery  --save  保存，后面的save是项目依赖
+
+
+wepack没有项目的包，有可以运行起来
+
+npm install  wepack   --save-dev  
+uninstall卸载
+
+
+
+
+如果拿到一个新的项目：
+npm  install  
+npm   rebuild
+
+npm  run  dev执行脚本程序
+npm   start  
+npm run build
+最后生成一个静态资源
+
+
+淘宝镜像
+
+npm   init  --yes 自动创建
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+创建淘宝镜像
+
+
+

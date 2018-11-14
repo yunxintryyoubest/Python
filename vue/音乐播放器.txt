@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    *{
+        /* margin: 0px; */
+        padding: 0px
+
+    }
+    ul{
+        list-style: none;
+    }
+    li{
+        border-bottom: 2px solid  gray;
+        background-color:beige;
+
+
+    }
+    
+    
+    </style>
+</head>
+<body>
+    
+
+    <div  id="music">
+       <div>
+   <audio :src="currentsong"  autoplay  controls  @ended='next_song' >
+
+        </audio>
+        <p>播放的歌曲</p>
+       </div>
+     
+   
+        <!--一定要加controls，才可以显示出来,循环播放,ended是结束的时候-->
+
+    <!-- <audio   src="陈奕迅 - 十年.flac" autoplay></audio> -->
+        <ul v-for='(music,index)  in music_data '>
+            <!--第一个音乐，第二个是索引-->
+            <li  @click='handlermusic(index)'>
+<h3>{{music.author}}</h3>
+    <p>{{music.name}}</p>
+            </li>
+        </ul>
+
+
+        <button  @click='next_song'>下一首</button>
+    </div>
+
+
+    <script src="vue.js"></script>
+    <script>
+        var  all_music=[
+
+           {id:1,src:"陈奕迅 - 十年.flac",name:"十年",author:'陈奕迅'},
+            {id:2,src:"陈奕迅 - 十面埋伏.flac",name:"十面埋伏",author:'小于'},
+            {id:3,src:"陈奕迅 - 好久不见.flac",name:"好久不见",author:'小ha'},
+        ]
+          
+
+    
+
+        new  Vue({
+            el:'#music',
+            data:{
+                    music_data:all_music,
+                    // currentmusic:'陈奕迅 - 十年.flac',
+                    // currentmusic:this.currentsong,//拿到这个第一个歌曲，不是写死了
+                    currentindex:0
+
+            },
+            methods:{
+                handlermusic(index){
+                    this.currentindex=index
+                    // this.currentmusic=this.music_data[index].src
+                    
+                },
+                //这个methods里面的是函数，而其他的是字典
+                next_song(){
+                    //计算属性是计算数据的属性，在data里面的数据属性
+                    if (this.currentindex==this.music_data.length-1){
+                        this.currentindex=-1
+                    }
+                    this.currentindex++
+                },
+          
+
+            },
+            computed:{
+                currentsong:function(){
+                    return  this.music_data[this.currentindex].src
+                    //在这里返回了数据的话，就可以拿到这个数据，在html里面
+                }
+
+            }
+
+
+        })
+    
+    
+    //任何在前端所看到的东西都是数据驱动视图
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+ time:`页面加载于${new  Date().toLocaleString()}`,
+获取时间

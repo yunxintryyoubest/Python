@@ -1,0 +1,30 @@
+绑定事件（v-bind:）
+@
+
+例子：
+v-bind:img='imgsrc'
+v-bind:title='t'
+v-bind:src=''
+
+data{
+title:'',
+src:'',
+imgrc:'',
+}
+
+
+
+@绑定标签的例子：
+@img='imgsrc'
+data是一样的
+
+
+
+
+
+
+
+显示时间：
+<img  v-bind:src="imgsrc" v-bind:alt="time">
+data:{
+time:`页面加载于${new  Date().toLocaleString()}`,}

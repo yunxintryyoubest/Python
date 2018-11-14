@@ -1,0 +1,206 @@
+双向数据绑定=单项数据绑定+ui事件监听
+
+注意：
+这个只能是在这个表单数据里面进行监听
+在其他标签里面是不可以的，只能是input标签
+
+jquery的ajax封装xmlhttpresponse方法
+
+axios   vue ajax技术
+
+keyup
+keyon
+
+
+捕获到所有键盘上输入的
+v-on.keyup.enter
+v-on.keytab
+等
+
+textarea多行文本
+
+
+指令系统：
+v-show
+v-if判断
+
+v-bind绑定属性
+v-on  绑定事件
+v-for  
+v-for  click()里面是可以传参进来的
+v-html解析html标签
+v-model  只适合在表单input标签    双向的数据绑定
+单项数据绑定+UI监听
+
+
+
+mmvvm，mvc，mvt
+
+mvvm
+
+
+
+
+
+
+
+
+
+
+
+
+e.target.value拿到这个键盘实时输入的值
+
+
+
+v-model的内部实现原理：
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <style>
+        ul{
+list-style: none;
+overflow: hidden;
+     display: inline-block
+        }
+    ul .img_li{
+        width: 50px;
+        height: 50px;
+        float: left;
+        background-color:aquamarine;
+        margin: 0px,10px;
+        text-align: center;
+        color: aliceblue;
+   
+
+    }
+    
+    </style>
+<body>
+
+    <!--
+标签里面是需要加{}
+而属性里面是不需要加的，直接是“”就可以取到相对应的值出来
+        
+    -->
+<div id="img_div"  class="app01">
+<h1>{{msg}}</h1>
+
+
+
+<div>
+
+    <!-- //:就是绑定src，@就是实时监听,这个是for循环，后面是加索引值，循环到哪一个图片 -->
+<img :src='imgsrc'  @mouseenter='closeTimer'  @mouseleave='openTimer'>
+<!-- 当鼠标在这个图片里面的话，这个就停止，当鼠标移除的时候，这个就开启图片轮播,enter。leave，进入，离开，鼠标进入，离开 -->
+<!--下面的for循环放在li里面也可以，放在ul里面有可以-->
+    <ul v-for="(item,i)  in items " >
+<li  class="img_li"   v-on:click='changepic(item)'>
+    <!--这个里面的item可以传进去的，click事件是可以传参加进去的-->
+{{i}}
+
+</li>
+    
+    </ul>
+<button  @click='pre_pic()'>上一张</button>
+    <button  @click='next_pic()'>下一张</button>
+</div>
+
+
+    
+
+
+</div>
+</div>
+
+
+
+
+
+<script  type="text/javascript" src="vue.js"></script>
+
+<!-- //字典是通过.来取值的，而这个列表时通过【】来取值的 -->
+<script>
+    var app=new Vue({
+        el:'#img_div',
+        data:{
+            msg:"录播图例子",//里面是字典的形式,
+            imgsrc:'1.jpg',
+            imgindex:0,//索引值，当前的索引值
+            items:[
+                {id:1,src:'1.jpg' },
+                {id:2,src:'2.jpg'},//for循环拿到这个里面的每一个元素，可以进行取值
+                {id:3,src:'3.jpg'},
+                {id:4,src:'4.jpg'}
+
+        ],
+        timer:null,
+        str:'<p>创建p标签</p>'
+
+        },//都是字典的形式
+        //注意，下面的created是自动设置时间，一定放在methods前面，否则不能自动
+        created(){//这个created是自带的方法，自动轮播
+
+            console.log('created')
+                this.timer=setInterval(this.next_pic,2000)//自动轮播这个this.next_pic的函数
+        },
+
+
+        methods:{
+//下面的这个item就是你传过来的参数，当前点击的那个图片
+changepic:function(item){
+    this.imgsrc=item.src
+},
+        next_pic(){
+
+            // this.imgindex++
+            if  (this.imgindex==this.items.length-1){
+                this.imgindex=0
+
+            }
+            //但你点击了一下的时候，下面图片的索引值就加1
+            this.imgindex++
+            this.imgsrc=this.items[this.imgindex].src
+        },
+
+        pre_pic(){
+            if(this.imgindex==0){
+                this.imgindex=4}//的那个点击到最小的数的时候，索引值就变成4，下面在减去1就是3了，就是最大的字典的索引值
+            
+            this.imgindex--
+            this.imgsrc=this.items[this.imgindex].src
+
+        },
+                //下面是自动轮播这图片出来
+
+//上面绑定的事件
+        closeTimer(){
+clearInterval(this.timer);
+//当悬浮在这个图片里面的时候，就清除这个自动轮播的效果
+        },
+        openTimer(){
+this.timer=setInterval(this.next_pic,2000);
+
+        }
+
+
+   
+
+
+
+        },
+
+})
+
+
+
+</script>
+
+
+</body>
+    </head>
+    </html>

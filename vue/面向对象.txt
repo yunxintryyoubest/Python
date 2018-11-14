@@ -1,0 +1,41 @@
+注意：实例化这个对象的时候，要加new，在进行实例化这个对象
+
+
+
+//定义了一个类，constructor是一个构造函数
+class  Animal{
+    constructor(name,age){
+        this.name=name;
+        this.age=age
+    }
+    //定义一个方法，对象单体模式
+    sho(){
+    console.log(this.age)
+}
+}
+
+    var  d=new   Animal('aex',43)//这个相当于是实例化了这个对象
+    d.sho()//调用这个实例化对象的方法  
+
+
+
+
+基于构造函数的面向对象：
+
+//如果是大写的话，就是一个构造函数，如果是小写的话，就是一个函数
+function Ania(name,age) {//必须要大写，才知道是一个构造函数
+    this.name=name
+    this.age=age
+    console.log(name)
+}
+//prototype这个是原型，可以调用这个函数里面的方法,showName这个是方法，可以自己随便定制,上面的相当于是一个类，下面的相当于是一个函数（也就是方法）
+Ania.prototype.showName=function () {
+    console.log(this.age)
+}
+
+var   ad=new Ania('aex',18)
+//基于构造函数的创建对象
+*/
+
+
+
