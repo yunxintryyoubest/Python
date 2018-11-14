@@ -1,0 +1,17 @@
+写入权限部分：
+request.session['perssoion_list']
+这个在这个reqeust里面取这个权限部分
+
+中间件部分：
+
+写入这个白名单
+valid_url_list=['/login/','/index/','/admin/']
+循环这个字典，当在这个字典的话，就是白名单的url
+
+curren_path=request.path_info
+这个是可以拿到这个url的路劲
+
+然后在这个路径里面进行判断看是否有这个白名单里面的内容
+for  valid_url  in  valid_url_list:
+	ret=re.match(valid_url, current_path)
+这个是进行匹配这个url，如果匹配到的话，就可以访问这个url，这个ret就存在值
