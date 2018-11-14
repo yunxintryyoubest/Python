@@ -1,0 +1,34 @@
+
+vue  init  webpack-simple  
+npm  run  dev  启动 
+
+
+1.
+index.html相当于是把下面的App.vue放了进来，include的关系
+App.vue
+
+2.
+在App.vue里面展示出不同的效果出来
+router-link  -to 相当于是屏幕上的菜单，每点击一个的话，就进行相对应的切换(分配相对应的url，在index.js里面）
+router-view播放出来，动态生成相对应的菜单选项
+
+script  里面可以存放可以访问的url进来
+
+
+
+3.
+router下面的index.js：
+当访问相对应的url的时候（菜单），要去router里面的index.js里面去找 
+
+匹配相对应的url和组件，就是说在这里进行url的映射关系
+每一个url对应一个组件
+
+4.
+components：
+组件集合：
+下面就是真正播放得内容了
+
+
+说明：
+router-view
+这个是动态的，在App.vue里面，这个是动态生成的
