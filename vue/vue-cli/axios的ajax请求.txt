@@ -1,0 +1,37 @@
+<script>
+  export default {
+    name: "vcourse",
+    //daat是数据属性，是方法
+    data() {
+    },
+    mounted: function () {
+      //vue的页面刚加载的时候执行的
+      this.initcour()
+//执行下面的方法的set方法
+    },
+    //method是方法属性
+    methods: {
+      //下面是方法了
+      initcour() {
+        //通过ajax往后端发送请求
+        //在这里通过axios组件向后台发送请求,jquery
+
+        //第二步
+        //this.$axios就是找到了在main.js里面配置的axios，requets里面有这个方法，属性
+        //在这里面也有回调函数
+        this.$axios.request({
+          url: 'http://www.baidu.com',
+          method: 'GET',
+
+//成功之后返回的值,ajax发送请求成功之后返回的值
+        }).then(function (data) {
+          console.log(data)
+        }).catch(function () {
+          console.log('fail')
+
+          //ajax请求失败后，的数据
+        })
+      }
+    }
+  }
+</script>

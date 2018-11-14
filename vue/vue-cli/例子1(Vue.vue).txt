@@ -1,0 +1,74 @@
+<template>
+
+
+
+
+<div>
+
+<h1>{{msg}}</h1>
+
+<input  type="text"  v-bind:value="getvalue">
+<button  v-on:click="handlermsg" >出现</button>
+</div>
+
+
+</template>
+
+
+
+<script>
+export default {
+    name:'vue',
+    //都是函数，最这个抛出 的对象里面都是函数，所以需要加（）
+    data(){
+        //注意，下面的都是通过return来返回得到这个数据的
+        return  {
+        msg:'很好',
+        all_name:'小李'
+        }},
+
+//方法属性
+    methods:{
+
+        handlermsg(){
+
+            this.all_name='小哈'
+    
+
+
+        }
+    },
+    //计算属性
+    computed:{
+        //方法，注意，只有data是抛出的对象
+        getvalue(){
+            return this.all_name
+
+        }
+
+    }
+
+        
+}
+
+
+
+/*
+
+注明一下，这个里面的data，包括data，和methods，computed里面的是方法，要加（）的，而其他的是字典的形式
+data（）{},methods里面的，computed里面的 
+
+
+*/
+
+
+
+</script>
+
+
+<style>
+
+
+
+
+</style>

@@ -1,0 +1,26 @@
+npm install -g @vue/cli
+vue -V
+
+
+为了初始化你的Vue UI，在一个干净的目录下输入：
+vue ui
+
+该命令会自动打开你的浏览器，你要确保当前目录下没有其他项目，浏览器展示的页面如下：
+localhost:8000/project/select
+
+
+
+
+在终端安装：
+vue  init  webpack-simple   pro01(这个是自己取的名字）
+
+
+
+
+
+
+
+
+
+
+

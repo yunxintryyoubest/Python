@@ -1,0 +1,22 @@
+vue  init  webpack-simple  
+初始化一个文件项目，后面加文件目录的名字
+
+vue  init  webpack-simple   mypro
+
+user sass选择n，没有学sass
+
+npm  run  dev启动vue
+
+
+
+
+
+
+
+wepack有entry进入口
+和output输出口
+node环境加上webpack生成一个小型的服务器
+
+.gitnore忽略的文件
+
+import  $ from  'jquery'//引入第三方包进来

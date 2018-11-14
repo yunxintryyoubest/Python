@@ -1,0 +1,22 @@
+注意：
+.vue的文件浏览器是识别不了的，所以需要webpack来打包这些程序，来实现这些效果
+
+main.js入口文件
+如果是在package.json里面引入的包，不需要加入路径
+--save是保存到当前的项目里面去
+
+npm  run  dev  启动程序的执行
+http://localhost:8000/project/select这个是浏览器的路劲 
+
+main.js是启动文件，当你启动的时候，就可以执行相对应的app.vue文件
+
+
+node.js编译语言
+webpack是打包器，对前端的代码做操作的
+
+
+组件是包含样式和结构的
+插件只是一个功能
+
+href:javascipt:
+阻止a标签的默认跳转

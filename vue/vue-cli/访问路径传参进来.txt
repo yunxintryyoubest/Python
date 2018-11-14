@@ -1,0 +1,19 @@
+import    course  from  '@/components/course'
+path: '/course_detail/:id',
+  //动态的接收参数
+  name: 'course_detail',
+  component: course_detail
+    },
+
+
+
+
+
+在相对应的访问的组件里面：
+<!-- 注明一下，这个name是访问这个idnex.js的name相对应的路径，后面是传的参数 -->
+<!-- <router-link to="{name:'course_detail',params:{id:item.id}}" >{{item.name}}</router-link> -->
+
+<!-- 讲解一下，上面的传参是第一个name：course_detail，是在index.js里面进行的查找，找到这个名字，对应的路径path
+也可以直接找到这个路径，总之就是就是找到想对应的url，这个index.js里面已经配置了一个位置参数，把后面的params传进去 
+注明一下，这个参数是从下面传进来的，所以要绑定数据属性来得到对应的id-->
+

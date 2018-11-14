@@ -1,0 +1,7 @@
+如果在package.json里面配置了的话，直接是import  $ from  'jquery'
+就可以导入进来
+
+
+./
+../
+从路径引入的组件进来

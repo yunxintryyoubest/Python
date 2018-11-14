@@ -1,0 +1,92 @@
+data（）抛出一个对象，数据属性
+methods:方法属性
+computed:计算属性
+components:存放组件的（你已经创建的文件）
+
+
+props验证父类传的值，字典，类表或者是其他得形式
+prpos这个是验证父类传送过来的值，并且进行验证
+this.$emit这个是触发父类的方法属性（触发事件）
+
+Arrgy数组形式
+String字符串形式
+
+注明：
+当是方法的时候，就加括号，不是方法的就是字典
+data，methods，computed下面的都是方法要加括号
+data本身就是一个方法，所以要加括号，注意区分
+
+
+子类触发父类的方法属性：
+当你点击一个指令系统的时候，就会触发下面相对应的方法属性
+这个方法属性如果了里面是this.$emit('slefname')
+在父类里面有这个标签的话，就会触发这个父类的标签，就会执行父类下面的标签的方法属性，执行相对应的操作  
+
+
+
+讲解：
+//注明一下，当触发这个事件属性的时候，就会触父类里面的标签add-change,这个add_change机会触发下面的事件属性，就会执行相对应的事件方法,这个emit是veeu提供的方法,这个后面是传的参数，在父类的方法属性里面可以直接进行调用（在方法属性里面必须要有一个接受的参数
+
+
+
+
+content.vue里面：
+<button  v-on:click="changehandler">点击</button>
+    methods:{//里面是好方法，要加（），而这个methods是字典的形式,methos是字典的形式
+changehandler(){
+this.$emit('add_change','hello')
+}
+   
+    }
+
+app.vue里面：
+<vcontent   @add_change="handler"></vcontent>
+
+  methods:{
+    handler(value){//这个参数是子类传过来的
+      alert(value)
+    }
+  },
+
+
+
+citys=[]
+this.citys.push(value)
+
+push是往这个数组里面添加数据进去
+
+
+
+
+
+
+
+讲解一下这个父类传值的过程：
+父类传值到子类里面
+APP.vue里面：
+<vfooters  :cityArray="citys"></vfooters>  
+data(){
+    return{
+      msg:'音乐播放器',
+      citys:['北京']
+
+    }
+  },
+
+
+vfooter.vue里面：
+<ul  v-for="(items,index)  in cityArray ">
+	<li>{{items}}</li>
+</ul> 
+props:{
+    	//在父类里面的data里面拿到的值
+    	cityArray:Array//数组的形式[]
+    }
+
+}
+
+
+
+this.city.push(value)
+往这个字典里面加数据进去
+

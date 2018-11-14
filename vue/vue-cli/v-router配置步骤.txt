@@ -1,0 +1,137 @@
+main.js部分：
+import Vue from 'vue'
+import App from './App.vue'
+
+//定义路由，把其他组件加进来
+import  VurRouter    from  'vue-router'
+import  vmain  from  './components/main'
+import  vcourse  from  './components/course'
+import  vmark  from  './components/mark'
+//注明一下，这个是引入这个名字，不是文件的名字，是自命名的名字name
+
+Vue.use(VurRouter)
+//注意这个前面的Vue是大写的
+
+
+
+//定义路由，一个路由一个组件（一个路由映射一个组件)，下面的对象对应的是一个是key一个是value
+const  router=new  VurRouter({
+	mode:'history',
+	routes:[
+{path:'/',component:vmain},
+{path:'/course',component:vcourse},
+{path:'/marked',component:vmark}]
+
+
+})
+
+
+//下面是挂载组件进
+new Vue({
+	//在这里面把这个范围加了进来，#app，主程序，启动的文件
+  el: '#app',
+  router,
+  //相当于是router:router  这个是挂载这个路由映射关系，前后相等的时候，可以这样，简洁
+  render: h => h(App)
+})
+
+
+
+
+
+
+
+
+
+App.vue部分：
+
+
+<template>
+<!-- 在组件里面template不是标签，包含的模板 -->
+<!--里面可以包含一个相同的名字的app-->
+
+
+<!--把下面的包裹起来 -->
+<div class="app">
+
+
+<h1>{{msg}}</h1>
+<a  href="">app_vue</a>
+
+<ul>
+  <li>
+    <router-link to='/' >首页</router-link>
+  <li>
+   <li>
+    <router-link to='/course' >course</router-link>
+    <!-- 注明一下，这个路由映射对应main.js的定义路由的部分，这个url访问的路径也是对应的，要一起修改才可以访问到 -->
+  </li> 
+  <li>
+    <router-link to='/marked' >首页</router-link>
+  </li>
+
+
+</ul>
+
+
+
+<router-view></router-view>
+
+
+</div>
+
+
+<!-- 路由出口，路由匹配的组件将被渲染在这里 -->
+
+
+</template>
+
+
+
+
+<script>
+//先引入子组件,注意，下面的组件引入的是name，名字，每一个components里面的名字
+
+//导入组件,之前的是名字，后面的是引入的路径
+
+
+
+//如果在package.json里面有下载这个组件的话，可以直接引入过来
+
+
+
+//页面的业务逻辑
+export  default{
+
+
+  name:'App',
+  data(){
+    return{
+        msg:'alex'
+    }},
+  computed:{
+
+  },
+  //下面就是用来挂载组件的，挂载的也是名字，在上面生成标签的也是这个名字
+  //注意，下面的component是组件的名字，下面是挂载组件进来，名字是固定的components
+
+
+}
+
+</script>
+
+
+
+
+
+
+<style  scoped>
+/*scoped是后面的样式不会覆盖本文件的样式*/
+</style>
+
+
+
+
+
+
+

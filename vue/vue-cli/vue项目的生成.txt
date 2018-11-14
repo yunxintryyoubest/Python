@@ -1,0 +1,23 @@
+vue+vue-router+vuex
+
+MVVM  view，model
+
+vue全家桶
+
+
+wepack模板
+vue  init   webpack  下载这个webpack安装包
+
+端口号：9527
+vue-router     y
+eslint限制你的代码n
+unit  tests单元测试n
+nightwatch     n
+
+use  npm  yes
+
+
+
+
+
+route-view是路由出口

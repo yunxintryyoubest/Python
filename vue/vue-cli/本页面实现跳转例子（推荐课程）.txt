@@ -1,0 +1,55 @@
+当是route的时候，可以拿到当前的id
+this.$route.params.id
+最后面得id是参数id，就是在配置路由的时候，写的位置参数
+
+
+
+当要改变当前的地址栏访问的url的时候
+可以在router里面加进来
+this.$router.push({name:'secodetail',params:{id:id}})
+
+
+
+
+
+
+
+下面是在index.js里面的url信息
+
+ {
+      path:'/secodetail/:id',//这个时访问的路径，后面是传入的的参数
+      name:'secodetail',//这个是自己命名的名字,自己随便可以命名的，但是在app里面要对应这个名字
+      component:secodetail
+      //注明一下，这个component后面的detail是在上面找到的，导入得对象找到的
+    },
+
+
+
+注明一下，当要在当前的路由里面改变页面效果的规划，得是
+click事件，才会重新加载这个路劲
+如果是router-link的话，在第一次加载的时候有效，在第二次的时候不能进行页面的跳转，但是上面的地址栏的url会发生改变，也即是说没有其他要访问的页面的效果（推荐课程）
+
+有想有地址栏url的改变，就要加router-link进来
+this.$router.push({name:'secodetail',params:{id:id}})
+要想有这个页面的改变的话，就要绑定事件，click
+当绑定下面的方法属性的时候，页面才会发生改变
+<a  @click="handler_related_course(item.id)">{{item.related_name}}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

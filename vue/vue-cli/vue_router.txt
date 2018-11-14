@@ -1,0 +1,12 @@
+下载mraked组件
+
+
+
+在main.js里面导入这个vue.router
+import   VueRouter   from  'vue-router'
+Vue.vue(VurRouter);
+当前的项目是用路由做的
+
+
+npm install  bootstrap@3  --save下载这个bootstrap3
+的最新版本

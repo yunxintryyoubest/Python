@@ -1,0 +1,52 @@
+在webpack(可以打包css，js，src等)里面，.vue的文件就是一个组件
+export  defult 
+
+
+webpack+node.js帮助我们快速开发
+webpack非常强大，打包，vue-loader，vue-template-compliter
+
+import  $ from  'jquery'//引入第三方包进来
+
+ 
+Vue  component  组件
+
+
+scopted不会自动覆盖掉，当前的样式只对当前的样式起作用
+
+
+//一个组件有3部分组成
+
+<template>
+//页面的结构
+<div class="app">
+
+<h3>{{msg}}</h3>
+
+</div>
+</template>
+
+
+
+
+<script>
+//页面的业务逻辑
+
+
+</script>
+//抛出来一个对象
+export  default{
+  name:'App',//这个代指的是这个app的名字
+  data(){
+  //可以retrun一个空对象
+return{
+  msg:'hello'
+}
+
+  }
+
+}
+
+
+
+<style>
+</style>

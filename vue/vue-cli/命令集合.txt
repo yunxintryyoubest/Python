@@ -1,0 +1,26 @@
+vue  init   webpack  下载这个webpack安装包
+vue  init  --yes  生成这个package.json的文件  
+npm  run dev  运行这个vue项目
+
+
+
+
+
+
+
+{active：index=currentindex}
+  @click='handler(index)'
+
+
+
+
+
+
+data(){
+curentindex:0
+}
+
+methods:{
+handler(index){
+this.currentindex=index}
+

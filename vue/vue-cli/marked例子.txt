@@ -1,0 +1,87 @@
+ <template>
+<header  class="wrap">
+    内容
+
+<div  class="mark">
+<textarea rows="10"  cols="100"  class="editor" v-model="markvalue"  ></textarea>    
+<!-- crows是高度，cols是宽度 v-model是实时监听你的输入的值的 -->
+
+<!-- 生成html代码，经过了marked处理过的 -->
+<textarea  rows="10"  cols="100"  v-html='currentvalue' ></textarea>
+<!-- v-html处理marked的数据 -->
+
+<div  class="show"></div>
+</div>
+
+
+
+
+<!-- 
+讲解：指令系统
+当你点击这个click事件的时候，就会触发下面的事件属性
+
+
+
+ -->
+<button  v-on:click="changehandler">添加城市</button>
+</header>
+
+</template>
+
+
+
+<script>
+//之关系src下面的文件夹,npm  install , nmp  run dec
+
+// import   陈奕迅 - K歌之王.flac  from  static;
+
+
+
+import  marked  from  'marked'
+
+
+export default {
+    name:'vcontent',
+    //data一定是一个函数
+    data(){
+
+        return  {
+            markvalue:''
+
+
+        }
+        
+    },
+    methods:{//里面是好方法，要加（），而这个methods是字典的形式,methos是字典的形式
+changehandler(){
+this.$emit('add_change','hello')//注明一下，当触发这个事件属性的时候，就会触父类里面的标签add-change,这个add_change机会触发下面的事件属性，就会执行相对应的事件方法,这个emit是veeu提供的方法,这个后面是传的参数，在父类的方法属性里面可以直接进行调用（在方法属性里面必须要有一个接受的参数
+}
+    
+    },
+    computed:{
+
+        currentvalue(){
+
+            return  marked(this.markvalue)
+           
+        }
+    }
+
+
+    
+    
+
+}
+</script>
+
+
+
+<style>
+
+
+
+
+
+
+
+</style>
