@@ -1,0 +1,310 @@
+编辑数据（修改数据）
+
+过程讲解：就是将编辑前的值（原来的数据）在对话框显示出来，再在对话框进行修改数据
+从点击的那个点可以拿数据（this），通过父类节点和子类，兄弟节点，取到nid，username，age，gender等数据，然后就可以取属性值（$(this).attr('自己在节点定义共同的属性'）,也可以取值（$(this).text()）,再把数据赋值给对话框里面（表单里面拿相应的标签）,$('.editname').text（编辑前拿的值），赋值操作
+<script>
+    $(function () {
+        bind_events();
+
+
+    })
+    var postdata={}
+    function bind_events() {
+        $('.edit_row').click(function () {
+            console.log('开始点击............')
+            edit_stu=$(this).parent().siblings().text()
+            nid=$(this).parent().siblings('#editid').text()
+            postdata['nid']=nid
+{#            console.log(edit_stu)#}
+            $('#edit').modal('show')
+
+            $(this).parent().prevAll().each(function () {
+                var  v=$(this).text()
+{#                拿到所有的值，在拿到所有得属性值#}
+                var n=$(this).attr('na')
+{#                console.log('所有的值',v)#}
+{#                console.log('所有得属性值:',n)#}
+                /*
+                in Startnull
+test:185 开始点击............
+test:196 所有的值 四班
+test:197 所有得属性值: title
+test:196 所有的值 23
+test:197 所有得属性值: age
+test:196 所有的值 女
+test:197 所有得属性值: gender
+test:196 所有的值 小余
+test:197 所有得属性值: user
+test:196 所有的值 3
+test:197 所有得属性值: nid
+                 */
+{#                开始将编辑前的信息赋值给对话框#}
+                if (n=='age'){
+{#拿出没有修改前的信息age#}
+                    var a=$(this).text()
+                    console.log('age是',a)
+                    /*
+                    in Startnull
+test:185 开始点击............
+test:216 age是 12
+                     */
+
+{#                    age赋值给对话框#}
+
+{#                    $('#edit select[name="age"]').val(a)#}
+                    $('.age').val(a)
+                    console.log('succfess')
+                }else if (n=='user'){
+                    username=$(this).text()
+                    $('.edit_name').val(username)
+                }else if(n=='gender'){
+                    gen=$(this).text()
+                    if(gen=='男'){
+                        
+                        
+                        
+                        $('.gender1').prop('checked',true)
+                    }else{
+                        $('.gender2').prop('checked',true)
+                    }
+                    
+                    
+                    
+                }else if(n=='title'){
+                    cla=$(this).text()
+                    $('.editcla').text(cla)
+                    console.log(cla)
+                }
+{##这个把select里面option的值直接话换掉，就可以将原来的值赋值了#}
+                
+            })
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+第二种方法（从兄弟节点拿编辑前的数据）：
+
+
+    var postdata={}
+    function bind_events() {
+        $('.edit_row').click(function () {
+            console.log('点击')
+            edit_stu=$(this).parent().siblings().text()
+            nid=$(this).parent().siblings('#editid').text()
+            postdata['nid']=nid
+            console.log(edit_stu)
+            $('#edit').modal('show')
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+完整代码：
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/plugins/font-awesome-4.7.0/css/font-awesome.css">
+    <script src="/static/jquery-3.1.1.js"></script>
+{#    #放下面就会报错，未正确引入jquery库#}
+</head>
+<body>
+<div class="container">
+    <table class="table table-condensed">
+    <thead>
+    <div >
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>年龄</th>
+        <th>班级</th>
+        <th>编辑</th>
+    </tr>
+    </div>
+
+    </thead>
+    <tbody id="tb" >
+    <tr >
+        {% for row in stu_list %}
+{#    #如果在这个标签tr里面绑定事件，那么就会出现异常现象，只有第一行点击才有效#}
+        <td id="editid" na="nid">{{ row.id }}</td>
+        <td na="user">{{ row.username }}</td>
+        <td na="gender">{{ row.gender }}</td>
+        <td na="age">{{ row.age }}</td>
+        <td na="title">{{row.cs.title }}</td>
+        <td><i class="fa fa-pencil-square-o  edit_row" aria-hidden="true"></i></td>
+        <td>
+
+{#            <a href="/add.html">编辑</a>#}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+
+
+
+<div class="modal fade"  id="edit" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">修改数据</h4>
+      </div>
+      <div class="modal-body">
+{#        <p>One fine body&hellip;</p>#}
+          <div>
+              <label>姓名:
+              <input type="text" name="name" class="edit_name" style="size: 100px;font-size: 18px"></label>
+          </div>
+         <div>
+              <label>年龄:
+              <input type="text"  name="age" class="age" style="size: 100px;font-size: 18px" ></label>
+          </div>
+        <div>性别：
+    <label class="radio-inline" >
+    <input type="radio" class="gender1"  id="inlineRadio1" value="男"name="gender"> 男
+    </label>
+    <label class="radio-inline">
+    <input type="radio" class="gender2" id="inlineRadio2" value="女"name="gender"> 女
+    </label>
+        </div>
+          <div>
+              <select class="form-control" name="cla">班级：
+                  {%  for row in cla_list %}
+                  <option name="cla"class="editcla">{{ row.title }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="editclose" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="editconfirm" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-
+
+
+
+
+
+
+
+
+
+
+<script src="/static/jquery-3.1.1.js"></script>
+
+<script src="/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+
+
+
+<script>
+    $(function () {
+        bind_events();
+
+
+    })
+    var postdata={}
+    function bind_events() {
+        $('.edit_row').click(function () {
+            console.log('开始点击............')
+            edit_stu=$(this).parent().siblings().text()
+            nid=$(this).parent().siblings('#editid').text()
+            postdata['nid']=nid
+{#            console.log(edit_stu)#}
+            $('#edit').modal('show')
+
+            $(this).parent().prevAll().each(function () {
+                var  v=$(this).text()
+{#                拿到所有的值，在拿到所有得属性值#}
+                var n=$(this).attr('na')
+{#                console.log('所有的值',v)#}
+{#                console.log('所有得属性值:',n)#}
+                /*
+                in Startnull
+test:185 开始点击............
+test:196 所有的值 四班
+test:197 所有得属性值: title
+test:196 所有的值 23
+test:197 所有得属性值: age
+test:196 所有的值 女
+test:197 所有得属性值: gender
+test:196 所有的值 小余
+test:197 所有得属性值: user
+test:196 所有的值 3
+test:197 所有得属性值: nid
+                 */
+{#                开始将编辑前的信息赋值给对话框#}
+                if (n=='age'){
+{#拿出没有修改前的信息age#}
+                    var a=$(this).text()
+                    console.log('age是',a)
+                    /*
+                    in Startnull
+test:185 开始点击............
+test:216 age是 12
+                     */
+
+{#                    age赋值给对话框#}
+
+{#                    $('#edit select[name="age"]').val(a)#}
+                    $('.age').val(a)
+                    console.log('succfess')
+                }else if (n=='user'){
+                    username=$(this).text()
+                    $('.edit_name').val(username)
+                }else if(n=='gender'){
+                    gen=$(this).text()
+                    if(gen=='男'){
+
+
+
+                        $('.gender1').prop('checked',true)
+                    }else{
+                        $('.gender2').prop('checked',true)
+                    }
+
+
+
+                }else if(n=='title'){
+                    cla=$(this).text()
+                    $('.editcla').text(cla)
+                    console.log(cla)
+                }
+{##这个把select里面option的值直接话换掉，就可以将原来的值赋值了#}
+
+            })
+        })
+    }
+
+ </script>
+</body>
+</html>

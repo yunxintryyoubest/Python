@@ -1,0 +1,14 @@
+内容
+分页
+form验证
+
+
+
+1.内容不失去：
+新url
+提交时，内容保留
+对话框：
+-var data=$('$fmFrom表单的ID').serialize()
+$.ajax({
+data:$('#fm').serialize()
+})

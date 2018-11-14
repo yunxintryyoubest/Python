@@ -1,0 +1,39 @@
+
+forms，utils源码
+
+from django.forms import forms,widgets,fields
+from django.shortcuts import render,redirect,HttpResponse
+
+
+
+ValidationError捕捉这个异常，当有错误的话就添加到obj.error里面了，可以找到，obj.errors.username.0
+raise ValidationError 就可以添加到error里面了，在源码的forms里面可以找到ValidationError
+
+
+
+
+#这个基于源码做的扩展from django.core.exceptions import  ValidationError
+from django.core.exceptions import  ValidationError
+class ajaxform(forms.Form):
+    price=fields.CharField()
+    # 如果是int的话就是选项框
+    # price=fields.CharField()
+    #如果是char的就是input的text框
+    user_id=fields.IntegerField(
+        widget=widgets.Select(choices=[(0,'alex'),(1,'yuan'),(3,'xiaoha')])
+    )
+#基于源码找的扩展
+#自定义方法,clean_字段名字
+#必须有返回值return
+    #要有返回值self.cleaned_data['username']
+    # 如果出错，raise  ValuedationError就会报错用户名已经存在，这个报错信息可以自己定制
+    def clean_username(self):
+        v=self.cleaned_data['username']
+        # 假如已经输入了值的话
+        if UserInfo.objects.filter(username=v).count():
+            raise  ValidationError('用户名已经存在')
+        #抛出这个异常,如果验证不通过的话就抛出这个异常，把这个错误信息添加到error里面（forms源码），就可以被找到了
+
+        return  v
+    def clean_user_id(self):
+        return  self.cleaned_data['user_id']

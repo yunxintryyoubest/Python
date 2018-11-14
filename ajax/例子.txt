@@ -1,0 +1,390 @@
+student.html：
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/plugins/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/plugins/font-awesome-4.7.0/css/font-awesome.css">
+</head>
+<body>
+
+<div class="container">
+<div style="padding: 20px  0">
+    <a class="btn btn-primary" id="addbtn">添加</a>
+{#    <a type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal" style="font-size:10px">添加</a>#}
+    <a class="btn btn-danger" >删除</a>
+</div>
+{#    <table class="table table-bordered">#}
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>班级</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="tb">
+           {% for row in stu_list %}
+        <tr>
+
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.username }}</td>
+                        <td>{{ row.age }}</td>
+                        <th>{{ row.gender }}</th>
+                        <th>{{ row.cs.title }}</th>
+                        <td>
+                            <i class="fa fa-edit fa-1x"></i>
+                            <i class="fa fa-trash fa-1x delbtn" style="color: red" aria-hidden="true"></i>
+                        </td>
+
+        </tr>
+
+           {%  endfor %}
+
+        </tbody>
+    </table>
+
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">添加信息</h4>
+      </div>
+      <div class="modal-body">
+
+
+
+
+
+
+
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">姓名</label>
+    <input type="text" class="name" name="name" placeholder="name">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">年龄</label>
+    <input type="text" class="age" name="age" placeholder="age">
+  </div>
+<div>
+       <label class="sex">性别
+
+    <label class="radio-inline">
+  <input type="radio" name="gender" value="男"> 男
+</label>
+<label class="radio-inline">
+  <input type="radio" name="gender" value="女"> 女
+</label>
+
+       </label>
+  </div>
+    <div>
+    <select class="form-control" name="cla">
+        {%  for row in cla_list %}
+  <option>{{ row.title }}</option>
+        {% endfor %}
+</select>
+    </div>
+{#  <div class="form-group">#}
+{#    <label for="exampleInputFile">文件上传</label>#}
+{#    <input type="file" name="InputFile">#}
+{#    <p class="help-block">Example block-level help text here.</p>#}
+{#   </div>#}
+</form>
+  <div class="modal-footer"  >
+{#          #当用户输入错误的时候就会显示报错信息#}
+        <p id="errormsg"  style="color: red" ></p>
+{#          p标签的话就会显示在下面那个按钮上面#}
+{#          span标签的话机会显示在关闭的左边#}
+{#          <span id="errormsg"  style="color:red"></span>#}
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" id="save">保存</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/static/jquery-3.1.1.js"></script>
+<script src="/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+
+
+
+{##添加绑定这个对话框#}
+<script>
+
+    $(function () {
+        bind_events();
+        bindsave();
+        binddel();
+    })
+{##绑定函数#}
+
+{#    #删除数据#}
+
+
+    function  binddel() {
+        $('.delbtn').click(function () {
+            $('#delModal').modal('show')
+        })
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function bind_events() {
+
+
+        $('#addbtn').click(function () {
+            $('#addModal').modal('show')
+        })
+    }
+{##点击添加按钮的时候，显示出弹出对话框#}
+
+    function bindsave() {
+        var  postdata={};
+{#        #当执行完click后postdata即使用户增加的值#}
+        $('#save').click(function () {
+            $('#addModal').find('input, select').each(function () {
+{#                找到标签为input和select，循环打印出来#}
+                console.log($(this)[0])
+                var  v=$(this).val()
+{#                #这个是找到输入的值val()#}
+                console.log('输入的值是',v)
+{#                n找到的是name的属性，name='gender' gender 就是name的属性,在循环打印出来#}
+                var  n=$(this).attr('name')
+                console.log(n)
+                if(n=='gender'){
+                     if($(this).prop('checked')){
+                         postdata[n]=v
+{##打印出各个对应属性的值出来#}
+{#                         比如n（属性为age）的属性值就是用户输入的值#}
+                     }
+                }else{
+                    postdata[n]=v
+                    /*
+
+                    postdata={
+                    usename:
+                    age:
+                     */
+                }
+            })
+        console.log(postdata)
+
+
+
+{#发请求给后端，提交数据#}
+{#          #ajax的内容#}
+{#****************************************************************************************#}
+                $.ajax({
+        url:'/add_student/',
+        type:'POST',
+        data:postdata,
+        success:function (arg) {
+            console.log(arg)
+{##已经回调过来的数据#}
+        var  dict=JSON.parse(arg)
+{#            #解析过来的字符串为字典形式#}
+
+            if (dict.status){
+{#                  window.location.reload();#}
+{#                #刷新功能#}
+
+                createRow(postdata,dict.data);
+{#                #往这个函数里面穿参数#}
+                $('#addModal').modal('hide')
+            }else{
+                    $('#errormsg').text(dict.message)
+{#                #给标签增加值，html也可以#}
+{#                #这个dict为字典形式#}
+{#                id=dict.data#}
+{#                #自增id#}
+            }
+        }
+    })
+        })
+    }
+
+
+
+    function createRow(postdata,nid) {
+        var tr=document._createElement('tr')
+{#        #创建一个tr标签#}
+
+        tdId=document._createElement('td')
+{#        #创建一个td标签#}
+
+        tdId.innerHTML=nid
+{#        tdId的内容设置为nid#}
+        $(tr).append(tdId)
+{#        #在tr标签下加tdId的内容,把这个标签添加到tr里面#}
+    }
+{##创建一个tr（一行）在后面（列）加列#}
+
+
+
+
+
+        tdage=document.createElement('td')
+        tdage.innerHTML=postdata.age
+{#        tdId的内容设置为nid#}
+        $(tr).append(tdage)
+
+
+        tdname=document.createElement('td')
+       tdname.innerHTML=postdata.username
+{#        tdId的内容设置为nid#}
+        $(tr).append(tdname)
+
+
+
+    tdgender=document.createElement('td')
+    tdgender.innerHTML=postdata.gender
+    $('tr').append(tdgender)
+
+{#            tdgender=document._createElement('td')#}
+{#        if (postdata.gender=='男'){#}
+{#            tdgender.innerHTML=''#}
+{#        }#}
+
+{#        tdgender=document._createElement('td')#}
+{#    tdgender.innerHTML=postdata.gender#}
+{#    #把这个作为html语言放到标签里面，就是td标签里面加gender#}
+{#    $('tr').append(tdgender)#}
+
+
+
+    var  tdclass=document.createElement('td')
+    var text=$('select[name="cls_id"]').find('option[value="'+ postdata.cls_id +'"]').text()
+{##字符串拼接,拿到的就是 select标签的name=cls_id里面找到option标签里面的id为多少的值进行字符串拼接#}
+    tdclass.innerHTML=postdata.cls_id
+    $('tr').append(tdclass)
+
+
+
+    var  tdhandle='<td><i class="fa fa-edit fa-1x"></i> <i class="fa fa-trash fa-1x " style="color: red" aria-hidden="true"></i> </td>'
+    $('tr').append(tdhandle)
+        $('#tb').append(tr);
+
+
+
+
+
+{#    id用#，class用.,标签不用加，直接标签名字就可以了#}
+</script>
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+views：
+
+from django.shortcuts import render,HttpResponse,redirect
+
+# Create your views here.
+from  app.models import  *
+
+def students(request):
+
+    stu_list=Student.objects.all()
+    cla_list=Class.objects.all()
+    # print(stu_list)
+    # for row in  stu_list:
+    #     print(row.cs.title)
+    return render(request,'students.html',{'stu_list':stu_list,'cla_list':cla_list})
+
+
+
+def add_student(request):
+    response={'statue':True,'message':None,'data':None}
+    #这个data就是这个记录的id值，会返回给html，的dict.data那里，自增id
+    try:
+    # print(request.POST)
+  # id的话就request.POST.get('username')    取值，当name的话就直接是reques.POST['username']取值既可以了
+    #拿到class的班级
+
+
+
+    # Student.objects.filter(cs__m__class=n).values('cs_id')
+        n=request.POST['name']
+        g=request.POST['gender']
+        a=request.POST['age']
+        c = request.POST['cla']
+        d=Class.objects.filter(title=c).values('id').first()['id']
+        # i = request.POST['InputFile']
+        print(n, a,c,d, g)
+        obj=Student.objects.create(
+            username=n,
+            gender=g,
+            age=a,
+            cs_id=d
+        )
+        response['data']=obj.id
+    #这个是一个新加的对象（一条记录）
+    #实现在页面加一个tr（记录）
+    #把这个用户增加的id传到ajax的回调函数里面
+    except Exception as e:
+        print('执行出现错误')
+        print(e)
+        response['statue']=False
+        response['message']='用户输入错误'
+        response['data']=None
+        # return  HttpResponse('输入错误')
+    import  json
+    result=json.dumps(response,ensure_ascii=False)
+
+    #需要把字典形式和转化为字符串形式
+
+    return HttpResponse(result)
+
+
+
+def del_student(request):
+    return  render(request,'del_student.html')

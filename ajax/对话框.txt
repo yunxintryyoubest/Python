@@ -1,0 +1,66 @@
+window.loaction.reload()页面刷新
+
+    
+    function submit() {
+
+        var  u=$('#username').val();
+        var  p=$('#password').val();
+{#        #找到id为username的标签把它的值拿到#}
+        console.log(u,p);
+        $.ajax({
+            url:'/ajax2.html',
+            type:'GET',
+            data:{username:u,password:p},
+            success:function (arg) {
+                console.log(arg)
+            }
+{##回调函数,arg是返回的数据（httpresponse，render）#}
+        })
+
+2.model操作
+
+a.类代表表
+
+b.字段：一列数据
+
+c.对象；一行数据
+
+
+一对多：
+foreign（代指关系表的一整行数据）
+__跨表
+多堆垛（字段）
+
+
+获取数据的类型
+
+[obj,obj....]一个一个的对象 .all和.filter
+
+[{'user':alex},{},{}...]    字典形式的queryset对象集合  .values
+
+[(),()...]     .values_list() 列表形式的queryset对象集合
+
+
+
+select 标签
+单选：
+$().val(1)
+
+$().val(2)
+
+多选：
+
+$().val()
+$().val(1,4,5)
+
+
+
+
+
+
+写ajax实例：
+
+创建project：
+
+
+

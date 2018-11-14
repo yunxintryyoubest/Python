@@ -1,0 +1,114 @@
+讲解：
+        $('#save').click(function () {
+            $('#addModal').find('input, select').each(function () {
+{#                找到标签为input和select，循环打印出来#}
+                console.log($(this)[0])
+                var  v=$(this).val()
+{#                #这个是找到输入的值val()#}
+                console.log('输入的值是',v)
+
+
+
+
+
+
+
+
+<script src="/static/jquery-3.1.1.js"></script>
+<script src="/static/plugins/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+
+
+
+{##添加绑定这个对话框#}
+<script>
+
+    $(function () {
+        bind_events();
+        bindsave();
+        binddel();
+    })
+{##绑定函数#}
+
+{#    #删除数据#}
+
+
+
+
+
+    }
+    function bind_events() {
+
+
+        $('#addbtn').click(function () {
+            $('#addModal').modal('show')
+        })
+    }
+{##点击添加按钮的时候，显示出弹出对话框#}
+
+    function bindsave() {
+        var  postdata={};
+{#        #当执行完click后postdata就是用户增加的值#}
+        $('#save').click(function () {
+            $('#addModal').find('input, select').each(function () {
+{#                找到标签为input和select，循环打印出来#}
+                console.log($(this)[0])
+                var  v=$(this).val()
+{#                #这个是找到输入的值val()#}
+                console.log('输入的值是',v)
+{#                n找到的是name的属性，（不是对话框）共同的属性name，name='gender' gender 就是name的属性,在循环打印出来#}
+
+
+                var  n=$(this).attr('name')
+                console.log(n)
+                if(n=='gender'){
+                     if($(this).prop('checked')){
+                         postdata[n]=v
+{##打印出各个对应属性的值出来#}
+{#                         比如n（属性为age）的属性值就是用户输入的值#}
+                     }
+                }else{
+                    postdata[n]=v
+                    /*
+
+                    postdata={
+                    usename:
+                    age:
+		...................
+                     */
+                }
+            })
+        console.log(postdata)
+
+
+
+{#发请求给后端，提交数据#}
+{#          #ajax的内容#}
+{#****************************************************************************************#}
+                $.ajax({
+        url:'/add_student/',
+        type:'POST',
+        data:postdata,
+        success:function (arg) {
+            console.log(arg)
+{##已经回调过来的数据#}
+        var  dict=JSON.parse(arg)
+{#            #解析过来的字符串为字典形式#}
+
+            if (dict.status){
+{#                  window.location.reload();#}
+{#                #刷新功能#}
+
+                createRow(postdata,dict.data);
+{#                #往这个函数里面穿参数#}
+                $('#addModal').modal('hide')
+            }else{
+                    $('#errormsg').text(dict.message)
+{#                #给标签增加值，html也可以#}
+{#                #这个dict为字典形式#}
+{#                id=dict.data#}
+{#                #自增id#}
+            }
+        }
+    })
+        })
+    }

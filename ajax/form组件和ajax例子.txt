@@ -1,0 +1,161 @@
+form 组件
+
+
+get 
+验证（后台）
+保留之前的内容（render）
+
+
+
+ajax：
+
+get
+点击提交（偷偷提交过去的，页面没有刷新）
+无需保留上一次内容（httpresponsed）
+ajax的错误信息与form 的不同，也要自己展示出来
+errordict 类型
+print(obj.as_ul)
+
+views：
+
+from django.forms import forms,widgets,fields
+from django.shortcuts import render,redirect,HttpResponse
+
+
+class ajaxform(forms.Form):
+    price=fields.IntegerField()
+    # 如果是int的话就是选项框
+    # price=fields.CharField()
+    #如果是char的就是input的text框
+    user_id=fields.IntegerField(
+        widget=widgets.Select(choices=[(0,'alex'),(1,'yuan'),(3,'xiaoha')])
+    )
+
+
+
+
+
+
+import  json
+def ajax(request):
+    if request.method=='GET':
+        obj=ajaxform()
+        #就生成一个对象，生成html标签，其余的没有做了
+        return render(request,'ajax.html',{'obj':obj})
+
+    else:
+        ret={'status':'fail','message':None}
+        obj=ajaxform(request.POST)
+        #把数据提交过来了，没有做验证
+        print('执行ajax的post操作')
+        if obj.is_valid():
+            #这个已经开始做验证了
+            print('验证通过')
+            ret={'status':'succ'}
+            import json
+            print('全部的数据是',obj.cleaned_data)
+
+            # return  redirect('http://www.baidu.com')
+#ajax 不刷新，（不跳转，不接受任何命令，这个可以不生效了，）
+
+#不用status也可以跳转，当加了status的可以做验证，当验证成功的话就怎样，失败的话就怎样
+
+            return  HttpResponse(json.dumps(ret))
+
+#看到json数据，才有反应
+        else:
+            import  json
+            print(type(obj.errors))
+            #错误信息显示在页面上
+#基本数据类型都可以被转化为字符串,这个不是Python的基本数据类型ErrorDict
+
+
+            from  django.forms.utils import ErrorDict
+            print(obj.as_ul())
+            ret['message']=obj.errors
+            return  HttpResponse(json.dumps(ret),locals())
+
+            # return  render(request,'ajax.html',locals())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ajax.html：
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="/ajax/" id="fm">
+
+    {% csrf_token %}
+
+    {{ obj.as_p }}{{ obj.errors.message }}
+{#    #会生成obj全部的标签，无需手动一个一个字段对应写上去#}
+{#    {{ obj.price }}#}
+{#    {{ obj.user_id }}#}
+    <input type='button'  id="btn" value="ajax提交">
+</form>
+
+
+
+
+
+
+<script src="/static/jquery-3.1.1.js"></script>
+
+<script>
+    $(function () {
+        $('#btn').click(function () {
+            $.ajax({
+                
+                url:'/ajax/',
+                type:'POST',
+                datatype:'JSON',
+                data:$('#fm').serialize(),
+                success:function (arg) {
+
+                    //arg：状态,错误信息
+{#                    console.log(arg)#}
+
+
+                    console.log(arg.status)
+{#                    console.log('回调成功')#}
+{#                    window.location.href="http://www.baidu.com"#}
+{##}
+{##}
+                    if(arg.status=='succ'){
+                        console.log('成功回调')
+                        window.location.href='http://www.baidu.com'
+{#                        #成功验证的话就跳转到百度，不用status也可以跳转#}
+                    }else{
+                        console.log('没有成功，返回错误信息')
+                        console.log(arg);
+                    }
+
+
+                }
+            })
+        })
+    })
+
+
+
+</script>
+</body>
+</html>
+
