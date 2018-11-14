@@ -1,0 +1,98 @@
+不使用scrapy-redis的：
+
+最初始的方法：
+
+ 
+
+settings里面：
+
+ 
+
+# DUPEFILTER_CLASS = 'scrapy_pro1.dupfliter.DupFilter'
+ 
+
+ 
+
+from   scrapy.dupefilter import  BaseDupeFilter
+from  scrapy.utils.request import  request_fingerprint##加密
+import redis
+class   DupFliter(BaseDupeFilter):
+    def   __init__(self):
+        self.dupdic=set()
+    @classmethod
+    def from_settings(cls, settings):
+        return cls()
+    def  request_seen(self,request):
+        url=request_fingerprint(request)
+        if  url  in  self.dupdic:
+            return  True
+        self.dupdic.add(url)
+        print('添加成功',request.url)
+
+配置了redis的去重方法：（通过集合sadd是否可以添加进去判断存不存在）
+ 
+
+settings里面：
+
+# DUPEFILTER_CLASS = 'scrapy_pro1.dupfliter.DupFilter'
+
+去重类：
+from   scrapy.dupefilter import  BaseDupeFilter
+from  scrapy.utils.request import  request_fingerprint##加密
+import redis
+class   DupFliter(BaseDupeFilter):
+    def   __init__(self):
+        self.dupdic=redis.Redis(host='127.0.0.1',port=6379)
+    def  request_seen(self,request):
+        url=request_fingerprint(request)
+        print(url)
+        print('执行去重')
+        exist=self.dupdic.sadd('scrapy_urls2', url)  ##做判断，看是否是相等的
+        if  exist==0:
+            print('已经存在', request.url)
+            return True
+        print('添加成功', request.url)
+        return  False
+        ##如果是添加成功的haul，那么久返回fasle，不做处理，如果返回true就会执行下一个yield
+
+
+
+
+使用scrapy-redis的：
+第一种去重方法：
+原生的scrapy-redis去重：
+
+settings里面：
+
+DUPEFILTER_CLASS = 'scrapy_redis.dupefilter.RFPDupeFilter'##自带的去重类
+
+
+
+
+第二种去重方法：
+（自定义部分，由于使用原生的scrapy-redis保存的记录会在执行完之后自动清除，而且key也是时间戳来保存的
+所以继承RFPDupeFilter类，弥补了上面的缺陷）
+settings配置：
+REDIS_HOST = 'localhost'                            
+REDIS_PORT = 6379                                   
+# REDIS_PARAMS  = {'password':'beta'}    #Redis连接参数，默认：REDIS_PARAMS = {'socket_timeout': 30,'socket_connect_timeout': 30,'retry_on_timeout': True,'encoding': REDIS_ENCODING,}）
+REDIS_ENCODING = "utf-8"                            
+
+# REDIS_URL = 'redis://user:pass@hostname:6379' #连接URL（优先于以上配置）
+DUPEFILTER_KEY = 'dupefilter:%(timestamp)s'
+
+
+去重类：
+
+from scrapy_redis.dupefilter import RFPDupeFilter
+from scrapy_redis.connection import get_redis_from_settings
+from scrapy_redis import defaults
+class RedisDupeFilter(RFPDupeFilter):
+    @classmethod
+    def from_settings(cls, settings):
+        server = get_redis_from_settings(settings)
+        # TODO: Use SCRAPY_JOB env as default and fallback to timestamp.
+        key = defaults.DUPEFILTER_KEY % {'timestamp': '记录key'}
+        debug = settings.getbool('DUPEFILTER_DEBUG')
+        return cls(server, key=key, debug=debug)
+ 

@@ -1,0 +1,53 @@
+判断是不是函数callback
+信号是不会拦截的，中间件才会拦截
+
+
+
+engine_started = object()
+engine_stopped = object()
+spider_opened = object()
+spider_idle = object()
+爬虫被闲置的时候
+spider_closed = object()
+spider_error = object()
+request_scheduled = object()
+请求到调度器的时候
+request_dropped = object()
+请求被丢弃的时候
+response_received = object()
+请求被接受的时候
+response_downloaded = object()
+item_scraped = object()
+item一个一个传递的时候
+item_dropped = object()
+
+
+
+
+
+
+'''
+配置：EXTENSIONS={xxxxxxx}信号，开了几个，才可以多少个
+使用框架预留的位置，帮助你自定义一些功能
+
+'''
+
+from   scrapy  import   signals
+class  Singal():
+    def __init__(self):
+        pass
+
+    @classmethod
+    def   from_crawl(cls,crawler):
+        self=cls()
+
+        crawler.signals.connect(self.fun1,signal=signals.spider_opened)
+        crawler.signals.connect(self.fun1,signal=signals.spider_closed)
+##连接上，预留的信号，注册
+        return  self
+
+    def  fun1(self):
+        pass
+
+    def  fun2(self):
+        pass

@@ -1,0 +1,167 @@
+DOWNLOADER_MIDDLEWARES = {
+   'scrapyproject1.self_middle_wares.Self_Middleware': 543,
+    'scrapyproject1.self_middle_wares.Self_Middleware1': 544,
+}
+
+
+
+
+找到这个爬虫，并执行爬虫里面的start_requets的方法，得到一个迭代器,start_request默认的回调函数是parse
+迭代器的里面的作用是会循环获取到requets对象，requtes对象里面封装了要访问的url和回调函数
+将所有的request对象（任务）放到调度器里面，供下载器下载
+
+下载器会去调度器里面获取要下载的requets对象，然后执行里面的回调函数
+然后在爬虫里面执行yield  items
+yield  requets方法
+
+去重就是在爬虫往调度器里面放之前先去去重里面看一下啊，这个要放进调度器里面的url是否是存在的
+入过是存在的
+
+中间件就是往里面加点东西，比如限制什么的
+
+在下载器去调度器里面取requets对象（任务）的时候
+会穿过中间的中间件部分
+下载中间件：
+process_requets
+process_response
+process_exeption
+
+
+如果中间件没有任何返回值的话就会一直到下载器那里
+假如两个中间件的话：
+process_requets1
+process_requets2
+process_response2
+process_response1
+优先级越小越先执行，在start_requets里面有设置优先级和深度，每执行一次的话，优先级就做相对应的减小
+深度就加1
+
+
+如果中间件有返回的话，分情况：
+如果第一种：HtmlResponse（在process_request）
+from   scrapy.http  import HtmlResponse
+return  HtmlResponse(url='xxxxxxx',status=200,headers=None,body='')
+直接返回，不处理后面的process_requets
+
+如果抛出异常的话：
+##第二种方式：忽视这个返回的结果,抛出异常
+# from   scrapy.exceptions import   IgnoreRequest
+# raise   IgnoreRequest
+
+如果是第三种方式的haul
+可以在请求的url里面加点东西上去，比如请求头加上代理，或者什么
+##对发送过来的请求进行加工处理
+request.header['']=''
+请求过来的requets里面有封装url，header，body部分
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+例子：
+
+
+
+'''在这里定义爬虫的下载中间件部分'''
+
+
+
+'''
+在下载器取调度器里面取url（也就是requets对象）的时候，会经过下载中间件部分
+下载中间件部分会拿到requets对象，里面封装了要访问的url和要回调函数（当下载器执行完成之后的回调函数）
+
+'''
+from   scrapy.http  import HtmlResponse
+from scrapy import signals
+class Self_Middleware():
+    @classmethod
+    def from_crawler(cls, crawler):
+        s = cls()
+        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        return s
+
+    def process_request(self, request, spider):
+        print('执行1process_request方法',request)
+        ##在这里只要以返回值回来的话，那么就不会继续往下面执行了
+        pass
+
+        #第一种方式：返回httprespone，返回response
+        # return  HtmlResponse(url='http://www.baidu.com',status=200,headers=None,body='')
+    ##当有resoponse的时候，就不往下面执行了
+    ##第二种方式：忽视这个返回的结果,抛出异常
+        # from   scrapy.exceptions import   IgnoreRequest
+        # raise   IgnoreRequest
+        ##加工处理  在settings里面有配置，源码已经想到了，但也可以在这里进行配置
+        ##对发送过来的请求进行加工处理，requets，spider
+        request.header['']=''##在传过来的请求进行加工处理
+
+
+    def process_response(self, request, response, spider):
+        print('执行1response方法',request)
+        # return  HtmlResponse(url='xxxxxxx',status=200,headers=None,body='')
+        return response
+
+
+    def process_exception(self, request, exception, spider):
+        pass
+
+    def spider_opened(self, spider):
+        print('开启爬虫1')
+        spider.logger.info('Spider opened: %s' % spider.name)
+
+
+class Self_Middleware1():
+    @classmethod
+    def from_crawler(cls, crawler):
+        s = cls()
+        crawler.signals.connect(s.spider_opened, signal=signals.spider_opened)
+        return s
+
+    def process_request(self, request, spider):
+        print('执行process_request2方法',request.url)
+        ##在这里只要以返回值回来的话，那么就不会继续往下面执行了
+        # return  HtmlResponse(url='xxxxxxx',status=200,headers=None,body='')
+        # return   request##当你在process_requets取url的时候，如果返回这个值的话，拿就 回到调度器里面不停取值
+        # return  HtmlResponse(url='http://www.baidu.com',status=200,headers=None,body='')
+
+    ##当有resoponse的时候，就不往下面执行了
+        # from   scrapy.exceptions import   IgnoreRequest
+        # raise IgnoreRequest
+
+    def process_response(self, request, response, spider):
+        print('执行response2方法',request.url)
+        return response
+
+    def process_exception(self, request, exception, spider):
+        pass
+
+    def spider_opened(self, spider):
+        print('开启爬虫2')
+        spider.logger.info('Spider opened: %s' % spider.name)
+
+
+'''
+在这里如果没有返回值的话
+process_request的时候，如果是有response的时候，就直接返回，不执行下面的process_response部分，直接返回
+顺序：
+当下载器取调度器里面取数据的时候，会经过中间件部分
+当经过process_request的时候，如果有返回response，那么久不会执行下面的respone部分
+
+在process_response部分，如果是有返回return  request的时候，就会在到调度器里面调度
+如果是response的时候，正常返回，图解
+'''
+
+

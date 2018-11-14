@@ -1,0 +1,35 @@
+settings里面：
+# REDIS_HOST='127.0.0.1'
+# REDIS_PORT='6379',
+# # REDIS_PAEAMS={'password':''}#连接的时候传的参数
+# REDIS_ENCODING='utf-8'
+
+
+# REDIS_URL='redis://user:pass@hostname:9001'##连接上url，优先级高于以上配置
+# REDIS_URL='redis://user:pass@127.0.0.1:6379'##连接上url，优先级高于以上配置
+##reids，用户名，密码，主机（hostname），端口
+##配置的连接的去重的类
+# DUPEFILTER_CLASS='scrapy_redis.dupefilter.xx'
+DUPEFILTER_CLASS='scrapy_pro.dupfliter.DupFliter'
+# DUPEFILTER_CLASS = 'scrapy_pro.dupfliter.RedisDupeFilter'
+
+
+
+
+
+
+去重类里面：
+from scrapy_redis.dupefilter import RFPDupeFilter
+from scrapy_redis.connection import get_redis_from_settings
+from scrapy_redis import defaults
+class RedisDupeFilter(RFPDupeFilter):
+    @classmethod
+    def from_settings(cls, settings):
+        server = get_redis_from_settings(settings)
+        # XXX: This creates one-time key. needed to support to use this
+        # class as standalone dupefilter with scrapy's default scheduler
+        # if scrapy passes spider on open() method this wouldn't be needed
+        # TODO: Use SCRAPY_JOB env as default and fallback to timestamp.
+        key = defaults.DUPEFILTER_KEY % {'timestamp': 'xiaodongbei'}
+        debug = settings.getbool('DUPEFILTER_DEBUG')
+        return cls(server, key=key, debug=debug)

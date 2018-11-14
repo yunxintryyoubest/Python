@@ -1,0 +1,30 @@
+首先配置settings：
+COMMANDS_MODULE='scrapyproject1.add_command'
+
+add_command文件目录是在spiders的同级目录中
+在这个add_command下面添加一个crawlall.py
+运行的时候是scrapy  crawlall
+
+
+crawlall.py如下：
+from   scrapy.commands  import  ScrapyCommand
+from  scrapy.utils.project import  get_project_settings
+
+class  Command(ScrapyCommand):
+    requires_project = True
+    def  syntax(self):
+        return  '[option]'
+
+    def   short_desc(self):
+        return   'run'
+
+    def  run(self, args, opts):
+        spider_list=self.crawler_process.spiders.list()
+        print(spider_list)##拿到当前下的所有爬虫
+        print(opts)
+        print(args)
+        '''['chouti', 'chouti1', 'chouti2']'''
+        for  name    in  spider_list:
+            self.crawler_process.crawl(name,**opts.__dict__)
+
+        self.crawler_process.start()

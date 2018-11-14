@@ -1,0 +1,53 @@
+在linux下面运行django项目：
+django
+
+django-admin  startproject  mysite
+
+cd mysite
+
+python  manage.py   startapp  app01
+
+python  manage.py     runserver  8000
+
+
+
+scrapy：
+创建scrapy项目
+scrapy  startproject   chouti 
+cd  chouti  
+
+创建爬虫
+scrapy  genspider  chouti  chouti.com
+第一个是名字，第二个是域名
+
+scrapy   crawl  chouti(爬虫名字）
+
+
+
+
+
+
+
+
+scrapy  startproject   chouti 
+创建文件下面有什么？
+项目名称/
+-spide>>chouti.py
+-items.py>>持久化
+-middlewares.py>>下载文件，等，全局操作  
+-pipelines>>持久化
+-settings.py>>配置文件，爬虫
+scrapy.cfg
+scrapy.cfg  部署
+配置文件
+
+
+
+创建爬虫：
+cd  项目目录
+
+scrapy  genspider   chouti   chouti.com
+
+
+启动爬虫：
+scrapy  crawl  chouti (只能一个爬虫名字）

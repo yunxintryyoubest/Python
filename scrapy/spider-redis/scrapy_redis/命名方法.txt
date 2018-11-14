@@ -1,0 +1,6 @@
+REDIS_START_URLS_KEY = '%(name)s:start_urls'
+data=REDIS_START_URLS_KEY%{'name':'yunxin'}
+
+
+
+yunxin:start_urls

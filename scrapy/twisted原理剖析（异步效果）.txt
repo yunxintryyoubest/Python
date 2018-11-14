@@ -1,0 +1,61 @@
+from   twisted.web.client import getPage,defer
+from   twisted.internet  import  reactor
+
+
+
+'''
+基于事件循环的异步非阻塞的框架(一个线程处理向多个目标发送多个http请求)
+'''
+##非阻塞，不等待
+##异步，回调
+'''
+回调函数执行完的时候，就执行以下他
+事件循环(一直在循环检测）
+'''
+
+
+##代理开始接受任务
+def callback(content):##回调函数，当执行完之后，就返回
+    print(content)
+    ##执行回调函数，当另一个有时间的时候，就执行
+defered_list=[]
+url_list=['http://www.baidu.com','http://www.baidu.com']
+for  url  in  url_list:
+    defered=getPage(bytes(url,encoding='utf-8'))##需要谁
+    defered.addCallback(callback)
+    defered_list.append(defered)
+    ##全部放进列表里面
+
+
+##io切换和执行任务是分开的，当你有空闲就切换到另一个，一直切换
+##第二部分：带来执行完任务之后，停止
+dlist=defer.DeferredList(defered_list)
+def  all_done():##回调函数，当谁执行完成之后，就执行这个回调函数，就终止
+    reactor.stop()##停止下来
+dlist.addBoth(all_done)####办事，执行函数all_done
+
+##第三部分：代理开始去处理
+reactor.run()
+
+
+'''
+讲解一下：
+异步，回调，不阻塞
+就是帮这里面的url去连接，一直切换连接，当连接成功，就会回调，通知他们
+3个同时连接，一直切换着连接，连接诶成功就回调
+
+事件循环：
+一直循环3个任务,检查3个的状态，当连接诶成功的时候，就返回
+
+
+
+'''
+
+
+
+'''
+自己讲解：
+循环全部的url，发起连接，没有连接成功就下一个连接，一直切换着连接，当连接成功的时候，就执行回调函数
+通知某个url，在把他加进列表里面，列表也全部的任务做处理，一直切换着处理任务，当谁执行完之后就终止，就是说同时处理全部的请求和任务（只是切换的速度很快）
+
+'''

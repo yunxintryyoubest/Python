@@ -1,0 +1,39 @@
+
+执行顺序：
+pipeline
+写 pipeline类
+class Scrapyproject1Pipeline(object):
+    def process_item(self, item, spider):
+
+
+写items类：
+class Scrapyproject1Item(scrapy.Item):
+    url_title = scrapy.Field()
+    text = scrapy.Field()
+    print('item操作')##相当于是一个字典,把你想要加的字段放进这个字典里面，之后在pipeline可以直接进行调用
+
+    pass
+
+
+settings配置：
+ITEM_PIPELINES = {
+   'scrapyproject1.pipelines.Scrapyproject1Pipeline': 300,
+}
+'''
+持久化操作，后面是优先级  
+数字越小越优先（范围是到0到1000）
+'''
+
+
+爬虫（spider）
+--在爬虫这里面有yield  requets
+和yield  item的方法，当yield  item 的时候，会调用pipeline里面的process_item方法
+每yield item就每执行一次就执行里面的pipeline方法（具体是里面的process_item方法，可能多次执行
+看这里yield多少次数）
+
+
+
+
+
+
+

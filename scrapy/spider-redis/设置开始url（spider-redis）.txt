@@ -1,0 +1,172 @@
+爬虫：（在这里不用配置start_url，直接可以取redis里面取start_url，可以多个）
+from   scrapy_redis.spiders import RedisSpider
+# class ChoutiSpider(scrapy.Spider):
+class ChoutiSpider(RedisSpider):
+    name = 'baidu'##在这里设置了这个name，那么在redispider里面就可以按照这个key来找到里面对应的值（开始url，可能多个），
+　　#key的格式是:self.redis_key = self.redis_key % {'name': self.name}
+    allowed_domains = ['baidu.com']
+　　def parse(self, response):
+    　　print('执行操作')
+    　　print(response)
+
+
+
+在settings里面的配置：
+#true的话，就是集合，false的话，就为列表
+REDIS_START_URLS_AS_SET=False#默认是false，列表的格式取数据出来
+如果是列表的话，取数据是lpop(key)，key就是下面的这个
+如果是集合的话，集合取数据是spop(key)，例如：spop('baidu:start_urls')>>后面就是对应的全部的开始url（可以多个）
+# REDIS_START_URLS_KEY = '%(name)s:start_urls'#不设置默认是这个,这个是存入redis里面的key，可以根据这来取value，例如:baidu:start_urls
+
+redis存入开始rul:
+在了一个.py文件里面存入开始url
+列表：
+import  redis
+conn=redis.Redis(host='127.0.0.1',port=6379)
+conn.lpush('baidu:start_urls','http://www.baidu.com')
+如果是settings里面：
+REDIS_START_URLS_AS_SET=False的话，就是列表的形式，存入就是lpush或者是rpush等操作
+如果是true的话，那么存入就是集合的形式，sadd等操作
+
+集合：
+import  redis
+conn=redis.Redis(host='127.0.0.1',port=6379)
+conn.sadd('baidu:start_urls','http://www.baidu.com')##按照这个格式来存数据的
+print(conn.smembers('baidu:start_urls'))
+ 
+
+
+spider-redis里面的spider源码分析：
+class RedisMixin(object):
+    """Mixin class to implement reading urls from a redis queue."""
+    redis_key = None
+    redis_batch_size = None
+    redis_encoding = None
+
+    # Redis client placeholder.
+    server = None
+
+    def start_requests(self):
+        """Returns a batch of start requests from redis."""
+        return self.next_requests()
+
+    def setup_redis(self, crawler=None):
+        """Setup redis connection and idle signal.
+
+        This should be called after the spider has set its crawler object.
+        """
+        if self.server is not None:
+            return
+
+        if crawler is None:
+            # We allow optional crawler argument to keep backwards
+            # compatibility.
+            # XXX: Raise a deprecation warning.
+            crawler = getattr(self, 'crawler', None)
+
+        if crawler is None:
+            raise ValueError("crawler is required")
+
+        settings = crawler.settings
+
+#####去配置文件里面那这个其始url,START_URLS_KEY = '%(name)s:start_urls',如果没有配置文件的话，就读取后面部分
+        if self.redis_key is None:
+            self.redis_key = settings.get(
+                'REDIS_START_URLS_KEY', defaults.START_URLS_KEY,
+            )
+
+        self.redis_key = self.redis_key % {'name': self.name}####在这里设置这个name的redis查询的key,如果在redis里面有这个key存在的话，就取出里面的值进行查找
+        '''
+        所以可以自己在添加开始到这个name里面去，这个key格式是固定的,START_URLS_KEY = '%(name)s:start_urls'''
+######写入redis的这个key里面存进去，里面可以放url，多个，然后拿到多个开始的url
+        if not self.redis_key.strip():
+            raise ValueError("redis_key must not be empty")
+
+        if self.redis_batch_size is None:
+            # TODO: Deprecate this setting (REDIS_START_URLS_BATCH_SIZE).
+            self.redis_batch_size = settings.getint(
+                ###取配置文件里面取值，后面是int的类型，转化为int的类型
+                'REDIS_START_URLS_BATCH_SIZE',
+                settings.getint('CONCURRENT_REQUESTS'),
+            )
+
+        try:
+            self.redis_batch_size = int(self.redis_batch_size)
+        except (TypeError, ValueError):
+            raise ValueError("redis_batch_size must be an integer")
+
+        if self.redis_encoding is None:
+            self.redis_encoding = settings.get('REDIS_ENCODING', defaults.REDIS_ENCODING)
+
+        self.logger.info("Reading start URLs from redis key '%(redis_key)s' "
+                         "(batch size: %(redis_batch_size)s, encoding: %(redis_encoding)s",
+                         self.__dict__)
+
+        self.server = connection.from_settings(crawler.settings)
+        # The idle signal is called when the spider has no requests left,
+        # that's when we will schedule new requests from redis queue
+        crawler.signals.connect(self.spider_idle, signal=signals.spider_idle)
+
+    def next_requests(self):
+        """Returns a request to be scheduled or none."""
+        use_set = self.settings.getbool('REDIS_START_URLS_AS_SET', defaults.START_URLS_AS_SET)
+        fetch_one = self.server.spop if use_set else self.server.lpop
+        ##做了判断，如果是REDIS_START_URLS_AS_SET=True得话，那么就为集合
+        ##做了判断，如果是REDIS_START_URLS_AS_SET=False得话，那么就为列表
+        # XXX: Do we need to use a timeout here?
+        found = 0
+        # TODO: Use redis pipeline execution.
+        ####在下面进行寻找，如果存在这个redis_key的话，就执行，有多个就执行多个其实url，
+        
+        
+        ''''
+        下面是一直循环着，看有没有其实url，在redis里面，这个格式是,REDIS_START_URLS_KEY = '%(name)s:start_urls'>>
+        当为false的时候，就是以列表的形式查找
+        conn.lpush('baidu:start_urls','http://www.baidu.com')
+        当true的时候，就是集合
+                
+        '''
+        while found < self.redis_batch_size:
+            data = fetch_one(self.redis_key)##可能是spop或者是lpop
+            if not data:
+                # Queue empty.
+                break
+            req = self.make_request_from_data(data)
+            if req:
+                yield req
+                found += 1
+            else:
+                self.logger.debug("Request not made from data: %r", data)
+
+        if found:
+            self.logger.debug("Read %s requests from '%s'", found, self.redis_key)
+
+    def make_request_from_data(self, data):
+        """Returns a Request instance from data coming from Redis.
+
+        By default, ``data`` is an encoded URL. You can override this method to
+        provide your own message decoding.
+
+        Parameters
+        ----------
+        data : bytes
+            Message from redis.
+
+        """
+        url = bytes_to_str(data, self.redis_encoding)
+        return self.make_requests_from_url(url)
+
+    def schedule_next_requests(self):
+        """Schedules a request if available"""
+        # TODO: While there is capacity, schedule a batch of redis requests.
+        for req in self.next_requests():
+            self.crawler.engine.crawl(req, spider=self)
+
+    def spider_idle(self):
+        """Schedules a request if available, otherwise waits."""
+        # XXX: Handle a sentinel to close the spider.
+        self.schedule_next_requests()
+        raise DontCloseSpider
+
+
+　　

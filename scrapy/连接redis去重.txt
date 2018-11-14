@@ -1,0 +1,41 @@
+settings里面：
+DUPEFILTER_CLASS='scrapy_pro.dupfliter.DupFliter'
+
+
+
+爬虫：
+
+  def parse(self, response):
+        print('执行操作')
+        # obj=response.xpath('//*[@id="dig_lcpage"]/ul/li/a[re:test(@class,"ct_pagepa")]/@href').extract()
+        obj=response.xpath('//*[@id="dig_lcpage"]/ul/li/a[re:test(@href,"/all/hot/recent/(\d+)")]/@href').extract()
+        for  i  in obj:
+            # print(i)
+            page='https://dig.chouti.com'+i
+            yield  Request(url=page,callback=self.parse)#dont_filter=True是不执行去重的，当为false是执行去重的
+
+
+去重类：
+from   scrapy.dupefilter import  BaseDupeFilter
+from  scrapy.utils.request import  request_fingerprint
+import redis
+class   DupFliter(BaseDupeFilter):
+    def   __init__(self):
+        self.dupdic=redis.Redis(host='127.0.0.1',port=6379)
+    # def  request_seen(self,request):
+    #     url=request_fingerprint(request)
+    #     if  url  in  self.dupdic:
+    #         return  True
+    #     self.dupdic.add(url)
+    #     print('添加成功',request.url)
+    def  request_seen(self,request):
+        url=request_fingerprint(request)
+        print('执行去重')
+        if  url==1:
+            self.dupdic.sadd('scrapy_urls', request.url)  ##做判断，看是否是相等的
+            print('添加成功', request.url)
+            return  False
+        print('已经存在',request.url)
+        return  True
+        # 如果是添加成功的haul，那么久返回fasle，不做处理，如果返回true就会执行下一个yield
+

@@ -1,0 +1,27 @@
+from  scrapy.downloadermiddlewares import httpproxy
+方式1：
+通过在发送process_request的时候，在请求头家还是那个代理就可以设置代理
+#########设置代理：
+
+import   os
+os.environ['HTTPS_PROXY']='192.1.1.1'##这种方式是在当前的进程下面设置的临时的代理方式，他会写入请求头里面，随着请求提交的时候，一起进行访问，在当前的进程下面有效，在其他进程下面是没有的
+os.environ['HTTPS_PROXY']='http://root:xx@192.1.1.1/'
+'''
+方式一：环境变量读取代理的方式
+在环境变量里面进行设置这个进代理进去，然后在源码里面可以找到
+'''
+
+
+注明：一个django是单独的一个进程(涉及到分割，取代理的时候）
+os.environ是可以拿到所有的环境变量，但是自己在自己djaogo设置的代理只在本进程有效，在其他djaogo程序是无效的
+
+设计代理：主要原理就是把这个proxy放进请求头里面
+
+
+方式二：
+自定义代理
+
+##第二种定义代理的方式是自定义代理
+def parse(self, response):
+        yield  Request(url='',callback=self.parse,meta={'proxy':'"http://root:xx@192.1.1.1/"'})##通过meta的方式传参数进来
+        ##把url放进调度器里面
