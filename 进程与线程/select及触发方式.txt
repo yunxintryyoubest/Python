@@ -1,0 +1,41 @@
+触发方式：select是水平触发，高电平有效
+1.水平触发：高电平有效，低电平无效
+
+2.边缘触发：当变化的时候，才会触发
+
+一直监测就是一直在系统调用
+
+服务端：
+import  socket
+import select
+sk=socket.socket()
+sk.bind(('127.1.1.1',8080))
+
+sk.listen()
+
+while True:
+    r,w,e=select.select([sk,],[],[],2)#sk是套接字对象，当client运行的时候就会触发，建立连接，2是2秒，这里有3个参数，[sk,],[],[]
+    print(r)#r是套接字对象
+    for i in r:
+        conn,addr=i.accept()#i是套接字对象，后面的addr是客户端的地址
+        print(conn)
+        print('hello') 
+
+
+    print('>>>>>>>')
+
+
+
+
+
+客户端：
+import socket
+
+sk=socket.socket()
+sk.connect(('127.1.1.1',8080))
+while True:
+    sk.send('hello'.encode('utf-8'))
+    print('已经发送')
+    data=sk.recv(1024)
+    print(data)
+

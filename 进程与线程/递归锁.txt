@@ -1,0 +1,108 @@
+
+递归锁就是A和B是两把相同的锁，一个进程进来以后，计数器就加一，count就加1
+当release一个的时候计数器就减一，当一个进程在执行action的时候另一个进程就不能执行另一个action
+当释放完A，B的时候，在进行竞争，永远不会出现死锁的问题
+
+
+
+import  threading
+import  time
+class Mythread(threading.Thread):
+    def actionA(self):
+        A.acquire()
+        print(self.getName(),'得到A',time.ctime())
+        time.sleep(2)
+
+        B.acquire()#又加了一把B锁
+        print(self.getName(),'得到B',time.ctime())
+        time.sleep(1)
+        B.release()
+        print('已经释放B锁',self.name)
+        A.release()
+        print('已经释放A锁', self.name)
+    def actionB(self):
+        B.acquire()
+        print(self.getName(),'得到B',time.ctime())#产生死锁的原因，第一个线程先进来，得到A锁，等待2秒后拿到B锁，等待1秒后B锁钥匙释放，紧接着A锁钥匙释放，然后线程11执行actionB，另一个线程2进来了，执行actionA
+        #线程1执行actiomB的时候拿到了B锁钥匙，还没有释放，线程2执行actionA的时候拿到了A锁钥匙也还没有释放，所以卡住了，产生了死锁，其他线程也进不来，一个锁对应一把钥匙,只能一个线程在执行
+        time.sleep(2)
+
+        A.acquire()#又加了一把B锁
+        print(self.getName(),'得到A',time.ctime())
+        time.sleep(1)
+        A.release()
+        print('已经释放A锁',self.name)
+        A.release()
+        print('已经释放B锁', self.name)
+    def run(self):
+        self.actionA()
+        # time.sleep(2)
+        self.actionB()
+
+
+A=threading.Lock()
+B=threading.Lock()#创建两把锁
+L=[]
+for i in range(5):
+  t=Mythread()#5个线程
+  t.start()
+  L.append(t)
+
+
+for i in L:
+    i.join()
+
+
+print('ending')
+
+
+
+
+
+递归锁：
+import  threading
+import  time
+class Mythread(threading.Thread):
+    def actionA(self):
+        r_lock.acquire()
+        print(self.getName(),'得到A',time.ctime())
+        time.sleep(2)
+
+        r_lock.acquire()#又加了一把B锁
+        print(self.getName(),'得到B',time.ctime())
+        time.sleep(1)
+        r_lock.release()
+        print('已经释放B锁',self.name)
+        r_lock.release()
+        print('已经释放A锁', self.name)
+    def actionB(self):
+        r_lock.acquire()
+        print(self.getName(),'得到B',time.ctime())
+        time.sleep(2)
+
+        r_lock.acquire()#又加了一把B锁
+        print(self.getName(),'得到A',time.ctime())
+        time.sleep(1)
+        r_lock.release()
+        print('已经释放A锁',self.name)
+        r_lock.release()
+        print('已经释放B锁', self.name)
+    def run(self):
+        self.actionA()
+        # time.sleep(2)
+        self.actionB()
+
+r_lock=threading.RLock()
+A=threading.Lock()
+B=threading.Lock()#创建两把锁
+L=[]
+for i in range(5):
+  t=Mythread()#5个线程
+  t.start()
+  L.append(t)
+
+
+for i in L:
+    i.join()
+
+
+print('ending')

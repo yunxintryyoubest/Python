@@ -1,0 +1,56 @@
+当有sk的时候，就是有用户建立连接的时候，否则一直不会变，当有conn的时候，就是可以收发消息的时候，可以多个conn，多个用户连接
+
+实现单线程的并发操作，I/O复用
+I/O多路复用：可以多个监听
+select
+poll
+epoll（重点）
+单线程下的I/O复用（重点）
+
+
+
+服务端：
+import  socket
+import select
+sk=socket.socket()
+sk.bind(('127.1.1.1',8080))
+
+sk.listen()
+inputs=[sk,]#建立一个列表，把sk放进去，后面可以加多个conn，多个用户进去
+while True:
+    r,w,e=select.select(inputs,[],[],3)#sk当client运行的时候就会触发，建立连接，多个conn可以监听多个用户，sk是监听有没有用户建立连接的，conn是可以监听多个用户的
+    print(r)#r是套接字对象
+    #如果进来的是sk的话，就可以建立新的用户，如果是conn的话，就可以收发消息了
+    for i in r:
+        if i==sk:
+            conn,addr=i.accept()#如果是sk的话，就建立连接
+            print(conn)
+            inputs.append(conn)#可以加多个用户进去，监听
+        else:
+            data_byte=i.recv(1024)
+            print(str(data_byte,'utf-8'))
+            inu=input('回答%s号用户>>>'%inputs.index(i))#inputs.index是打印出inputs列表中的i在第几个位置，i的第一个位置是sk，第二个位置是第一个用户conn，迪欧三个位置是第二个用户conn
+            # i.sendall(bytes(inu,'utf-8'))
+            # msg=input('输入：')
+            i.sendall(inu.encode('utf-8'))
+            print('已经发送')
+
+
+
+    print('>>>>>>>')
+
+
+
+
+客户端：（可以建立多个客户端）
+import socket
+
+sk=socket.socket()
+sk.connect(('127.1.1.1',8080))
+while True:
+    msg=input('输入：')
+    sk.send(msg.encode('utf-8'))
+    print('已经发送')
+    data=sk.recv(1024)
+    print(data.decode('utf-8'))
+

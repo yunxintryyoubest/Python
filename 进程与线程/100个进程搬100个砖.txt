@@ -1,0 +1,20 @@
+import  time
+from multiprocessing import Pool,Process
+import  threading
+num=0
+def carry(i):
+    global  num
+    while num<100:
+        num+=1
+        print('线程%s  结果%s'%(i,num))
+        # time.sleep(2)
+# carry()
+if __name__ == '__main__':
+
+    pool=Pool(100)
+    for i in  range(100):
+        # pool.apply_async(fu)
+        pool.apply_async(func=carry,args=(i,))#进程是独立的空间，所以是同时在运行
+        # pool.apply_async(func=carry)
+    pool.close()
+    pool.join()

@@ -1,0 +1,50 @@
+当等待一个数据的时候
+同步就是：一边在等待，一边在发送，好比recv和send一样，一直在等待
+
+event.set()设定event
+event.wait()#等待设定好的event
+event.clear()#清空之前设定的event
+
+
+import threading
+import  time
+class Boss(threading.Thread):
+    def run(self):
+        print('BOSS：今天晚上10点下班')
+        print(event.is_set())
+        event.set()
+        time.sleep(3)
+        print('BOSS:可以下班了')
+        print(event.is_set())#查看event是否被设定
+        event.set()#event被设定
+
+
+class workers(threading.Thread):
+    def run(self):
+        event.wait()#等待被设定的event，被动状态，只能等待
+        print('workers：命苦呀')#做出回应
+        time.sleep(1)
+        event.clear()#清空之前被设定的event
+        event.wait()
+        print('workers：哦豁yeah！！！！')
+
+
+
+event=threading.Event()
+
+L=[]
+
+for i in range(5):
+    L.append(workers())
+
+L.append(Boss())
+
+for j in L:
+    j.start()
+
+
+for i in L:
+    i.join()
+
+
+print('endding')

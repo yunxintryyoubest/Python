@@ -1,0 +1,46 @@
+回调函数：某个动作某个函数执行成功后，再去执行的函数
+import  time,os
+from multiprocessing import  Process,Pool
+
+
+#子进程的
+def foo(i):
+    print(i)
+    time.sleep(2)
+    return  i
+
+#主进程的
+def Bar(num):
+    # pass
+    print(os.getpid())
+    print(num)
+if __name__ == '__main__':
+    pool=Pool(5)
+    for i in range(100):
+        # pool.apply(func=foo,args=(i,))#同步，一个进程一个进程的走
+     #某个动作后某个函数执行成功后，在执行的函数
+        pool.apply_async(func=foo,args=(i,),callback=Bar)#异步,几个进程进程的走
+    pool.close()
+    pool.join()#这个顺序不能换
+    print('endding')
+
+
+
+
+
+#10个进程一个一个的运行f函数
+from multiprocessing import  Process,Lock
+
+
+def f(l,i):
+    # with l:
+    #     print('hello %s'%i)
+    l.acquire()#2种方式
+    print('hello %s'%i)
+    l.release()
+#同步锁，每次只能进来一个进程，不加锁的话，10个进程会抢占式分配
+if __name__ == '__main__':
+    Lock=Lock()
+    for i in range(10):
+        t=Process(target=f,args=(Lock,i))
+        t.start()

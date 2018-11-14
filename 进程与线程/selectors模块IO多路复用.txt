@@ -1,0 +1,69 @@
+导入selectors模块
+
+服务端：
+import  selectors
+import socket
+
+
+sel=selectors.DefaultSelector()#自己选一个i/o复用的方式，select，epoll
+inp=[]
+def accept(sock,mask):
+    #这个是那个用户建立连接，在进行通信
+
+    conn,addr=sock.accept()#一个是3次握手，一个是客户端的addr
+    print('已经与建立连接')
+    inp.append(conn)
+    print(inp)
+    conn.setblocking(False)#非阻塞I/O
+    sel.register(conn,selectors.EVENT_READ,read)#conn绑定read，就是在与用户建立连接后进行通信
+
+
+def read(conn,mask):
+    data=conn.recv(1024)
+    if data:
+        print('接收到数据:',data.decode('utf8'))
+        conn.send(data.upper())
+        print('已经发送数据给用户%s'%(inp.index(conn)+1))
+    else:
+        print('关闭通信')
+        sel.unregister(conn)
+        conn.close()
+
+
+sock=socket.socket()
+
+sock.bind(('127.1.1.1',8080))
+
+sock.listen(5)
+sock.setblocking(False)
+
+sel.register(sock,selectors.EVENT_READ,accept)#sock绑定了accept，在监听有用户过来后，sock有变化时，在sock绑定conn，每加一个用户，就多一个conn，执行accept函数，传conn进去
+print(sock)
+print('正在等待用户进来.......')
+while True:
+    #这个功能是监听有没有用户过来
+    print('正在监听......')
+    events=sel.select()
+    print('events是',events)
+    for key,mask in events:
+        callback=key.data#这个data是sock触发的绑定的accept（函数）
+        callback(key.fileobj,mask)#accept里面传2个参数进去，执行accept
+        print('key.fileobj是',key.fileobj)#fileobj和sock一样是socket对象
+
+
+#如果监听到的话，就是sk变成活动的socket对象时，accept绑定sk,[sk,accept,accept,]
+
+客户端：
+
+
+import socket
+
+sk=socket.socket()
+sk.connect(('127.1.1.1',8080))
+while True:
+    msg=input('输入：')
+    sk.send(msg.encode('utf-8'))
+    print('已经发送')
+    data=sk.recv(1024)
+    print(data.decode('utf-8'))
+

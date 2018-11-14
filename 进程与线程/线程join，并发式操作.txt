@@ -1,0 +1,49 @@
+例子：
+import  threading
+import  time
+def hi(num):
+    print('开始时间是%s'%time.ctime())
+    print('hello %d'%num)
+    time.sleep(num)
+    print('结束时间是%s'%time.ctime())
+
+
+
+
+t1=threading.Thread(target=hi,args=(3,))
+# t1.start()
+t2=threading.Thread(target=hi,args=(5,))
+t1.start()
+t2.start()
+t1.join()#等待t1执行完后打印endding
+t2.join()#等待t2执行完后打印endding
+#总共耗时5秒钟
+print('endding')
+
+
+
+例子：
+import  threading
+import time
+def music():
+    print('music开始时间是%s'%time.ctime())
+    time.sleep(3)
+    print('music结束时间是%s'%time.ctime())
+
+def game():
+    print('game开始时间是%s'%time.ctime())
+    time.sleep(5)
+    print('game结束时间是%s'%time.ctime())
+
+
+
+t1=threading.Thread(target=music)
+
+t2=threading.Thread(target=game)
+t1.start()
+t2.start()
+
+# t1.join()
+t2.join()
+
+print('endding')

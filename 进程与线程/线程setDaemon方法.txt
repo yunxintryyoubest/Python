@@ -1,0 +1,52 @@
+i=0
+for t in range(10):
+	t+=1
+
+print(t)
+for与if是没有作用域的，按最后的值来取，所以t为10
+
+setDameon 意思是守护主线程，当主线程有2个子线程t1，t2的时候，当t1.setDameon(True)意思是
+t1守护主线程，当主线程结束子线程t1也跟着结束，t2没有结束，只有t1是和主线程一起结束，setDeameon
+是必须写在start（）方法前面的，setDameon(true)这个和join（）是相反的，join（）是写在start方法后面的
+
+
+
+start() 启动线程活动，等待就绪的过程
+getName() 返回线程名
+setName() 设置线程名
+isAlive():返回线程是否活动的
+
+
+
+
+
+import  threading
+import  time
+def hi(num):
+    print(t.getName())
+    print('开始时间是%s'%time.ctime())
+    print('hello %d'%num)
+    time.sleep(num)
+    print('结束时间是%s'%time.ctime())
+    print(t2.isAlive())
+thread=[]
+
+t1=threading.Thread(target=hi,args=(3,))
+
+t2=threading.Thread(target=hi,args=(5,))
+
+实例方法，thread.Threadding下的实例方法
+thread.append(t1)
+thread.append(t2)#把t1，t2放进列表thread里面
+# t1.setDaemon(t1)
+t2.setDaemon(True)#当t1结束时，主线程也结束了，t2是守护主线程的，当主线程结束时，t2也跟着结束
+for t in thread:
+    t.start()#所有线程都开启了
+    # print(t.setName('Thread-1'))#设置线程名
+
+
+print('all over')
+print(t2.isAlive())#判断t2线程是否活动
+
+
+

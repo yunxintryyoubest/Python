@@ -1,0 +1,43 @@
+同步锁：大家同时在处理一个数据
+比如100个线程在进行减1操作，初始值为1时，当时间sleep足够长时，每一个线程分配到的都是100,最后的而结果可能就是第一个线程进行了一次减1操作，切换到多少个线程就会进行多少个操作
+信号量和同步对象（了解）
+
+队列  生产者消费者模型
+
+进程
+
+并发：是指系统具有处理多个任务（动作）的能力（多件事情）
+并行：指系统具有同时处理多个任务（动作）的能力（多件事情）
+
+
+并行是并发的子集
+
+
+同步：当进程执行一个IO(等到外部数据时)的时候，accept，recv同步，等：同步
+异步：      不等：一直等到数据接收成功，在回来处理
+
+
+
+
+import time
+def mul():
+    global  num
+    lock.acquire()#只能有一个线程,只支持一个cpu进行一个线程
+    num-=1
+    lock.release()
+
+num=100
+import threading
+l=[]
+lock=threading.Lock()#拿到所
+for i in range(100):
+    t=threading.Thread(target=mul)#给100个线程
+    t.start()
+    # print(num)
+
+print(num)
+
+
+
+
+

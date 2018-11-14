@@ -1,0 +1,110 @@
+run（）
+q=multiprocess.Queue()建立一个进程的队列
+进程之间的通信是非常耗资源的，进程不同于线程，它不是共享资源的，它
+是通过复制拷贝来映射得到数据的（进程之间拥有独立的内存空间）
+开一个进程，复制一个queue，开5个，复制5个queue，来进行通信，消耗资源非常大
+
+
+
+Queue和pipe只是实现了数据交互，并没有是实现数据共享，即一个进程去改变了一个进程的数据（Managers可以实现进程间的数据共享）
+
+terminate()调用它，立即结束进程
+
+多线程安全：队列
+
+
+import  time
+from multiprocessing import Process
+
+class Myproess(Process):
+    def __init__(self,num):
+        super(Myproess,self).__init__()
+        self.num=num
+    def run(self):
+        time.sleep(1)
+        print(self.pid)
+        print(self.is_alive())
+        print(self.num)
+# p_list=[]
+if __name__ == '__main__':
+    p_list = []
+    for i in range(10):
+        p=Myproess(i)
+    # p=Process(target=foo,args=(i,))#,开了10个进程，传10个参数，从0到9
+        p_list.append(p)
+
+    for i in p_list:
+        i.start()
+
+    print('endding')
+
+
+
+
+
+
+
+
+通过双向管道进行通信：两条管道，接收，发送各一个管道
+import  queue
+
+from  multiprocessing import  Process,Pipe
+
+def f(conn):
+    conn.send([12,{'name':'yuan'},'hello'])
+    response=conn.recv()
+    print('response',response)
+    conn.close()
+
+
+if __name__ == '__main__':
+    parent_conn,child_conn=Pipe()#双向管道
+    p=Process(target=f,args=(child_conn,))#向f函数传一个参数child_conn
+    p.start()
+    print(parent_conn.recv())
+    parent_conn.send('hello')
+    p.join()
+
+    print('endding')
+
+
+
+
+
+
+
+
+Manager：实现进程间的数据共享：不仅仅是字典，列表的共享，还可以实现锁，变量等等的共享
+from multiprocessing import  Process,Manager
+def f(d,l,n):
+    d[n]='1'#d是字典,n是进来的进程，n会改变
+    d['2']=2
+    # d['0.12']=None
+    l.append(n)#在l列表中添加n
+
+
+
+
+if __name__ == '__main__':
+    with Manager() as manager:
+        d=manager.dict()#定义一个字典
+        l=manager.list(range(5))#l是一个列表
+        p_list=[]
+
+        for i in range(10):
+            p=Process(target=f,args=(d,l,i))
+            p.start()
+            p_list.append(p)
+
+        for res in p_list:
+            res.join()
+
+        print(d)
+        print(l)
+
+
+
+
+结果：
+{0: '1', 1: '1', 2: '1', 3: '1', 4: '1', 5: '1', 6: '1', 7: '1', 8: '1', 9: '1', '2': 2}
+[0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 6, 5, 7, 8, 9]

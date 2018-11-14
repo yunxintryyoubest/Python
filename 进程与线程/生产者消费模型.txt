@@ -1,0 +1,74 @@
+耦合性强：所有代码写到一个文件里面
+
+task_done（）当任务完成后给是给队列提示一下,任务已经完成，join就可以执行了
+和if not q.empty()一样,假如队列为空的情况下
+join()等待完成
+
+
+
+生产者前面加一个task_done()当任务完成的时候，消费者就可以执行
+消费者可以加一个join（）
+
+
+
+data=q.get()从队列取东西
+time.sleep(random.randrange(4))随机休息4秒以内
+q.put()放进队列
+
+
+
+
+
+# import socket
+#
+# sk=socket.socket()
+# sk.connect(('127.1.1.1',8080))
+# while True:
+#     try:
+#         msg=input('输入：')
+#         sk.send(msg.encode('utf-8'))
+#         print('已经发送')
+#         data=sk.recv(1024)
+#         print(data.decode('utf-8'))
+#     except Exception as e:
+#         print(e)
+
+#10个人吃包子
+
+# import queue
+# import  time,random
+# import  threading
+# q=queue.Queue()
+# 
+# def producess(name):
+#     count=1
+#     while count<1000:
+#         print('%s开始>>>making....'%name)
+#         time.sleep(1)
+#         q.put('%s号包子'%count)
+#         print('%s放了%s号包子进去'%(name,count))
+#         count+=1
+#         # q.join()
+#         print('OK')
+# def customer(name):
+#     count=1
+#     while count<1000:
+#         time.sleep(random.randrange(1))
+#         data=q.get()#取得是哪个包子
+#         print('eatting..................')
+#         time.sleep(2)
+#         # name=name+'号消费者'
+#         # q.task_done()
+#         print('%s吃了%s包子'%(name,data))
+#         count+=1
+# t1=threading.Thread(target=producess,args=('prod',))
+# 
+# # t2=threading.Thread(target=customer,args=('cus',))
+# # t3=threading.Thread(target=customer,args=('cs',))
+# 
+# for i in  range(10):
+#     t=threading.Thread(target=customer,args=(i,))
+#     t.start()
+# t1.start()
+# # t2.start()
+# # t3.start()

@@ -1,0 +1,17 @@
+def f():
+    print('ok')
+    s=yield 3#相当于send的值给了s，然后在打印s出来
+    print(s)
+    print('ok1')
+    yield
+    print('ok2')
+    yield 3
+
+
+gen=f()
+
+print(gen.__next__())#print会返回一个值
+gen.send(7)#send会继续往下走，相当于next
+# print(gen.__next__())
+# gen.send(7)
+# next(gen)

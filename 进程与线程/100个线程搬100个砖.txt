@@ -1,0 +1,30 @@
+
+import  time
+# from multiprocessing import Pool,Process
+import  threading
+num=0
+def carry(i):
+    global  num
+    while num<100:
+        num+=1
+        print('线程%s  结果%s'%(i,num))
+        time.sleep(2)
+# carry()
+if __name__ == '__main__':
+
+    # pool=Pool(10)
+    # for i in  range(100):
+    #     # pool.apply_async(fu)
+    #     # pool.apply_async(func=carry,args=(i,))
+    #     pool.apply_async(func=carry)
+    # pool.close()
+    # pool.join()
+    p_list=[]
+    for i in range(100):
+        rel=threading.Thread(target=carry,args=(i,))
+        p_list.append(rel)
+        rel.start()
+
+    for j in p_list:
+        j.join()
+    print('endding.........')

@@ -1,0 +1,31 @@
+加了一把锁，这个锁每次放固定数量线程进程进去，这几个线程执行完后下一批线程在进去
+
+import threading
+import time
+class mythread(threading.Thread):
+    def run(self):
+        if semaphone.acquire():
+            print(self.name)
+            time.sleep(2)#没隔2秒出来5个
+            semaphone.release()
+
+
+
+
+
+semaphone=threading.Semaphore(5)#开了一把锁，每次放5个线程进去
+
+thrs=[]#写了一个列表
+
+for i in range(100):
+    thrs.append(mythread())#开了100个线程
+
+
+for i in thrs:
+    i.start()
+    
+
+for i in thrs:
+    i.join()
+
+print('endding')

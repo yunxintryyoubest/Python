@@ -1,0 +1,25 @@
+queue
+线程队列
+q=queue.Queue(3)#先进先出，队列里面可以放3个值满了就会报错
+q=queue.LifoQueue(4)#先进后出
+q=queue.PriorityQueue(3)#优先级来输出
+可以共享
+
+
+import  queue
+# q=queue.LifoQueue(3)#先进后出
+
+q=queue.PriorityQueue(3)#优先级来输出
+q.put([2,12])
+q.put([1,'name','alex'])
+q.put([5,'fasf'])
+# q.put('sfasf',block=False)#队列满了
+
+
+print(q.empty())#如果队列为空，返回True
+print(q.full())#如果队列满了，返回True
+print(q.qsize())#返回队列的大小
+
+while 1:
+    p=q.get()#先进先出
+    print(p)

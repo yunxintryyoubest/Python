@@ -1,0 +1,24 @@
+
+import  threading
+import time
+
+class Mythread(threading.Thread):
+    def __init__(self,num):
+        threading.Thread.__init__(self)
+        self.num=num
+
+    def run(self):
+        print(Mythread.getName(self))#得到子线程的名字,调用函数里面的方法，传实例self进去
+        print(self.getName())#当那个实例运行时就打印出那个线程在运行
+        print('running 的是:%s'%self.num)
+
+        time.sleep(2)
+        print('当前时间是%s'%time.ctime())#过两秒后同时结束
+t1=Mythread(1)
+t2=Mythread(2)
+
+
+t1.start()
+t2.start()
+
+print('endding ........')
