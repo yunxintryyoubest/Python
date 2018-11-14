@@ -1,0 +1,219 @@
+index.js部分：
+import Vue from 'vue'
+import Router from 'vue-router'
+
+
+
+//引入建好的vue文件，反向解析，，定义好相对应的url路由,下面的这些只针对于要访问相对应能够的路由所提供得
+import  main  from  '@/components/main'
+import  course_detail  from  '@/components/course_detail'
+import    course  from  '@/components/course'
+//注明一下，@是反向解析,第一个是自己写的对象的名字
+import  secodetail  from '@/components/detail'
+
+
+Vue.use(Router)
+
+export default new Router({
+	//抛出了一个入口对象,下面是定义了路由路径，一个url对应一个组件
+  routes: [
+   
+        {     
+      path: '/',
+      name: 'main',
+      component: main
+    },
+           {  
+      path: '/course',
+      name: 'course',
+      component: course
+    },
+  //注明一下，怎么找到这个url进来，首先找到这个nme来找到这个path，在进行传参进去,params:{id:item.id}
+    
+       {  
+  path: '/detail/:id',
+  //动态的接收参数
+  name: 'detail',
+  component: course_detail
+    },
+    {
+      path:'/secodetail/:id',//这个时访问的路径，后面是传入的的参数
+      name:'secodetail',//这个是自己命名的名字,自己随便可以命名的，但是在app里面要对应这个名字
+      component:secodetail
+      //注明一下，这个component后面的detail是在上面找到的，导入得对象找到的
+    },
+
+  ],
+
+
+
+  mode:'history'
+  //设置了这个之后就不会出现#了，在地址栏中
+
+
+
+
+})
+
+
+
+
+
+
+
+
+detail部分：
+
+
+
+
+<template>
+<div>
+<h1>{{msg}}</h1>
+<!--         fields=['course_name','relatedcourse','related_capacter','coursedetail_content','why','coursedetail_time','slogon']
+
+
+ -->
+ 	<ul >
+<h3>course名字:{{all_course_detail.course_name}}</h3>
+<h3>{{all_course_detail.why}}</h3>
+<h3>{{all_course_detail.coursedetail_time}}</h3>
+<h3>{{all_course_detail.slogon}}</h3>
+<h3  v-for='(item,index)  in  all_course_detail.related_capacter'>章节：
+<li>第{{item.章节}}章</li>
+<li>{{item.章节名字}}</li>
+	</h3>
+	<div style="font-size: 30px">相关推荐课程:
+<h3  v-for='(item,index) in all_course_detail.relatedcourse '>
+
+	<li>课程id：{{item.id}}</li>
+	<!-- <router-link  :to='{name:"secodetail",params:{id:item.id}}'>{{item.related_name}}</router-link>
+ --><!-- 
+讲解一下：
+在这里面当用router-link的时候，只是上面的地址栏的detail下的url改变了，但是并没有重新加载出来
+所以只是地址栏发生改变，但是页面效果并没有发生改变，只是匹配了相对应的url，在index.js里面，但是没有重新进行加载
+ -->
+<a  @click="handler_related_course(item.id)">{{item.related_name}}</a>
+
+
+
+<!-- <router-link  :to="{name:'secodetail',params:{id:item.pk}}" -->
+</h3>
+	</div>
+
+ 	</ul>
+
+
+
+
+
+
+</div>	
+
+
+</template>
+
+
+
+<script  >
+	
+export  default{
+
+name:'secodetail',
+data(){
+	return{
+msg:'secodetail',
+all_course_detail:''
+
+	}
+
+},
+mounted:function(){
+var  id=this.$route.params.id
+this.course(id)
+//这个是刚开始的执行加载出来的页面，后面的id是的当前的route下面的id
+
+
+},
+methods:{
+
+	handler_related_course(id){
+				//然后上面的地址栏也要发生改变，往这个router当前的地址，改变 注意一下，这个当前的地址栏的url是router里面的			
+		console.log(this.$router)
+		this.$router.push({name:'secodetail',params:{id:id}})
+		this.course(id)
+		//这个是点击推荐课程的时候，改变的页面
+
+
+
+
+	},
+
+course(id){
+	console.log(this.$route.params.id)
+	//对id进行操作，当是这个页面的id的时候，就显示出这个页面的效果粗来，当是推荐课程的id的时候，就显示出推荐课程的效果出来
+	var  that=this//拿到全局的额作用于，在下面的话作用域是这个对象
+	this.$axios.request({
+	url:'http://127.0.0.1:9000/api/course/'+id,
+	methods:'GET',
+	}).then(function(data){
+			console.log(data)
+			that.all_course_detail=data.data.msg//注明一下，这个that是全局的window，如果是this的话，是局部的，也就是在这个对象下面的
+
+
+	}).catch(function(res){
+		console.log(res)
+
+	})
+
+}
+
+}
+
+}
+
+
+
+
+</script>
+
+
+
+
+
+<style  >
+	
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

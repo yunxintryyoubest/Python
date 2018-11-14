@@ -1,0 +1,10 @@
+
+		for  (var  i=0;i<this.route_url.length;i++){
+			if(this.route_url[i]=this.$router.path){//这个path是拿到的当前访问的路径
+					this.currentindex=i;
+					return;
+					//这个就是都拿你遍历完这个循环之后不会在往下面走了，return一直悬停着
+			}
+		
+
+		}

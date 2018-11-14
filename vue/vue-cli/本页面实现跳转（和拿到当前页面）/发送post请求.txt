@@ -1,0 +1,87 @@
+methods:{
+	login_auth(){
+		this.auth
+	}
+
+	
+},
+computed:{
+
+auth(){
+
+	var  username=this.username
+	var  pwd=this.pwd
+	alert('µÇÂ¼')
+	this.$axios.request({
+		url:'http://127.0.0.1:9000/api/login/',
+		method:'POST',				
+		data:{
+			username:username,
+			pwd:pwd
+		},
+		headers:{
+'Content-Type':'application/json',
+		}
+
+	}).then(function(data){
+		console.log(data)
+
+	}).catch(function(res){
+
+		console.log(res)
+
+	})
+}
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class   LoginSerivilizer(serializers.ModelSerializer):
+    class Meta:
+        model:UserInfo
+        fields='__all__'
+
+class  Authlogin(APIView):
+    def  options(self, request, *args, **kwargs):
+
+        ##½øÐÐÔ¤¼ì
+        obj=HttpResponse('')
+        obj['Access-Control-Allow-Origin']='*'
+        obj['Access-Control-Allow-Headers']='Content-Type'
+
+        return  obj
+
+
+
+    def post(self,request,*args,**kwargs):
+        res={'code':1000,'msg':None}
+
+        print(request.data)
+
+
+
+
+        return  Response(res)
+

@@ -1,0 +1,222 @@
+login.vue部分：
+
+
+
+<template>
+	
+	<div>
+
+<h1>{{msg}}</h1>
+
+<input type="text" id="username" v-model:value="username">
+<input type="text" id="pwd"  v-model:value="pwd">
+<div  v-if='this.$store.state.token' >
+	<!-- 讲解一下，在这里面的话，$store是组件，在main.js里面有配置这个组件部分，直接导入这个组件就可以进行调用,导入
+	这个组件在导入这个组件里面得到内容，可以去找 -->
+	<h1>用户名:{{this.$store.state.username}}</h1>
+</div>
+
+	<div v-else>
+		
+<button   @click='login_auth()'>登录</button>
+
+	</div>
+
+
+	</div>
+
+</template>
+
+
+
+
+
+
+
+
+
+<script>
+
+
+	
+export  default{
+	name:'login',
+data(){
+
+return{
+	msg:'login页面',
+	username:'',
+	pwd:'',
+}
+
+
+},
+methods:{
+	login_auth(){
+		this.auth
+	}
+
+	
+},
+computed:{
+
+auth(){
+
+	var  username=this.username
+	var  pwd=this.pwd
+	var  that=this
+	this.$axios.request({
+		url:'http://127.0.0.1:9000/api/login/',
+		method:'POST',				
+		data:{
+			username:username,
+			pwd:pwd
+		},
+		headers:{
+'Content-Type':'application/json',
+		}
+
+	}).then(function(data){
+
+		console.log(data)	
+		console.log(data.data.code)
+		if  (data.data.code==200){
+			alert('验证成功')
+			console.log(data)
+			console.log(data.data.token)
+
+
+			that.$store.state.token=data.data.token//这个是传过来的数据
+			//取到这token，设置cookies进去
+			//设置用户名进去
+			that.$store.state.username=that.username
+			//存入这个store存储空间里面
+			//自动执行将这个用户和密码存进去
+
+			that.$store.commit('saveToken',{token:data.data.token,username:that.username})
+//执行这个savetoken的命令的时候，可以保存进这个cookies里面
+
+		}else{
+
+			alert('验证失败')
+		}
+
+
+	}).catch(function(res){
+
+		console.log(res)
+
+	})
+}
+
+
+}
+
+
+}
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+<style >
+
+
+
+
+app.vue部分：
+
+this.$store.commit('clearToken')
+//通过事件来执行这个函数
+
+
+
+
+
+store.js部分：
+import Vue from 'vue'
+import Vuex from 'vuex'
+import Cookie from 'vue-cookies'
+
+Vue.use(Vuex)
+
+
+//下面的作用是将用户名和cokie存进这里面，然后在全局里面调用他
+export default new Vuex.Store({
+  // 组件中通过 this.$store.state.username 调用
+  state: {
+    username: Cookie.get("username"),//这个是在cookei里面取值，在login的时候，已经存进值了
+    token:Cookie.get("token"),
+    //当登录的时候，这个里面就有值了
+    apiList:{
+      course: 'http://127.0.0.1:8000/api/v1/course/',
+      courseDetail: 'http://127.0.0.1:8000/api/v1/course/',
+      auth: 'http://127.0.0.1:8000/api/v1/auth/',
+      micro: 'http://127.0.0.1:8000/api/v1/micro/'
+    }
+  },
+  mutations: {
+    // 组件中通过 this.$store.commit(saveToken,参数)  调用
+    saveToken: function (state, userToken) {
+      state.username = userToken.username;
+      state.token = userToken.token;
+      Cookie.set("username", userToken.username, "20min")
+      Cookie.set("token", userToken.token, "20min")
+
+    },
+    clearToken: function (state) {
+      state.username = null
+      state.token = null
+      Cookie.remove('username')
+      Cookie.remove('token')
+
+    }
+  }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+</style>

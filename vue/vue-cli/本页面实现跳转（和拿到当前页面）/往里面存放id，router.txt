@@ -1,0 +1,4 @@
+this.$router.push({name:'secodetail',params:{id:id}})
+
+
+当存放的话，就可以实现地址栏的改变的效果

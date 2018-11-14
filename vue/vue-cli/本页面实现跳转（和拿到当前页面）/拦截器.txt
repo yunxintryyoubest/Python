@@ -1,0 +1,45 @@
+/*
+讲解一下：
+当这里面存在requiredAuth的话，就执行这个认证的操作
+就是说在这里加了认证的方法的haul，就会执行这里的部分
+
+      //需要认证的意思，加了一个标识
+      path: '/',
+      name: 'main',
+      component: main,
+      //需要认证的意思，加了一个标识
+      //在main.js里面有设置这个拦截器
+      meta:{
+          requireAuth:true
+
+      }
+    },
+*/在main.js里面
+//拦截器
+router.beforeEach(function(to,from,next){
+if (to.meta.requireAuth){
+if(store.state.token){
+next()
+}else{
+next({name:'login'})
+}
+
+
+}else{
+	next()
+}
+
+})
+
+
+
+
+
+讲解一下原理：
+当你
+
+
+
+
+
+
