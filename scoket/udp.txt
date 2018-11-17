@@ -1,0 +1,126 @@
+udp通信没有建立链接，不同于tcp通信，要建立链接（3次握手）
+服务端：
+# from socket import *
+# ip_port=('')
+# buffer_size=1024
+#
+# udp_server=socket(AF_INET,SOCK_DGRAM)#tcp流式套接式，数据报的套接字，tcp_server是套接字对象
+# udp_server.bind(ip_port)
+#
+# while True:
+#     data,addr=udp_server.recvfrom(buffer_size)#接收了data和ip地址
+#     print(data)
+#     print('已接收到客户端的消息')
+#     udp_server.sendto(data.upper(),addr)
+
+
+
+#通信循环，少了链接循环udp
+
+# from socket import *
+# ip_port = ('127.1.1.1',8080)
+# buffer_size=1024
+# udp_server=socket(AF_INET,SOCK_DGRAM)#套接字家族，类型,数据报
+# udp_server.bind(ip_port)
+#
+# while True:
+#     data,addr=udp_server.recvfrom(buffer_size)#给我发消息的ip
+#     print('接收到客户端的消息%s'%data)
+#     data1=udp_server.sendto(data.upper(),addr)#后面要指定发给客户端的地址
+#     print('服务端已经发送消息%s'%data1)
+
+
+from socket import *
+import time
+ip_port=('127.1.1.9',8080)
+udp_server=socket(AF_INET,SOCK_DGRAM)#基于数据报格式的
+# ip_port=('128.1.1.1',8080)
+buffer_size=1024
+udp_server.bind(ip_port)
+while True:
+    print('服务端开始运行了')
+    data,addr=udp_server.recvfrom(buffer_size)#服务端接收到的消息和地址，接收消息时不用加ip地址
+    print('接收到客户端的消息是',data.decode('utf-8'))
+    msg=input('请输入你想发送的:').strip()
+    udp_server.sendto(msg.encode('utf-8'),addr)
+    print('服务端发送成功')
+#     data1,addr1=udp_server.recvfrom(buffer_size)#服务端接收到的消息和地址，接收消息时不用加ip地址
+#     print('接收到客户端的消息是',data1.decode('utf-8'))
+#
+#     if data1.decode('utf-8') in '%Y-%m-%d %X':
+# # back_time=time.strftime('%Y-%m-%d %X')
+#         back_time=time.strftime(data1.decode('utf-8'))
+#         print('服务端发送消息的标准时间是:',back_time)
+#         udp_server.sendto(back_time.encode('utf-8'),addr)#发送消息时要加一个ip地址
+#     else:
+#         print('输出错误')
+#         break
+
+
+    # msg=input('服务端要发送的消息:')
+    # udp_server.sendto(msg.encode('utf-8'),addr)
+    # print('已经发送消息出去')
+    # print(data1)
+
+
+
+
+客户端：
+# from socket import *
+# ip_port=('')
+# buffer_size=1024
+#
+# udp_client=socket(AF_INET,SOCK_DGRAM)#流式套接式，数据报的套接字
+# # udp_server.bind(ip_port)
+#
+# while True:
+#     msg=input('情书如你兴水的')
+#     data,addr=udp_client.sendto('hello'.encode('utf-8'))#没有链接，通过ip port指定某个ip端口
+#     print(data)
+#     print('已经发送出去')
+#     data1=udp_client.recvfrom(buffer_size)
+#     print(data1)
+#     print('已接收到')
+
+
+# from socket import *
+#
+# ip_port = ('127.1.1.1',8080)
+# buffer_size = 1024
+# udp_client = socket(AF_INET, SOCK_DGRAM)  # 套接字家族，类型,数据报
+# # udp_server.bind()
+#
+# while True:
+#     msg=input('输入:').strip()
+#     data=udp_client.sendto(msg.encode('utf-8'),ip_port)#服务端的地址和端口，发送消息
+#     print('已经发送消息给服务端')
+#     data1,addr1=udp_client.recvfrom(buffer_size)
+#     print(data1.decode('utf-8'))
+
+from socket import *
+
+udp_client=socket(AF_INET,SOCK_DGRAM)#基于数据报格式的
+ip_port=('127.1.1.9',8080)
+buffer_size=1024
+while True:
+    print('客户端开始运行了')
+    msg=input('请输入你想发送的:').strip()
+    data1=udp_client.sendto(msg.encode('utf-8'),ip_port)#发送消息时要加一个ip地址
+    print('客户端发送成功')
+    data2,addr2=udp_client.recvfrom(buffer_size)
+    print('接收到服务端的的消息是:',data2.decode('utf-8'))
+    # print(data1,ip_port)
+# data,addr=udp_client.sendto()#服务端接收到的消息和地址
+# print(data)
+# msg=input('请输入你想发送的:')
+#     choice=input('请输入你想查看的时间:')
+#     udp_client.sendto(choice.encode('utf-8'),ip_port)
+#     data,addr=udp_client.recvfrom(buffer_size)
+#     print('客户端现在的标准时间是:',data.decode('utf-8'))
+
+# print(data1)
+
+
+
+
+

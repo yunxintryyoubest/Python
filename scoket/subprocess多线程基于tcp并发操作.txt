@@ -1,0 +1,83 @@
+基于tcp的subprocess操作
+服务端：
+import  socketserver
+import  subprocess
+
+class Myserver(socketserver.BaseRequestHandler):
+    def handle(self):
+        print('3次握手conn is', self.request)#conn,3次握手，建立3次握手的过程
+        print('客户端返回的ip地址是',self.client_address)#打印的是客户端的ip地址,addr
+        while True:
+            try:
+                print('开始通信循环了')
+                cmd=self.request.recv(1024)
+                # if not cmd:
+                #     break  # 解决死循环的情况
+                print('收到客户端的消息', cmd.decode('utf-8'))  # 一字节的形式接收到的数据
+                # 执行命令，得到命令的运行结果
+                res = subprocess.Popen(cmd.decode('utf-8'), shell=True,
+                                       stderr=subprocess.PIPE,
+                                       stdin=subprocess.PIPE,
+                                       stdout=subprocess.PIPE)  # 获取的是对象
+
+                response = res.stdout.read()
+
+                if response:
+                    print('程序已经执行out')
+                    cmd_res = response  # 加入err没有问题的话就读取到stderr的
+                elif not response:
+                    print('程序已经执行err')
+                    cmd_res = res.stderr.read()
+
+
+                # 发消息
+                self.request.send(cmd_res)
+
+
+
+            except Exception as e:
+                print(e)
+                break
+
+if __name__ == '__main__':
+    s=socketserver.ThreadingTCPServer(('127.0.2.1',8080),Myserver)#实例化过程，传入2个参数，一个是ip地址，建立链接循环，第二个建立通信循环
+    print('已经建立链接')
+    s.serve_forever()#永远服务下去
+
+
+
+
+
+
+
+
+
+客户端：
+
+
+from socket import *
+ip_port=('127.0.2.1',8080)
+buffer_size=1024
+back_log=5
+tcp_client=socket(AF_INET,SOCK_STREAM)
+# tcp_client.bind(ip_port)
+tcp_client.connect(ip_port)
+
+while True:
+    try:
+        print('开始运行客户端1')
+        msg=input('输入：').strip()
+        if not msg: continue
+        else:
+            tcp_client.send(msg.encode('utf-8'))
+            print('客户端已经发送消息给服务端')
+            data=tcp_client.recv(buffer_size)
+            print('客户端接收的数据是',data.decode('gbk'))
+    except Exception as e:
+        print(e)
+        break
+
+
+
+
+
