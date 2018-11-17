@@ -1,0 +1,80 @@
+可以被保存到本地文件里面
+
+字符串
+基本数据类型是直接可以处理的（列表，字典等），直接dumps，反序列化成对象，但是queryset对象不能这样，要进行serializes序列化一下才可以进行反序列化
+
+序列化:可以保存在本地loads（字符串）json格式  对象》》字符串
+
+序列化(Serialization)将对象的状态信息转换为可以存储或传输的形式的过程。 在序列化期间，对象将其当前状态写入到临时或持久性存储区。 以后，可以通过从存储区中读取或反序列化对象的状态，重新创建该对象。 序列化使其他代码可以查看或修改，那些不序列化便无法访问的对象实例数据
+
+
+
+对象不能保存
+反序列化：转化为对象，不能保存在本地文件夹（queryset对象，queryset字典形式，元组形式的对象）
+字符串》》对象
+
+
+queryset有3种类型（拿到的）
+第一种：
+对象 queryset对象.all()可以用serializes，下面那个不能
+
+第二种：
+字典形式的queryset类型（values）
+把queryset字典形式的通过list(user_list)可以把queryset字典形式变成字典
+queryset<[{},{},{},{},{}]>最外面是queryset对象，list一下就变成了[{},{},{},{},{}]
+
+第三种：
+元组的形式的quertyset类型（valueslist）
+
+
+import json
+from  django.shortcuts import render,redirect,HttpResponse
+from app01.models import *
+
+
+
+def xuliehua(request):
+
+    user_list=UserInfo.objects.all()
+
+    return render(request,'xuliehua.html',locals())
+
+####序列化操作，将queryset对象那个转化为字符串，obj
+
+def get_data(request):
+    from  django.core import serializers
+    # 导入一个序列化模块,重力对queryset进行序列化
+
+    ret={'status':True,'data':None}
+    # 写一个字典出来
+    try:
+
+
+        #第一种形式是queryset对象形式的,要使用serializes方法序列化操作
+        user_list=UserInfo.objects.all()#这个是queryset对象
+#不加之前data是一个对象，queryset对象
+        ret['data']=serializers.serialize('json',user_list)#django内置 的方法
+        #这个只能对queryset对象进行序列化，加了之后就是字符串类型，不能是字典形式>>字符串(json类型）
+
+
+        #第二种形式，字典形式的queryset对象，这个是Python类型的
+        # user_list=UserInfo.objects.all().values('id','username')
+        # ret['data']=list(user_list)
+        #console.log(arg.data)
+
+        # 第三种形式，list元组形式
+
+        # user_list=UserInfo.objects.all().values_list()
+        # ret['data']=list(user_list)
+
+
+
+
+
+    except Exception as e:
+
+        ret['status']=False
+#json。dumps只支持基本数据类型，不能是queryset对象（基本数据类型有字典，列表等）
+    result=json.dumps(ret)
+    # data=serializers.serialize('json',ret)
+    return  HttpResponse(result)

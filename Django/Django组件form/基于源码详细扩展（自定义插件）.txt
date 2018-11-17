@@ -1,0 +1,94 @@
+from django.forms import forms,widgets,fields
+from django.shortcuts import render,redirect,HttpResponse
+#这个基于源码做的扩展from django.core.exceptions import  ValidationError
+from django.core.exceptions import  ValidationError,NON_FIELD_ERRORS
+# NON_FIELD_ERRORS这个就是__all__错误信息，（obj.errors.__all__,字段的话就是obj.errors.username）
+class ajaxform(forms.Form):
+    username=fields.CharField()
+    # 如果是int的话就是选项框（在html里面渲染出来）
+    # price=fields.CharField()
+    #如果是char的就是input的text框
+    user_id=fields.IntegerField(
+        widget=widgets.Select(choices=[(0,'alex'),(1,'yuan'),(3,'xiaoha')])
+    )
+#基于源码找的扩展
+#自定义方法,clean_字段名字
+    #要有返回值self.cleaned_data['username']
+    # 如果出错，raise  ValuedationError就会报错用户名已经存在，这个报错信息可以自己定制,clean_username对username进行验证,__username__错误信息放在这里
+    def clean_username(self):
+        v=self.cleaned_data['username']
+    #     # 假如已经输入了值的话
+        if UserInfo.objects.filter(username=v).count():
+            raise  ValidationError('there is username,are you know? ')
+        #这个会加到error里面，自定制，可以看forms源码里面的clean_usrname函数（clean_字段名)
+        #抛出这个异常,如果验证不通过的话就抛出这个异常,将这个错误加到error里面，就可以在浏览器拿出来
+
+        return  v
+    # def clean_user_id(self):
+    #     return  self.cleaned_data['user_id']
+# 这个可以整体验证,__all__放在这个里面错误信息
+    def clean(self):
+        value_dict=self.cleaned_data
+        v1=value_dict.get('username')
+        v2=value_dict.get('user_id')
+        print('执行clean')
+        print(v1)
+        print(v2)
+        if v1=='root' and v2==1:
+            print('已经捕捉到')
+            raise ValidationError('all error  are you konw?')
+            #
+        #出错的话就会打印这个自己定制的错误出来
+
+#整体错误的话就是__all__里面，而不是一个字段
+        return  self.cleaned_data
+        # return  value_dict
+
+    #还可以在定制其他的东西出来
+    def _post_clean(self):
+        pass
+    #最终的一个验证方法，可以不用定制
+
+import  json
+def ajax(request):
+    if request.method=='GET':
+        obj=ajaxform()
+        #就生成一个对象，生成html标签，其余的没有做了
+        return render(request,'ajax.html',{'obj':obj})
+
+    else:
+        ret={'status':'fail','message':None}
+        obj=ajaxform(request.POST)
+        #把数据提交过来了，没有做验证
+        print('执行ajax的post操作')
+        if obj.is_valid():
+            #这个已经开始做验证了
+            print('验证通过')
+            ret={'status':'succ'}
+            #ret是一个字典，放了一个statuew进去
+            import json
+            # ret['message'] = obj.errors
+            #这个是再放一个message进去
+            print('obj.errors是',obj.errors)
+            print('全部的数据是',obj.cleaned_data)
+
+            # return  redirect('http://www.baidu.com')
+#ajax 不刷新，（不跳转，不接受任何命令，这个可以不生效了，）
+
+#不用status也可以跳转，当加了status的可以做验证，当验证成功的话就怎样，失败的话就怎样
+
+            return  HttpResponse(json.dumps(ret))
+        #当返回的时候就会调用这个字典
+
+#看到json数据，才有反应
+        else:
+            import  json
+            print(type(obj.errors))
+            #错误信息显示在页面上
+#基本数据类型都可以被转化为字符串,这个不是Python的基本数据类型ErrorDict
+
+
+            from  django.forms.utils import ErrorDict
+            print(obj.as_ul())
+            ret['message'] = obj.errors
+            return  HttpResponse(json.dumps(ret))

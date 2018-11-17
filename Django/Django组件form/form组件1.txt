@@ -1,0 +1,44 @@
+对用户的验证(可以显示错误)
+生成html代码
+
+
+创建一个类
+类中创建字段（包含正则表达式）
+
+GET
+obj=fr()
+obj.user=>>自动生成html
+
+post
+ob=fr(request.post)
+if obj.is_vaild();
+	obj.cleaned_data
+else:
+	obj.errors
+	return 返回到哪里，{'obj',obj.error}
+
+
+
+
+placeholder这个是在生成底部字的
+
+
+
+python manage.py startapp app02
+
+
+
+widget定制生成的插件
+
+<ul>
+{{obj.as_ul}}
+</ul>
+ul,p,table等都可以自定制（charfiled的参数）
+
+errormessage的错误信息：没有匹配成功的错误信心永远可以是invaild
+
+
+
+
+
+

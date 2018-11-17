@@ -1,0 +1,181 @@
+fielfield（field）
+allow_empty_field=False  是否允许空文件（上传文件）
+--str--方法 （str返回什么就可以看到什么）
+插件可以自动生成html标签(input,select,radio等标签，不能是label，li，a，p，div，td等点缀的标签）
+
+form组件：（fields字段里面有两个东西，一个是封装好的正则表达式，还有一个是html插件）
+fields下面的字段：（本质就是做了一个正则表达式的封装）在这些字段下面可以弄input，select，table标签，加下划线
+充当html语言，即使html文件中不用加不起啊，直接在views里面加这些字段就可以做到好多功能（自定制）
+choicefields
+multi.......（select多选框，默认的html插件是select标签）
+charfilds（默认的html插件是input）
+integerfield
+datefield
+charfield
+emailfield
+datetimefield
+widget（这个可以蛮强大，这个可以改默认的插件）
+widget=widget.TextInput（默认的）
+等等字段
+
+
+
+
+
+#字段。fields下面的字段
+
+from django.shortcuts import  render,redirect,HttpResponse
+
+from django.forms import forms,fields,widgets
+
+class Testform(forms.Form):
+    user=fields.CharField(
+        required=True,
+        max_length=32,
+        min_length=3,
+        error_messages={
+            'required':'不能为空',
+            'max_value':'太大了',
+        }
+        #定制html插件
+        widgets=widgets.TextInput(attrs={'class':'c1'})
+    )
+
+    age=fields.IntegerField()
+    email=fields.EmailField(label='邮箱')
+    img=fields.FileField(
+        allow_empty_file=False
+        #不允许放空文件
+    )
+    #这个是文件
+
+    city=fields.ChoiceField(
+        choices=[(1,'alex'),(2,'yaun')],
+        initial=1
+        #默认值可以自己设置
+    )
+
+    city=fields.TypedChoiceField(
+        coerce=lambda  x:int(x),
+        coerce=lambda x:float(x),
+      #接收一个参数，在返回的的int类型，不是字符串类型了，可以字符转换
+        choices=[(1, 'alex'), (2, 'yaun')],
+
+    )
+    ip=fields.GenericIPAddressField(
+        protocol='both',
+
+        unpack_ipv4=False
+        # ipv4,bothn,ipv支持的ip格式
+        # 解析ipv4地址
+    )
+
+
+
+    xoo=fields.FilePathField(
+        path='test.html',
+        # 这个可以看到这个文件的目录所在，所在文件还有他的目录等
+    )
+# 可以多个选择，下拉框,传过去的而是字符串，要想拿到的还是数字，可以协会穿了个typechoicefield
+
+#这个可以支持多选
+    bobby=fields.MultipleChoiceField(
+        choices=[(1,'alex'),(2,'yuan'),(3,'xioayu')],
+        initial=[1,3],
+
+    )
+
+
+
+
+
+#widget定制html插件
+    #常用选择插件
+
+# 单选的radio
+    user=fields.CharField(
+        initial=2,
+        widget=widgets.RadioSelect(choices=(('1,'上海'')....))
+    )
+
+
+    user=fields.ChoiceField(
+        choices=((1,'上海'),(2,'北京'),),
+        initial=2,
+        widgets=widgets.RadioSelect
+
+    )
+
+# 单选的select
+
+    bo=fields.ChoiceField(
+        choices=.....,
+        initial=2,
+        widgets=widgets.Select
+    )
+    #这个intn和char都可以则会自动转换过来相应的格式
+    bo=fields.IntegerField(
+        initial=[1,3],
+        widget=widgets.Select(choices=[(1,'alex'),(2,'yuan'),(3,'xioayu')])
+    )
+# 多选的select
+
+    user=fields.MultipleChoiceField(
+        choices=.....,
+        initial=2,
+        widgets=widgets.Select
+    )
+#单选的checkbox
+    user=fields.ChoiceField(
+        choices=.....,
+        initial=2,
+        widgets=widgets.CheckboxInput()
+    )
+
+# 多选的checkbox，值 为列表
+
+    xoa=fields.ChoiceField(
+        choices=.....,
+        initial=2,
+        #默认那个显示
+        widgets=widgets.CheckboxSelectMultiple
+    )
+
+
+    xdb=fields.ChoiceField(
+        choices=((1,'上海'),(2,'北京')(3,'广州')),
+        initial=2,
+        widget=widgets.RadioSelect
+        #这个是单选的radio
+    )
+
+
+
+
+
+
+
+
+
+
+
+def test(request):
+    if request.method=='GET':
+        obj = Testform({'city':2})
+        #可以在test的html文件里面默认一个city的值
+
+#这个可以在views里面定制html插件出来，再在浏览器渲染出input的效果出来，用mark_save方法
+        txt='<input type='text'/>'
+        from django.utils.safestring import  mark_safe
+        txt=mark_safe(txt)
+
+
+        return render(request, 'test.html', {'obj': obj,'txt':txt})
+
+    else:
+        obj=Testform(request.POST,request.FILES)
+        #上传文件要加fields.post表单的数据都放在post里面了，而文件就放在fields里面了
+        obj.is_valid()
+        print(obj.cleaned_data)
+
+        return  render(request,'test.html',locals())

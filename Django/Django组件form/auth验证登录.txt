@@ -1,0 +1,29 @@
+def kinglogin(request):
+    print('正在登陆.....................')
+    print('执行kingadmin里面的login操作')
+    if request.method=='POST':
+        print('正在提交post表单')
+        username=request.POST.get('username')
+        password = request.POST.get('password')
+        print(username,password)
+        user=authenticate(username=username,password=password)
+        print(type(user))
+        #验证过程
+        if user:
+            print('验证成功',user)
+            #用户名对象
+            login(request,user)
+            return  redirect('/kingadmin/')
+            # return  redirect(request.GET.get('next','/'))
+            #这个是get方式，从地址栏拿到数据，next=什么，当执行成功就会执行next，没有成功的话就会到首页(http://127.0.0.1:8000/login/?next=/crm/
+    # '''
+    # #这个会进行路由映射，不渲染，直接到crm那个页面
+    # # return  HttpResponse('ok')
+    # '''
+        else:
+            error='Authenticate  fail  Please input again'
+            print('验证错误')
+            return  render(request,'king/login.html',{'error_message':error})
+
+
+    return  render(request,'king/login.html')

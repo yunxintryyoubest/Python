@@ -1,0 +1,76 @@
+当数据库添加数据时，浏览器刷新一下不能立即拿到数据，必须重启一下（刷新一下）数据库才可以在浏览器看到数据
+这样做不方便，下面的方法就是当添加数据(在数据库)，不需要重启，就刷新一下浏览器就可以看到数据
+
+
+class chat():
+	
+类下面是静态字段（实时更新）
+父类
+	def __init__(self,*args,**kwargs):(类属性，静态属性）
+
+		super(chat,self).__init__(*args,**kwargs)
+
+		self.fileds['user_id].widget.choices=userinfo.object.values_lsit('id','username')
+
+当子类创建对象的时候，就会刷新一次，init重新执行一遍，chat又去数据库重新取了一次，相当于子类也跟着更新了
+slef.fields只能在super下面（找所有的静态属性），会拷贝所有的静态字段，赋值给self.fields，否则根本找不到
+
+
+obj=chat()实例化
+
+
+
+
+
+
+
+class chat(forms.Form):
+
+    xdb=fields.InterFields(
+        initial=2,
+        widget=widgets.Select()
+      
+    )
+	def __init__(self,*args,**kwargs):
+
+		super(chat,self).__init__(*args,**kwargs)
+
+		self.fileds['user_id].widget.choices=userinfo.object.values_lsit('id','username')
+	
+
+
+
+
+
+
+obj=chat()实例化
+
+return render(....{'obj
+
+html渲染 {{obj}}
+
+
+
+
+
+
+def test(request):
+    if request.method=='GET':
+        obj = Testform({'city':2})
+        #可以在test的html文件里面默认一个city的值
+
+#这个可以在views里面定制html插件出来，再在浏览器渲染出input的效果出来，用mark_save方法
+        txt='<input type='text'/>'
+        from django.utils.safestring import  mark_safe
+        txt=mark_safe(txt)
+
+
+        return render(request, 'test.html', {'obj': obj,'txt':txt})
+
+    else:
+        obj=Testform(request.POST,request.FILES)
+        #上传文件要加fields.post表单的数据都放在post里面了，而文件就放在fields里面了
+        obj.is_valid()
+        print(obj.cleaned_data)
+
+        return  render(request,'test.html',locals())

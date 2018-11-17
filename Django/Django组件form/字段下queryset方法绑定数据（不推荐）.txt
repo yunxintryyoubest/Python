@@ -1,0 +1,29 @@
+
+
+可以做到实时更新，但在浏览器显示不出来具体信息（显示不了中文），多少个可以显示，不推荐
+
+user=ModeChoicefield（
+
+queryset=userinfo.object.all()
+to_field_name='id'
+
+）
+
+return  render(....{'user',user})
+
+{{user}}html文件渲染
+
+
+
+要在model里面加str方法
+才可以在浏览器显示出来
+
+def __str__():
+	return self.username
+这个只返回了名字，有时候不止名字也还会有年龄，班级等信息在浏览器显示出来（所以耦合性差，不推荐）
+
+
+
+
+注意：
+依赖model下面的str方法

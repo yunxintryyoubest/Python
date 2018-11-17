@@ -1,0 +1,23 @@
+form组件
+可以用来验证（输入的用户信息）
+form可以生成html文件，类里面的字段可以生成后input标签，就不用再在输入信息的地方加这个标签
+了，obj=userform(request.POST)这个可以引入这个输入的全部数据
+
+
+
+
+
+
+返回的上下文必须是字典形式，不能是自己设置的形式，否则报错
+TypeError: context must be a dict rather than set.
+之前是
+ return render(request, 'add_user.html', {'obj',obj})
+改成这个后就不报错了
+ return render(request, 'add_user.html', locals())
+
+
+
+
+
+
+This field is required.这个不能为空
