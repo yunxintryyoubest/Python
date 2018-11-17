@@ -1,0 +1,62 @@
+编写代码：
+name不能省
+starts_urls起始url地址
+allowed_domains=['chouti.com']边界，只能在这个网站里面爬去，允许的域名 
+allowed_domains=['chouti.com','baidu.com']
+
+
+第一个处理请求的函数是parse
+如果要更改这个名字parsel
+def parse(self,resposne):
+
+就要重写这个起始函数
+
+def start_reqeuts(self):
+for url in slef.start_urls:
+yield  Request(url,callback=self.parsel1)
+ 
+那么这个其实函数就可以改成parsel1了
+def parsel1(self,resposne):
+
+响应response
+response.url
+response.text
+response.body
+response.meta={'depth':深度}
+
+采集数据：
+Selector(response=response_.xpath()
+//div子孙
+//div[@id='i1']
+//div[start-with(@id.'i1')]
+//div[re:test(@id,'i1')]
+
+对象：
+.//  对象里面找子孙
+./儿子
+//div/a/text()
+//dic/a/@href
+
+Selector().extract()这个是将对象转化 为字符串
+Selector().extract_first()取这个列表的第一个数据   visit_urls=set()
+
+
+
+
+
+yield Request(url='',callback='')    别人写的耦合要低
+yield Item(name='',title='')
+
+
+
+pineline  
+
+class Foo:
+def process_item(self,item,spider):
+spder是这个爬虫的名字
+
+
+settings={
+'',300,
+}
+

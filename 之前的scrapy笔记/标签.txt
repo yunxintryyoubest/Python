@@ -1,0 +1,74 @@
+xpath
+
+//a所有的a标签  
+//div[@id='content-list']这个就会找到所有的div标签，而且这个有这个id=content-list的属性的标签
+hxs=Selector(response=response).xpath('//div[@id="content-list"]/div[@class="item"]')####加上.extract()就是对象转化为字符串了
+
+注意：当循环遍历这个对象列表的时，就不能这样取值了
+.// 这个点就是上一级的目录
+/text（）时取某个标签的文本内容
+
+extract.first()是取某列表的第一个值
+'''
+//表示子子孙孙
+.//当前对象的子孙中
+/儿子
+/div[@id='i1']  儿子中的div标签并且id为i1的标签
+obj.extract() 列表中的对象转化为字符串
+obj.extract_first()返回列表的第一个值 
+//div/text()获取某标签的文本  
+'''
+
+
+
+例子：
+# -*- coding: utf-8 -*-
+import scrapy
+import  sys,io
+# sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='gb18030')
+sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
+#######这个在linux不用加，但在win要加
+from  scrapy.selector import  Selector
+
+class BaiduSpider(scrapy.Spider):
+    name = 'chouti'
+    allowed_domains = ['chouti.com']
+    start_urls = ['http://dig.chouti.com/']
+
+    def parse(self, response):
+        ##################爬去这个网站所有的a标签
+        # hsx=Selector(response=response).xpath('//a').extract()########一个标签对象列表，多个a标签
+        # content=str(response.body,encoding='utf-8')
+        # print(content)
+        # for i  in hsx:
+            # print(i)#######每一个都是标签对象
+
+
+        hxs=Selector(response=response).xpath('//div[@id="content-list"]/div[@class="item"]')####加上extract就是对象转化为字符串
+        ######曾是找到标签div并且它的id属性为content-list的标签,/就表示它的儿子，找他下面div标签
+        # print(hxs)
+        i=0
+        for obj in hxs:
+        ###########注明一下，这个不太与上面的，取文本要通过text（）来取，.代表上一级下面的文件
+            # print(obj)
+            # a=obj.xpath('.//a[@class="show-content"]/text()')#############这个拿到的是一个一个的对象 ，但如果在hxs后面加上.extract（）的话，就是一个一个的字符串了
+######################不能用//，要用./来去找，只有对象可以xpath,找到a标签和下面的class=‘’某个值的标签
+            a=obj.xpath('.//div[@class="news-content"]/div[@class="part1"]/a/text()').extract_first()
+            # a = obj.xpath('.//div[@class="new-content"]/div[@class="part1"]/a[@class="show-content color-chag"]/text()').extract_first()#########取这个第一个值，就是类似列表一样的
+
+            # print(a.strip())
+            i=i+1
+            print('标题[{}]'.format(i))
+            print(a.strip())
+            print('\n')
+
+'''
+//表示子子孙孙
+.//当前对象的子孙中
+/儿子
+/div[@id='i1']  儿子中的div标签并且id为i1的标签
+obj.extract() 列表中的对象转化为字符串
+obj.extract_first()返回列表的第一个值 
+//div/text()获取某标签的文本  
+'''
+

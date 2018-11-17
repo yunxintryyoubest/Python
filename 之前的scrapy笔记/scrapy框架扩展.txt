@@ -1,0 +1,66 @@
+EXTENSIONS这个相当于挂钩子
+已经存在的个钩子有爬虫开始的时候，关闭，引擎开始，关闭，调度器开始等
+
+当然自己也可以自定义扩展， 想在什么位置扩展都可以
+
+settings:
+from  scrapy.extensions.telnet import  TelnetConsole
+#######################导入这个扩展的模块
+
+这个可以在telnet里面对应相应的地方自定义钩子
+
+from  scrapy  import  signals
+这个可以看到所有的钩子（信号量）
+
+
+
+
+settings.py:
+
+EXTENSIONS = {
+   # 'scrapy.extensions.telnet.TelnetConsole': None,
+    'app01.extensions.MyExtend':300
+}
+
+from  scrapy.extensions.telnet import  TelnetConsole
+#######################导入这个扩展的模块
+'''
+这个可以自定义扩展，相当于from  scrapy.extensions.telnet import  TelnetConsole
+'''
+
+
+
+
+extensions.py:
+##########################自定义扩展
+
+from  scrapy  import  signals
+###导入这个信号量
+
+class MyExtend:
+
+
+
+    def __init__(self,crawler):
+        self.crawler=crawler
+
+        ################在指定的信号上注册操作
+        self.crawler.signals.connect(self.start, signals.engine_started)
+        ################这个之前是注册相对应的钩子，后面是对应的名字，自定义什么的扩展
+        self.crawler.signals.connect(self.close, signals.engine_stopped)
+
+#########################静态类方法，一进来就先执行曾from_crawler方法
+    @classmethod
+    def from_crawler(cls,crawler):
+        ######注明一下，这个cls是这个Myextend的这个类
+        obj=cls(crawler)
+        #############3执行这个mYExtnd类，实例化一下，传了一个参数进去
+        return  obj
+
+
+
+    def start(self):
+        print('引擎钩子start')
+
+    def close(self):
+        print('引擎钩子close')

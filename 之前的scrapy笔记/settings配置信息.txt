@@ -1,0 +1,166 @@
+# -*- coding: utf-8 -*-
+
+# Scrapy settings for app01 project
+#
+# For simplicity, this file contains only settings considered important or
+# commonly used. You can find more settings consulting the documentation:
+#
+#     https://doc.scrapy.org/en/latest/topics/settings.html
+#     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
+#     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+
+BOT_NAME = 'app01'
+
+SPIDER_MODULES = ['app01.spiders']
+NEWSPIDER_MODULE = 'app01.spiders'
+
+
+# Crawl responsibly by identifying yourself (and your website) on the user-agent
+#USER_AGENT = 'app01 (+http://www.yourdomain.com)'
+
+# Obey robots.txt rules
+ROBOTSTXT_OBEY = False
+
+
+DEPTH_LIMIT=4
+#####个是访问深度,0是不受限制的，一次一个页面，没往下走一层，就加1
+
+# Configure maximum concurrent requests performed by Scrapy (default: 16)
+#CONCURRENT_REQUESTS = 32
+########这个爬虫的并发数，默认是16个
+
+# Configure a delay for requests for the same website (default: 0)
+# See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
+# See also autothrottle settings and docs
+# DOWNLOAD_DELAY = 5
+# The download delay setting will honor only one of:
+#CONCURRENT_REQUESTS_PER_DOMAIN = 16
+#######据域名和ip进行控制,域名的ip最多有16个，和这个域名请求的ip并发数最多更有16个
+#CONCURRENT_REQUESTS_PER_IP = 16
+
+# Disable cookies (enabled by default)
+#COOKIES_ENABLED = False
+# COOKIES_DEBUG=True
+
+# Disable Telnet Console (enabled by default)
+#TELNETCONSOLE_ENABLED = False
+TELNETCONSOLE_ENABLED = True
+######################监听你的scrapy的进程里面的状态和数据
+
+
+# Override the default request headers:
+#DEFAULT_REQUEST_HEADERS = {
+#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+#   'Accept-Language': 'en',
+#}
+
+# Enable or disable spider middlewares
+# See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+#SPIDER_MIDDLEWARES = {
+#    'app01.middlewares.App01SpiderMiddleware': 543,
+#}
+
+# Enable or disable downloader middlewares
+# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
+#DOWNLOADER_MIDDLEWARES = {
+#    'app01.middlewares.App01DownloaderMiddleware': 543,
+#}
+
+# Enable or disable extensions
+# See https://doc.scrapy.org/en/latest/topics/extensions.html
+EXTENSIONS = {
+   # 'scrapy.extensions.telnet.TelnetConsole': None,
+    'app01.extensions.MyExtend':300
+}
+#######zgeextension是自定义的扩展，可以自己定义放在哪里
+from  scrapy.extensions.telnet import  TelnetConsole
+#######################导入这个扩展的模块
+'''
+这个可以自定义扩展，相当于from  scrapy.extensions.telnet import  TelnetConsole
+'''
+
+# Configure item pipelines
+# See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+
+
+ITEM_PIPELINES = {
+   'app01.pipelines.App01Pipeline': 300,
+    # 'app01.pipelines.App01Pipeline': 200,
+    # 'app01.pipelines.App01Pipeline': 300,
+    # 'app01.pipelines.App01Pipeline': 300,
+####这个执行持久化操作的先后顺序是有这里定的，后面是权重，权重越大，就越靠前执行，这个持久化操作（保存数据），可以是保存到缓存，或者而保存到数据库（页面输出等），自己定制，可以是相同的爬虫也可以不同
+}
+######################这里是配置这个pipeline的，做持久化操作#########################
+# Enable and configure the AutoThrottle extension (disabled by default)
+# See https://doc.scrapy.org/en/latest/topics/autothrottle.html
+#AUTOTHROTTLE_ENABLED = True
+# The initial download delay
+#AUTOTHROTTLE_START_DELAY = 5
+# The maximum download delay to be set in case of high latencies
+#AUTOTHROTTLE_MAX_DELAY = 60
+# The average number of requests Scrapy should be sending in parallel to
+# each remote server
+#AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+# Enable showing throttling stats for every response received:
+#AUTOTHROTTLE_DEBUG = False
+
+# Enable and configure HTTP caching (disabled by default)
+# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
+#HTTPCACHE_ENABLED = True
+#HTTPCACHE_EXPIRATION_SECS = 0
+#HTTPCACHE_DIR = 'httpcache'
+#HTTPCACHE_IGNORE_HTTP_CODES = []
+#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+
+
+
+DUPEFILTER_CLASS="app01.duplication.RepeatFilter"
+###############################去除重复,进入自己定义的类
+
+# DUPEFILTER_CLASS="scrapy.dupefilters.RFPDupeFilter"
+#############默认是等于下面的
+from  scrapy.dupefilters import  RFPDupeFilter
+###################RFPDuperFilte这个是去除重复的
+
+
+#####################是否启用缓存策略
+
+HTTPCACHE_ENABLED=True
+# # 缓存策略：所有请求均缓存，下次在请求的时候直接访问原来的缓存即可
+HTTPCACHE_POLICY="scrapy.extensions.httpcache.DummyPolicy"
+# # 缓存保存路劲:
+HTTPCACHE_DIR = 'httpcache'
+# # 缓存忽略的http状态码：+
+# HTTPCACHE_IGNORE_HTTP_CODES={}
+# # 缓存存储的插件：
+HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+HTTPCACHE_EXPIRATION_SECS = 0
+####延迟时间
+
+# from  scrapy.extensions.httpcache import  FilesystemCacheStorage
+#
+# from  scrapy.extensions.httpcache import DummyPolicy
+
+# HTTPCACHE_ENABLED = True
+# HTTPCACHE_EXPIRATION_SECS = 0
+# HTTPCACHE_DIR = 'httpcache'
+# HTTPCACHE_IGNORE_HTTP_CODES = []
+# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+################默认代理
+from  scrapy.contrib.downloadermiddleware.httpproxy import  HttpProxyMiddleware
+###############证书（http）
+from  scrapy.core.downloader.webclient import   ScrapyHTTPClientFactory
+
+from  scrapy.core.downloader.contextfactory import  ScrapyClientContextFactory
+###支持这个买的这个http证书
+
+
+
+COMMANDS_MODULE='app01.commands'
+####################这个会自动爬所有的爬虫了
+
+DOWNLOADER_CLIENTCONTEXTFACTORY=' scrapy.core.downloader.contextfactory.ScrapyClientContextFactory'

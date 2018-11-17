@@ -1,0 +1,33 @@
+爬虫中间件:
+sewttings里面的配置：
+SRIDER_MIDDLEWARES={
+'app01.middlewares.SpoiderMiddleware'}
+这个是自己配置的爬虫中间件  
+
+在spider的同级目录下创建commands
+scrapy crawlall自动爬去全部爬取全部的数据，当创建完成这commadns之后就可以在
+这这个命令行显示这个commands
+
+process_start_reqeusts
+爬虫启动时调用
+param start_reqeusts
+param spider
+return: 包含requet对象的可迭代对象
+return start_requests
+
+
+chouti.py那里start_urlshi被start_url（爬虫中间件）调用
+
+def  process_spider_input
+
+def process_spider_output
+
+
+在执行这个parse之前会执行这个爬虫中间件,SpiderMiddleware,执行完之后就给这个parse
+在执行这个parse，继续往下执行
+下载器传进来的response,紧接这把这个response交给parse，往下执行了 
+
+
+下载器向这个请求队列拿到这个url，有个回调函数，交个这个spider，spider再循环这个请求队列
+
+process先经过这个url

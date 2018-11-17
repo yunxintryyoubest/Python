@@ -1,0 +1,39 @@
+scrapy默认是不允许携带自定义的证书的 
+
+源码里面有解释
+证书2种
+
+key  私钥
+cert 证书
+pem
+自定义这个证书：
+继承这个证书的类 
+证书是一个文件，要把文件转化为对象  
+settingsl里面的配置：
+
+###############证书（http）
+from  scrapy.core.downloader.webclient import   ScrapyHTTPClientFactory
+
+from  scrapy.core.downloader.contextfactory import  ScrapyClientContextFactory
+###支持这个买的这个http证书
+
+
+DOWNLOADER_CLIENTCONTEXTFACTORY=' scrapy.core.downloader.contextfactory.ScrapyClientContextFactory'
+
+
+
+
+
+
+class cert(ScrapyClientContextFactory):
+def getCertificateOptions():
+里面重写这个证书就可以了 
+
+pkey
+cert
+
+ return CertificateOptions(verify=False,
+                        method=getattr(self, 'method',
+                                       getattr(self, '_ssl_method', None)),
+                        fixBrokenPeers=True,
+                        acceptableCiphers=DEFAULT_CIPHERS)

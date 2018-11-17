@@ -1,0 +1,72 @@
+# -*- coding: utf-8 -*-
+import scrapy
+import  sys,io
+from  scrapy.http import Request
+from  scrapy.http.cookies import  CookieJar
+############导入这个cookies的模块
+# sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='gb18030')
+sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
+#######这个在linux不用加，但在win要加
+from  scrapy.selector import  Selector
+
+
+#######################################注明一下，这个cokies是可以一直保存在这容器里面的，这个是在你下次访问这个网站的时候就不需要携带的数据（隐私），这个容器可以存很多cookies数据
+
+class BaiduSpider(scrapy.Spider):
+    name = 'chouti'
+    allowed_domains = ['chouti.com']
+    start_urls = ['http://dig.chouti.com/']
+    cookie_dict = None
+
+    def parse(self, response):
+        # print(dir(response))
+        cookies_obj=CookieJar()
+        ########创建一个对象容器
+        # print(response.request)
+        cookies_obj.extract_cookies(response,response.request)
+        ############这个request里面有这个cookies，把这个cookies放到这个容器里
+        print(cookies_obj._cookies)
+        self.cookie_dict=cookies_obj._cookies
+##################带上这个用户名和密码
+    ##########登录操作,提交请求到调度器
+        yield Request(
+            url='https://dig.chouti.com/login',
+            method='POST',
+            # body={'phone':'13237005217','password':'192855wang,,..??','oneMonth':1},
+            body="phone=8613237005217&password=192855wang,,..??&oneMonth=1",
+            headers={"content-type": 'application/x-www-form-urlencoded; charset=UTF-8'},
+            cookies=cookies_obj._cookies,
+            callback=self.check_login)#######调用一下这个self.parse方法，默认这个callback=self,parse,requets的话就放到调度器进行diaodu
+        #########注明一下，取这个对象容器的cookies要加下划线来取这个cookies
+        #######提交post请求，登录操作
+        print('已经执行')
+    def check_login(self,response):
+        print(response.text)
+        print('已经验证通过了')
+        yield  Request(url='http://dig.chouti.com/',callback=self.agree_good)
+        #############拿到的是json数据,这个是网页返回的数据
+        #######这个是对这个登录成功后的点赞操作
+    def agree_good(self,response):
+        print('点赞')
+
+
+        id_list=Selector(response=response).xpath('//div[@share-linkid]/@share-linkid').extract()
+        #######拿到每一个id，对每一个id进行操作
+        for i in id_list:
+            ##################点赞操作，带cookies，进行点赞操作
+            url = 'https://dig.chouti.com/link/vote?linksId=%s'%i
+            yield Request(
+                url=url,
+                cookies=self.cookie_dict,
+                method='POST',
+                callback=self.show_good,
+            )
+        page_url=Selector(response=response).xpath('//a[starts-with(@href,"/all/hot/recent/")]/@href').extract()####这个和下面这个方法都可以使用，都是以什么开头进行匹配
+        for page in page_url:
+            url='http://dig.chouti.com%s'%page###################做了一个拼接
+            yield  Request(url=url,callback=self.agree_good)
+            ######################点赞成功这页后，在返回继续点赞
+
+    def show_good(self,response):
+        print('已经点赞成功')
+        print(response)

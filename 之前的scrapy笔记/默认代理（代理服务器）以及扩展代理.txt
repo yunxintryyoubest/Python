@@ -1,0 +1,16 @@
+默认代理：
+os.environ{
+http_proxy:http://root:yunxin@192.0.0.1:8080}
+
+
+os.environ所有的环境变量 
+只能走当前的环境变量
+
+name.lower()变成小写
+if value and name[-6:]='_proxy'
+
+自定义代理：
+这个代理的def  process_request不能改变 
+
+服务端：
+

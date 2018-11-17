@@ -1,0 +1,14 @@
+//a[@id]这个是筛选 ，有a标签且有id的标签
+//a/@id这个是取值（取这个标签对应的id值）
+xpath('//a[@href="link"][@id="i1"]')
+('//a[contains(@href,"link")]')
+('//a[start-with(@href,"link")]')
+('//a[re:test(@id,"i\d+")]')
+
+
+
+做了筛选了
+extract()是将对象转化为字符串
+extract_first()
+
+

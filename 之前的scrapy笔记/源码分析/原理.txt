@@ -1,0 +1,68 @@
+特殊对象：
+getpage(url)  传url进来，创建socket，自动完成 
+defer.Defered()   加到事件循环里面    _close=defer.Defered()    _close.callback(None)  这个是执行这个done方法的 
+
+
+2.@defer.inlineCallbacks
+
+3.reactor.callLater(0，函数）几秒钟之后执行
+
+4.reactor.run()  reactor.stop()    开始终止
+
+5.defer.DeferList([d1,d2.....])  
+dd.addCallBack(lambda _:rector.stop())
+
+
+当这个调度器里面没有这个url和这个crawel进来的时候
+，就会终止
+
+
+
+
+Crawlerprocess  这是进行处理这个所有的请求
+defer 这个是对所有的请求都耗着
+_active 这个表示有多少个爬虫
+crawl 这是执行所有的爬虫方法
+这里面可以创建spider对象和engine引擎
+defer.defered() 这是耗这所有的请求的
+open_spider 这个放进所有的引擎的
+这里有两件事，一个是schdler创建这个调度器，一个是start_request这个是开启下一个页面
+next_request 这个是可以创建下一页面的，这个就可以执行这个中间件
+slot 这个里封装了很多值，
+nextcall 这个是可以调用下一个方法的
+没取完放到这个调取器里面，没有取完在放到这个调度器里面
+nextcall没有取完就在次去取
+
+exucte 这个是可以执行的引擎
+start 里面有一个start_wait 这可以等住所有的引擎
+
+
+原理解析：
+不管多少个爬虫，事件循环只启动一次
+创建多个defer
+
+
+这个有3部分组成
+第一个部分是get_page
+第二部分是defer
+第三部分是  recator
+
+
+
+可以去这个cls里面找类
+import  importlib
+m=importlib.import_module(module_path)
+这个是可不能找这个里面的类的
+
+当你yield 的时候，的把所有URl加进这个调取器
+
+一个是开启这个调度器
+一个是开启这url
+
+
+
+
+
+
+
+

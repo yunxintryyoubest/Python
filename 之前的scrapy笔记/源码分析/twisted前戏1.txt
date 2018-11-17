@@ -1,0 +1,62 @@
+
+
+利用getpage创建socket
+将socket添加到时间循环
+开始事件循环（内部发送请求，并接受）
+
+reactor监听，如果有人连接成功的话，就会
+已经发数据，监听响应数据的话，就会进行处理，事件循环，内部帮我们
+完成成了事件循环，监听的scoket对象，当全部的socket对全部回来的时候，就会停止
+
+getpage就是一个scoket对象，创建socket对象，你发那个ip，发送那个地址，就自动连接那个地址，
+自动从事件循环中移除
+
+defer这个是特殊得socket对象，不给任何地址发送请求，不知道什么时候结束，所以需要手动移除 
+defer就是告诉事件循环，一直循环下去
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+from twisted.internet import  reactor
+from   twisted.web.client import   getPage
+from  twisted.internet  import    defer
+
+
+
+'''
+
+1.利用getpage创建socket
+2.将socket添加到事件循环中
+3.开始事件循环（内部发送请求，并接受响应，当所有socket完成之后，结束事件循环）
+'''
+def response(content):
+    print(content)
+
+@defer.inlineCallbacks
+################已经添加到事件循环了
+def task():
+    url='http://www.baidu.com'
+    d=getPage(url.encode('utf-8'))
+    #########这个是一个特殊的defer对象，转化为字节类型
+    d.addCallback(response)
+    #####回调函数
+    #############创建了socket对象，执行完后之后就执行回调函数response
+
+    yield  d
+
+task()
+############执行完成之才会添加到事件循环中
+
+reactor.run()
+########这个是开始执行事件循环#################################

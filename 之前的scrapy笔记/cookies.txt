@@ -1,0 +1,19 @@
+from  scrapy.http.cookies import  CookieJar
+
+parse：
+cookies_obj=CookieJar()
+########创建一个对象容器
+print(response.request)
+cookies_obj.extract_cookies(response,response.request)
+############这个request里面有这个cookies，把这个cookies放到这个容器里
+print(cookies_obj._cookies)
+
+
+
+
+
+
+
+这个拿到的这个cookies的值       print(cookies_obj._cookies)，那个域名下的cookies，
+/表示在这个域名下所有的cookies都生效  
+{'.chouti.com': {'/': {'gpsd': Cookie(version=0, name='gpsd', value='c158eed0b107c14077ab98a9b9ce04cb', port=None, port_specified=False, domain='.chouti.com', domain_specified=True, domain_initial_dot=False, path='/', path_specified=True, secure=False, expires=1539845526, discard=False, comment=None, comment_url=None, rest={}, rfc2109=False)}}, 'dig.chouti.com': {'/': {'JSESSIONID': Cookie(version=0, name='JSESSIONID', value='aaa3TFkiWcrOhbqhuorxw', port=None, port_specified=False, domain='dig.chouti.com', domain_specified=False, domain_initial_dot=False, path='/', path_specified=True, secure=False, expires=None, discard=True, comment=None, comment_url=None, rest={}, rfc2109=False)}}}

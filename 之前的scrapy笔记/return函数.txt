@@ -1,0 +1,8 @@
+class  student:
+def __init(self,val):
+self.val=val
+
+def first(self):
+a=1
+return a
+注明一下，这个return的值返回到__init这个构造函数里面

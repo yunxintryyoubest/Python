@@ -1,0 +1,95 @@
+from twisted.internet import  reactor
+from   twisted.web.client import   getPage
+from  twisted.internet  import    defer#######################不发送请求，需要手动终止
+
+
+
+
+
+
+
+
+
+"""
+原理讲解：
+执行了3个爬虫，当放在deferlist里面，，设置了全部变量_defer_close，这3个爬虫并发执行，之后执行response，当count等于这个爬虫数3的时候
+就执行done，终止这个爬虫的函数，当遇到这个yield的时候，d=task()这个就是遇到yield的是，返回的后面的值，当执行这个recator.run()的时候就执行这个response，这个是默认执行的函数
+名字不能修改，addboth里面把这个done加进去了这个callback的时候就自动执行这个done函数
+reactor.run启动这个爬虫
+reactor.stop终止这个爬虫
+"""
+count=0
+def response1(content):
+    print(content)
+    global  count
+    count+=1
+    if count==3:
+        _defer_close.callback(None)
+#################当全部的爬虫回来的时候，就终止他,dd.addBoth(done)这个里面已经把这个回调函数已经加进来了在，只需要执行这个callback就好了
+############执行完成这个之后，就执行这个done终止这个事件循环,done()
+@defer.inlineCallbacks
+################已经添加到事件循环了
+def task():
+
+    #################################每一个爬虫的开始 ,start_url
+    url='http://www.baidu.com'
+    d=getPage(url.encode('utf-8'))###################注明一下，这只是创建socket对象,并没进行connect
+    #########这个是一个特殊的defer对象，转化为字节类型
+    d.addCallback(response1)
+    #####回调函数
+    #############创建了socket对象，执行完后之后就执行回调函数response
+
+
+    url='http://www.cnblogs.com'
+    d1=getPage(url.encode('utf-8'))###################注明一下，这只是创建socket对象,并没进行connect
+    #########这个是一个特殊的defer对象，转化为字节类型
+    d1.addCallback(response1)
+    #####回调函数
+    #############创建了socket对象，执行完后之后就执行回调函数response
+
+    url='http://www.sina.com'
+    d2=getPage(url.encode('utf-8'))###################注明一下，这只是创建socket对象,并没进行connect
+    #########这个是一个特殊的defer对象，转化为字节类型
+    d2.addCallback(response1)
+    #####回调函数,把这个全部的socket对象放进这个回调函数里面
+    #############创建了socket对象，执行完后之后就执行回调函数response
+###################每执行一个这个就开启了一个爬虫
+
+    global  _defer_close
+
+    #########设置全局变量，可以在response里面可以终止这个defer
+    _defer_close=defer.Deferred()
+    ################defer开始不终止他
+    yield  _defer_close
+
+################当有多个socket的时候，这个是全部放在socket里面，在发给task，执行response
+d=task()##创建socket对象，放到事件循环，在执行，这个d就是yiel后面的值，返回的值
+############执行完成之才会添加到事件循环中
+# d.addCallback()
+# d.addErrback()
+# d.addboth()
+    # dd=defer.DeferredList([d,])
+dd = defer.DeferredList([d,])#################监听多个socket对象，list类型
+############加进列表里面，进行监听
+########这个是开始执行事件循环#################################
+
+####总之事件循环
+def done(*args,**kwargs):
+    reactor.stop()
+
+
+def start(*args,**kwargs):
+    print('start')
+    reactor.stop()
+
+
+
+
+
+#########################解决了无数次终止的问题
+dd.addBoth(start)######这个是response里执行的这个回调函数
+# dd.addBoth(done)######这个是response里执行的这个回调函数
+####################执行终止函数done，完成，加进来这个回调函数
+reactor.run()
+
+#####当执行者recator.run()的时候就执行这个response函数，执行这个response，这个response名字不能修改，这个是addcallback加进去的函数，当run一下，就会执行。。。。。。。。。。。。

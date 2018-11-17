@@ -1,0 +1,27 @@
+问题解决：
+解决办法是 在 setting.py 中：
+''# Obey robots.txt rules
+ROBOTSTXT_OBEY = True  //设置为 False 即可
+就能抓出来了，问题是因为 scrapy 默认检测 robots.txt ，看是否可以抓取，如果不行，就不能用了哦
+
+
+
+
+
+
+
+scrapy startproject  app01
+cd app01
+scrapy  genspider chouti chouti.com  
+scrapy crawl chouti（注意，这个抽屉式自己取得名字，不能式.py,只能是自己取得名字，或者这个爬虫的名字）
+这里可以进这个chouti.py文件里面修改一下，就可以运行出来了
+scrapy crawl chouti  相应的去查找这个蜘蛛了
+scrapy crawl chouti --nolog这个就不会显示头信息了
+
+
+
+
+
+
+
+

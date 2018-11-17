@@ -1,0 +1,4 @@
+去配置文件找到这个SPIDEZR_MODULES=['app01.spiders']
+
+
+你要连接那个ip那个端口，就去reactor这里就可以了

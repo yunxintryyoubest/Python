@@ -1,0 +1,16 @@
+特殊对象：
+getpage（url）自动完成
+_close=defer.Defered()
+
+defer.ilineCallbacks
+
+rector.callLater(0,函数)
+
+rector.run() stop() 注意这个run值执行了一次，这个spider名字都放在了list里面  
+
+
+
+defer.DeferList([d1,d2,])
+dd.addCallBack(lambda _:rector.stop())
+
+

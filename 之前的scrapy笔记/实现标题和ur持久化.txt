@@ -1,0 +1,80 @@
+items 和pipeline是做持久化的（存储数据）、
+items是做格式化的，把你想要的东西格式化你想要的对象
+
+
+baidu.py:
+这步操作是将这个请求传给调度器取接受请求，然后在items里面进行格式化操作，再在pipeline。李里面存入数据库操作
+yield Request(url=url,callback=self.parse)#######调用一下这个self.parse方法，默认这个callback=self,parse,requets的话就放到调度器进行diaodu
+################这个就是把这个请求放到调度器里面了，调度器拿到请求进行下载，callback就是下载完了要调度谁
+
+
+
+item_obj=ChoutiItem(title=title,href=url)#######注明一下，这个前面那个title，href是在items里面定义的，后面是直接进行传参操作，写进去,注意区分
+#####################注明一下，这是封装一个对象，把title和url封装到item_obj里面去，然后传给itms，下面的yield就是执行相对应的操作
+
+
+
+
+items.py 
+
+class ChoutiItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    print('执行格式化操作')
+    title=scrapy.Field()
+    href=scrapy.Field()
+
+
+
+
+
+
+
+
+pipelines.py
+
+###############这里是做持久化的（就是保存数据进去的）
+class App01Pipeline(object):
+    def process_item(self, item, spider):
+        # return item
+        # if spider.name =='chouti':
+        ############当你的蜘蛛名字为这个的时候，执行相对应的操作
+        print(spider,item)
+        ######spider:<BaiduSpider 'chouti' at 0x1fb047e1908>,choouti的名字
+        # f=open('new.json','a+')
+        f=open('news.json','a')
+        ############以追加的方式打开
+        tpl='%s\n%s\n\n'%(item['title'],item['href'])
+        ###################注明这个item里面的字典的title，url是在items里面定义的，不是baiud.py里面定义的
+        print('写入成功')
+        print(tpl)
+        f.write(tpl)
+        f.close()
+        ###########这个spider是这个爬取（自己取得名字）
+
+
+
+
+
+
+
+
+
+
+
+
+
+settings:
+
+DEPTH_LIMIT=5
+深度
+
+
+ITEM_PIPELINES = {
+   'app01.pipelines.App01Pipeline': 300,
+    # 'app01.pipelines.App01Pipeline': 300,
+    # 'app01.pipelines.App01Pipeline': 300,
+    # 'app01.pipelines.App01Pipeline': 300,
+####这个执行持久化操作的先后顺序是有这里定的，后面是权重，权重越大，就越靠前执行，这个持久化操作（保存数据），可以是保存到缓存，或者而保存到数据库（页面输出等），自己定制，可以是相同的爬虫也可以不同
+}
+######################这里是配置这个pipeline的，做持久化操作#########################

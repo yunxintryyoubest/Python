@@ -1,0 +1,99 @@
+settings:
+
+DUPEFILTER_CLASS="app01.duplication.RepeatFilter"
+这个是配置用哪个类来处理
+
+self.visted_url=set()
+这可以改成数据库，后面的set（）
+
+
+baiud.py：
+    def parse(self, response):
+        ################这个第一步是向这个parse，调度器发送url请求，不间断的发送请求，深度可以自己定制
+        # page_url = Selector(response=response).xpath('//div[@id="dig_lcpage"]/ul/li/@href').extract()
+        page_url = Selector(response=response).xpath('//div[@id="dig_lcpage"]//a/@href').extract()######一个/代表预估目录，2个/代表2个目录,可能也是多个目录，在之前的层级下进行的筛选
+        #########通过正则来匹配##########,注明，从当前的a标签下找到（正则匹配），以什么开头
+        page_url=Selector(response=response).xpath('//a[starts-with(@href,"/all/hot/recent/")]/@href').extract()####这个和下面这个方法都可以使用，都是以什么开头进行匹配
+        # page_url=Selector(response=response).xpath('//a[re:test(@href,"/all/hot/recent/\d+")]/@href').extract()
+        ####################拿到/d+里面的内容 ,以href开头的,总之@就是涉及到属性,以这个属性开头，什么结尾，拿到什么数据
+
+        for url in page_url:
+            ##################实例化，传参进去，执行这个函数,每一个url进行加密处理
+            md5_url=self.md5(url)
+            # print('\r\n')
+            # if md5_url in self.visted_urls:
+            #     # print('已经存在这页',url)
+            #     pass
+            # else:
+            #     self.visted_urls.add(md5_url)
+            #     # print(url)
+            #     #############创建了一个reqeust对象，在加一个yield, 默认就会发给调度器
+            url='http://dig.chouti.com%s'%url###################做了一个拼接
+            yield Request(url=url,callback=self.parse)#######调用一下这个self.parse方法，默认这个callback=self,parse,requets的话就放到调度器进行diaodu
+                ################这个就是把这个请求放到调度器里面了，调度器拿到请求进行下载，callback就是下载完了要调度谁
+                #####实现循环分页的效果
+
+
+
+
+
+
+
+
+自定义的函数RepeatFilter，这个可以实现去除重复或写入 log日志的功能
+###################注明一下，这个一开始执行的位置是request_seen函数
+####################这个是自己定义的去除重复的操作,注明一下，这几个函数不能改名，就只能这几个名字
+class RepeatFilter(object):
+
+######################这个要自己创建一个类，类里面的方法不能改###########################
+############第二个执行的方法，对象初始化
+    def __init__(self):
+        self.visted_urls=set()
+
+    @classmethod
+    #############第一个执行的方法，通过from_seeings来创建对象,这个是从配置文件里面取的
+    def from_settings(cls, settings):
+        print('这个cls是',cls)
+        ############cls是  app01.duplication.RepeatFilter
+        for i in range(0,5):
+            print('...............')
+        return cls()
+#############################返回一个类名，类名加()就是一个对象了,这个相当于执行这个类了
+
+    def request_seen(self, request):
+        ##################自己定义去除重复，这个是第四个执行的方法
+        print('执行request_seen方法........................')
+        print('监听..........................')
+        print(request)
+        print(request.url)
+        #######################注明一下，这个request.url是从Requets（调度器）里面传过来
+        if request.url  in self.visted_urls:
+            return   True
+        self.visted_urls.add(request.url)
+        return False
+
+
+
+    def open(self):  # can return deferred
+        #################################从open开始捕获所有的url
+        ##################这个是第三个执行的方法
+        print('open.............')
+        # pass
+
+    def close(self, reason):  # can return a deferred
+        ##########################从open开始，close关闭
+        ###################这是第五个执行的方法
+        print('close..............')
+        # pass
+
+    def log(self, request, spider):  # log that a request has been filtered
+##########################写入日志里面#############################
+        ################这是写入日志里面#################
+        print('log。。。。。。。。。。。。。。。。')
+        pass
+
+
+
+# RepeatFilter.from_settings()
+##########这样去执行###################################
+

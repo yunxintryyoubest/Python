@@ -1,0 +1,13 @@
+result=response.json()
+return result['data']['result']
+
+
+
+for i in check():
+	tmp_list=i.split('|')
+	print(tmp_list)
+
+
+
+
+

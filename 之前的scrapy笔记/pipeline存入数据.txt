@@ -1,0 +1,124 @@
+当年创建一个函数时，里面这个return在里面会返回到init里面，如果没有指定那个实例化的话
+
+
+
+注意：
+crawler.settings.get（'DB')配置文件的名称必须大写
+spider进行判断吧是哪个爬虫名字
+process_items这个，如果排除异常的话就终止，否则交给下一个pipeline进行处理 
+
+
+
+class App01Pipeline(object):
+###############这个from_crawler  的参数 return到这里面，init构造函数里面
+    def __init__(self,conn_str):
+        self.conn_str=conn_str
+    
+    ################每当数据需要持久化的时候，就会调用
+
+#####################注明一下，不管加不加下面这个函数，都会创建pipeline对象，加这个里面传入了一个crawler，这个可以取这个stettings配置文件里面的东西
+    @classmethod
+    def from_crawler(cls,crawler):
+        ##############初始化的时候，用于创建pipeline对象
+
+        # val=crawler.settings.getint('MMMM')
+        val=crawler.settings.get('DB')
+        ###########这个可以取settings里面拿settings，取这个数据库
+        return  cls(val)
+
+
+
+
+
+
+
+
+
+全部代码：
+pipeline.py
+
+
+
+
+
+# -*- coding: utf-8 -*-
+
+# Define your item pipelines here
+#
+# Don't forget to add your pipeline to the ITEM_PIPELINES setting
+# See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+'''
+# 原理讲解：
+这个from_crawler，是可以创建这个类（实例化）的，cls就是这个类，这个可以从这个settiongs配置文件里面取东西，比如数据库（DB）
+然后返回到init里面，在后面的函数里面执行，写入数据等操作
+'''
+
+
+
+from  scrapy.exceptions import  DropItem
+########放弃这个item
+
+
+
+###############这里是做持久化的（就是保存数据进去的）
+class App01Pipeline(object):
+###############这个from_crawler  的参数 return到这里面，init构造函数里面
+    def __init__(self,conn_str):
+        self.conn_str=conn_str
+        self.conn=None
+
+    ################每当数据需要持久化的时候，就会调用
+
+#####################注明一下，不管加不加下面这个函数，都会创建pipeline对象，加这个里面传入了一个crawler，这个可以取这个stettings配置文件里面的东西
+    @classmethod
+    def from_crawler(cls,crawler):
+        ##############初始化的时候，用于创建pipeline对象
+
+        # val=crawler.settings.getint('MMMM')
+        val=crawler.settings.get('DB')
+        ###########这个可以取settings里面拿settings，取这个数据库
+        return  cls(val)##这个返回到了__init里面
+    #######################这个cls就是App01Pipeline这个类，（）就表示实例化这个类，就去执行这个类
+
+
+###当刚开始执行的时候，调用一次
+    def open_spider(self,spider):
+        ############爬虫开始执行的时候，调用
+        print('开始执行pipeline操作')
+
+
+####################注明一下，这个不管close_spider放在哪个位置，都是最后执行的关闭操作，没有影响,这是特殊的，里面已经定义好的方法,close_spider是已经定义好的方法，，修改这个名字的话就会不执行这步操作
+    def close_spider(self,spider):
+
+        print('关闭pipeline操作')
+
+###所有的item（就是传过来的数据）都会经过这个pipeline进行处理
+    def process_item(self, item, spider):
+        # self.conn_str=open('news.josn','a+')
+        # self.conn_str.write(item)
+        # self.conn_str.close()
+
+
+
+        # return item
+        # if spider.name =='chouti':
+        ############当你的蜘蛛名字为这个的时候，执行相对应的操作
+        print(spider,item)
+        ######spider:<BaiduSpider 'chouti' at 0x1fb047e1908>,choouti的名字
+        # f=open('new.json','a+')
+        f=open('news.json','a')
+        ############以追加的方式打开
+        tpl='%s\n%s\n\n'%(item['title'],item['href'])
+        ###################注明这个item里面的字典的title，url是在items里面定义的，不是baiud.py里面定义的
+        print('写入成功')
+        print(tpl)
+        f.write(tpl)
+        f.close()
+        ####交给下一个pipeline处理
+        return item
+        #########这个item是是标题和对应的url（就是数据）
+        #####丢弃曾item，不交给曾数据库
+        # raise  DropItem()######当不想对这个item进行pipeline处理的时候，就可以丢弃这个item，不进行处理
+        ##################当放弃这个item的时候，就会触发异常
+        # f.close()
+        ###########这个spider是这个爬取（自己取得名字）

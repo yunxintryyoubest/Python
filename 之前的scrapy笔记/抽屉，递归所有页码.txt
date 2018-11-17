@@ -1,0 +1,31 @@
+@href 这个取里面的属性，那个标签下某个属性 
+ul/@id
+ul/@href 只要是属性就可以这样取,在某标签下的属性 
+ 
+去重：
+
+visted_urls=set()设置列表这样设置
+设置一个列表，这个列表是做分页处理的,set()
+
+if item in self.visted_urls:
+	print("已经存在")
+else:
+self.visted_urls.add(item)##############add()，把没有重复的加进去
+
+一个/代表一个目录,//代表两个目录
+
+
+两种方法找：一种是xpath，一种是re，正则来找
+
+ page_url = Selector(response=response).xpath('//div[@id="dig_lcpage"]//a/@href').extract()######一个/代表预估目录，2个/代表2个目录,可能也是多个目录，在之前的层级下进行的筛选
+        #########通过正则来匹配##########,注明，从当前的a标签下找到（正则匹配），以什么开头
+        page_url=Selector(response=response).xpath('//a[starts-with(@href,"/all/hot/recent/")]/@href').extract()####这个和下面这个方法都可以使用，都是以什么开头进行匹配
+        # page_url=Selector(response=response).xpath('//a[re:test(@href,"/all/hot/recent/\d+")]/@href').extract()
+        ####################拿到/d+里面的内容 ,以href开头的,总之@就是涉及到属性,以这个属性开头，什么结尾，拿到什么数据
+
+
+
+
+
+
+

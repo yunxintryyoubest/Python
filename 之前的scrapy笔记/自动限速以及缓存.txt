@@ -1,0 +1,42 @@
+调度器队列：
+yield Requets（）就是把url放到队列里面了
+
+自动限速算法：
+获取最小延迟：DOWNLOAD_DELAY
+获取最大延迟：AUTOTHROTTLE_MAX_DRLAY
+设置初始下载延迟AUTOTHROTTLE_START_DELAY
+当数据下载完成后，获取其连接时间latency 就是请求连接到接受响应头之间的时间
+用于计算的AUTOTROTTLE_TARGET_CONCURRENCY
+
+
+connect   之前已经回来再发，
+
+
+频繁操作数据库会非常耗时
+缓存：
+内存里面或者比较近的地方
+
+
+是否启用缓存策略：
+HTTPCACHE_ENABLED=True
+缓存策略：所有请求均缓存，下次在请求的时候直接访问原来的缓存即可
+HTTPCACHE_POLICY="scrapy.extensions.httpcache.DummyPolicy"
+缓存策略：更具http响应头：cache-control,last-modified  等进行缓存的策略
+HTTPCACHE_POLICY="scrapy.extension.httpcache.RFC2616Policy"
+缓存保存路劲:
+HTTPCACHE_DIR='httpcache'
+缓存忽略的http状态码：
+HTTPCACHE_IGNORE_HTTP_CODES={}
+缓存存储的插件：
+HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
+# HTTPCACHE_EXPIRATION_SECS = 0
+缓存延迟时间  
+
+缓存策略：
+# HTTPCACHE_ENABLED = True
+# HTTPCACHE_EXPIRATION_SECS = 0
+# HTTPCACHE_DIR = 'httpcache'
+# HTTPCACHE_IGNORE_HTTP_CODES = []
+# HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+

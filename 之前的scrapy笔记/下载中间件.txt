@@ -1,0 +1,79 @@
+中间件
+进去和出去是不一样的
+（薄膜）
+
+下载中间件：
+相当于障碍
+
+
+下载中间件
+
+
+执行过程：先执行requet，后面resonse，执行完全部的中间件后，就在执行spdier，进行
+后续的一系列操作 。
+
+
+
+先执行一个中间件，注意一定要加 return response 这样才可以返回
+在执行下一个中间件，然后第二个中间件返回，然后第一个中间件返回
+
+
+process_reqeust下载完成，后续无需下载
+process_response 有return response
+
+
+
+#################中间件
+
+######
+'''
+原理讲解：先执行requets，到中间件这里，执行中间件，在到spider那里
+当执行reqeuts有问题的时候，会抛出异常，执行exception，当exception的时候，如果是retunn none的话就表示处理不了，交给下一个中间件处理,如果后续也处理不了，一直到最后的话就会报错
+当没有抛出异常的时候，就会执行response,当没有抛出异常的时候，就会继续往下执行，最后的那个response执行完成之后，就交给spider进行处理，进行后续操作
+
+
+
+
+
+'''
+
+
+class  DownMiddleware(object):
+
+    def process_reqeust(self,request,spider):
+        ###############执行requets
+        '''
+        :param request:
+        :param spider:
+        :return:
+        None：继续后续中间件下载
+        respone对象，停止process_request的执行,开始执行process_response
+        raise IgnoreRequest异常，停止process_request的执行,开始执行异常
+        '''
+        print('downmiddleware1.process-reqeus',request.url)
+    def process_response(self,request,response,spider):
+        '''
+        :param:response
+        :param request:
+        :param spider:
+        :return:
+        Response对象：转交给其他中间件process_response
+        Request对象 ：停止中间件，reqeust会被重新下载
+        raise IgnoreRequest 异常 ：调用Request.errback
+        '''
+        print('执行中间件  ')
+        return  response
+    def process_exception(self,reqeust,exception,spider):
+        '''
+        :param reqeust:
+        :param exception:
+        :param spider:
+        :return:
+        Nonde:继续交给后续中间件处理异常
+        response对象：停止后续process-exception方法
+        reqeust对象：停止中间件，reqeust将会被重新调度下载
+        '''
+
+        return   None
+
+

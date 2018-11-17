@@ -1,0 +1,275 @@
+baiud.py：
+# # -*- coding: utf-8 -*-
+# import scrapy
+# import  sys,io
+# # sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='gb18030')
+# sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
+# #######这个在linux不用加，但在win要加
+# from  scrapy.selector import  Selector
+#
+# class BaiduSpider(scrapy.Spider):
+#     name = 'chouti'
+#     allowed_domains = ['chouti.com']
+#     start_urls = ['http://dig.chouti.com/']
+#
+#     def parse(self, response):
+#         ##################爬去这个网站所有的a标签
+#         # hsx=Selector(response=response).xpath('//a').extract()########一个标签对象列表，多个a标签
+#         # content=str(response.body,encoding='utf-8')
+#         # print(content)
+#         # for i  in hsx:
+#             # print(i)#######每一个都是标签对象
+#
+#
+#         hxs=Selector(response=response).xpath('//div[@id="content-list"]/div[@class="item"]')####加上extract就是对象转化为字符串
+#         ######曾是找到标签div并且它的id属性为content-list的标签,/就表示它的儿子，找他下面div标签
+#         # print(hxs)
+#         i=0
+#         for obj in hxs:
+#         ###########注明一下，这个不太与上面的，取文本要通过text（）来取，.代表上一级下面的文件
+#             # print(obj)
+#             # a=obj.xpath('.//a[@class="show-content"]/text()')#############这个拿到的是一个一个的对象 ，但如果在hxs后面加上.extract（）的话，就是一个一个的字符串了
+# ######################不能用//，要用./来去找，只有对象可以xpath,找到a标签和下面的class=‘’某个值的标签
+#             a=obj.xpath('.//div[@class="news-content"]/div[@class="part1"]/a/text()').extract_first()
+#             # a = obj.xpath('.//div[@class="new-content"]/div[@class="part1"]/a[@class="show-content color-chag"]/text()').extract_first()#########取这个第一个值，就是类似列表一样的
+#
+#             # print(a.strip())
+#             i=i+1
+#             print('标题[{}]'.format(i))
+#             print(a.strip())
+#             print('\n')
+#
+# '''
+# //表示子子孙孙
+# .//当前对象的子孙中
+# /儿子
+# /div[@id='i1']  儿子中的div标签并且id为i1的标签
+# obj.extract() 列表中的对象转化为字符串
+# obj.extract_first()返回列表的第一个值
+# //div/text()获取某标签的文本
+# '''
+
+
+
+
+
+
+
+
+
+# -*- coding: utf-8 -*-
+import scrapy
+import  sys,io
+from  scrapy.http import  Request
+from  ..items import  *
+# sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='gb18030')
+sys.stdout=io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
+#######这个在linux不用加，但在win要加
+from  scrapy.selector import  Selector
+
+class BaiduSpider(scrapy.Spider):
+    name = 'chouti'
+    allowed_domains = ['chouti.com']
+    start_urls = ['http://dig.chouti.com/']
+
+    visted_urls=set()##设置这个分页的列表,去重
+
+
+
+
+    def parse(self, response):
+        ################这个第一步是向这个parse，调度器发送url请求，不间断的发送请求，深度可以自己定制
+        # page_url = Selector(response=response).xpath('//div[@id="dig_lcpage"]/ul/li/@href').extract()
+        page_url = Selector(response=response).xpath('//div[@id="dig_lcpage"]//a/@href').extract()######一个/代表预估目录，2个/代表2个目录,可能也是多个目录，在之前的层级下进行的筛选
+        #########通过正则来匹配##########,注明，从当前的a标签下找到（正则匹配），以什么开头
+        page_url=Selector(response=response).xpath('//a[starts-with(@href,"/all/hot/recent/")]/@href').extract()####这个和下面这个方法都可以使用，都是以什么开头进行匹配
+        # page_url=Selector(response=response).xpath('//a[re:test(@href,"/all/hot/recent/\d+")]/@href').extract()
+        ####################拿到/d+里面的内容 ,以href开头的,总之@就是涉及到属性,以这个属性开头，什么结尾，拿到什么数据
+
+        for url in page_url:
+            ##################实例化，传参进去，执行这个函数,每一个url进行加密处理
+            md5_url=self.md5(url)
+            # print('\r\n')
+            if md5_url in self.visted_urls:
+                # print('已经存在这页',url)
+                pass
+            else:
+                self.visted_urls.add(md5_url)
+                # print(url)
+                #############创建了一个reqeust对象，在加一个yield, 默认就会发给调度器
+                url='http://dig.chouti.com%s'%url###################做了一个拼接
+                yield Request(url=url,callback=self.parse)#######调用一下这个self.parse方法，默认这个callback=self,parse,requets的话就放到调度器进行diaodu
+                ################这个就是把这个请求放到调度器里面了，调度器拿到请求进行下载，callback就是下载完了要调度谁
+                #####实现循环分页的效果
+        # print(self.visted_urls)
+
+        # 重写start_requets方法，指定最开始处理请求的方法，yield
+
+
+###############################这个第二部是取这个标题和url，把对应的标题和url洗相对应的格式化（items操作），格式化就相对应写入想对应的数据库（pipeline操作）
+#########取标题和url
+        hxs=Selector(response=response).xpath('//div[@id="content-list"]/div[@class="item"]')####加上extract就是对象转化为字符串
+        # print(hxs)
+        for obj   in hxs:
+            # title=obj.xpath('.//a[class="show-content color-chag"]/text()').extract()
+            title=obj.xpath('.//a[@class="show-content color-chag"]/text()').extract_first().strip()
+            ########注明一下，外面可以加一个环境，就在这个环境里面取值就可以了
+            # print(title)
+            url=obj.xpath('.//a[@class="show-content color-chag"]/@href').extract_first().strip()
+            # print(title)
+            # print(url)
+
+            from  ..items import ChoutiItem
+
+            item_obj=ChoutiItem(title=title,href=url)#######注明一下，这个前面那个title，href是在items里面定义的，后面是直接进行传参操作，写进去,注意区分
+            #####################注明一下，这是封装一个对象，把title和url封装到item_obj里面去，然后传给itms，下面的yield就是执行相对应的操作
+            ##########传值进去
+
+            yield  item_obj###################封装成一个items对象
+            ####################将相对应的封装好的对象床到iems，执行格式化操作，然后在pipeline存入数据库
+
+
+    def md5(self,url):
+        import hashlib
+        obj=hashlib.md5()
+        obj.update(bytes(url,encoding='utf-8'))
+        #####对每一个传入的url进行加密处理
+        return  obj.hexdigest()
+
+
+
+
+
+
+
+        ##################爬去这个网站所有的a标签
+        # hsx=Selector(response=response).xpath('//a').extract()########一个标签对象列表，多个a标签
+        # content=str(response.body,encoding='utf-8')
+        # print(content)
+        # for i  in hsx:
+            # print(i)#######每一个都是标签对象
+
+#
+#         hxs=Selector(response=response).xpath('//div[@id="content-list"]/div[@class="item"]')####加上extract就是对象转化为字符串
+#         ######曾是找到标签div并且它的id属性为content-list的标签,/就表示它的儿子，找他下面div标签
+#         # print(hxs)
+#         i=0
+#         for obj in hxs:
+#         ###########注明一下，这个不太与上面的，取文本要通过text（）来取，.代表上一级下面的文件
+#             # print(obj)
+#             # a=obj.xpath('.//a[@class="show-content"]/text()')#############这个拿到的是一个一个的对象 ，但如果在hxs后面加上.extract（）的话，就是一个一个的字符串了
+# ######################不能用//，要用./来去找，只有对象可以xpath,找到a标签和下面的class=‘’某个值的标签
+#             a=obj.xpath('.//div[@class="news-content"]/div[@class="part1"]/a/text()').extract_first()
+#             # a = obj.xpath('.//div[@class="new-content"]/div[@class="part1"]/a[@class="show-content color-chag"]/text()').extract_first()#########取这个第一个值，就是类似列表一样的
+#
+#             # print(a.strip())
+#             i=i+1
+#             print('标题[{}]'.format(i))
+#             print(a.strip())
+#             print('\n')
+#
+#             for item in self.visted_urls:
+#                 md5_url=self.md5(item)
+#                 ########对每一个url进行加密处理，固定长度
+#                 if md5_url in self.visted_urls:
+#                     print('已经存在',md5_url)
+#                 else:
+#                     self.visted_urls.add(md5_url)
+#                     print(md5_url)
+
+
+
+
+
+        # def md5(self,url):
+        #     ###对每一个url进行加密，这样就固定了长度，当url很长时，也固定了长度
+        #     import  hashlib
+        #     obj=hashlib.md5()
+        #     obj.update(bytes(url,encoding='utf-8'))
+        #     return  obj.hexdigest()
+        # #########返回一个对象的md5方法
+'''
+//表示子子孙孙
+.//当前对象的子孙中
+/儿子
+/div[@id='i1']  儿子中的div标签并且id为i1的标签
+obj.extract() 列表中的对象转化为字符串
+obj.extract_first()返回列表的第一个值 
+//div/text()获取某标签的文本  
+'''
+
+
+
+
+items部分：
+# -*- coding: utf-8 -*-
+
+# Define here the models for your scraped items
+#
+# See documentation in:
+# https://doc.scrapy.org/en/latest/topics/items.html
+
+import scrapy
+
+
+class ChoutiItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    print('执行格式化操作')
+    title=scrapy.Field()
+    href=scrapy.Field()
+
+
+
+pipeline部分：
+# -*- coding: utf-8 -*-
+
+# Define your item pipelines here
+#
+# Don't forget to add your pipeline to the ITEM_PIPELINES setting
+# See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+
+###############这里是做持久化的（就是保存数据进去的）
+class App01Pipeline(object):
+    def process_item(self, item, spider):
+        # return item
+        # if spider.name =='chouti':
+        ############当你的蜘蛛名字为这个的时候，执行相对应的操作
+        print(spider,item)
+        ######spider:<BaiduSpider 'chouti' at 0x1fb047e1908>,choouti的名字
+        # f=open('new.json','a+')
+        f=open('news.json','a')
+        ############以追加的方式打开
+        tpl='%s\n%s\n\n'%(item['title'],item['href'])
+        ###################注明这个item里面的字典的title，url是在items里面定义的，不是baiud.py里面定义的
+        print('写入成功')
+        print(tpl)
+        f.write(tpl)
+        f.close()
+        ###########这个spider是这个爬取（自己取得名字）
+
+
+
+
+
+settings部分：
+ROBOTSTXT_OBEY = False
+
+
+DEPTH_LIMIT=5
+
+
+
+
+
+
+
+
+ITEM_PIPELINES = {
+   'app01.pipelines.App01Pipeline': 300,
+    # 'app01.pipelines.App01Pipeline': 300,
+    # 'app01.pipelines.App01Pipeline': 300,
+    # 'app01.pipelines.App01Pipeline': 300,
+####这个执行持久化操作的先后顺序是有这里定的，后面是权重，权重越大，就越靠前执行，这个持久化操作（保存数据），可以是保存到缓存，或者而保存到数据库（页面输出等），自己定制，可以是相同的爬虫也可以不同
+}
+######################这里是配置这个pipeline的，做持久化操作#########################

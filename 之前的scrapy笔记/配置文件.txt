@@ -1,0 +1,100 @@
+配置文件：
+每一个爬虫都会带着自己的名字过去 
+BOT_NAME='day96'
+
+BOT_NAME = 'app01'
+
+#USER_AGENT = 'app01 (+http://www.yourdomain.com)'
+当你访问的时候，就带着这个爬虫名字过去，正常的爬取数据 
+
+ROBOTSTXT_OBEY = False表示不遵守这个爬虫的规则了，忽略这个服务器的文件
+按照这个正常的话，就是让你爬你就可以爬虫，不让你就不可以
+真实的话，很多的网站不让爬数据
+
+#USER_AGENT = 'app01 (+http://www.yourdomain.com)'
+这个后面写成浏览器的配置，就伪装成浏览器来进行爬去数据，也不遵守
+
+
+#CONCURRENT_REQUESTS = 32
+并发请求数，这个爬虫一下可以发出32个请求 
+# Configure maximum concurrent requests performed by Scrapy (default: 16)
+默认是16个 
+
+加入这个人没有做反爬虫机制，这个并发数可以开到特别大 
+
+
+#DOWNLOAD_DELAY = 3
+下载延迟，每多少秒执行一次
+
+
+#CONCURRENT_REQUESTS_PER_DOMAIN = 16
+针对每一个域名最多放16个，一个域名可以有很多ip，比如这个有3个网站，这个网站最多可以16个，另一个也是，合起来就是16*3个请求ip
+负载，域名可以解析ip
+
+#CONCURRENT_REQUESTS_PER_IP = 16
+每一个ip并发16个 
+
+#COOKIES_ENABLED = False
+帮你去爬取cookies，这个就是这个返回的reposne是否携带这个cookies，携带（解析），默认是True
+
+
+# COOKIES_DEBUG=True
+加debug，调式的时候就会出现set-cookie:route=什么的一个cookies显示出来 
+
+#TELNETCONSOLE_ENABLED = False
+可以请求发送过去，让他暂停，爬虫先暂停
+
+默认这个6023端口，是这个scrapy的端口 
+通过telent可以监听当前爬虫的状态是什么样的，进行一系列的
+telnet  127.0.0.1  6023
+如果等于True的话，就可以连接这个爬虫进行操作
+engine pause 这个是暂停，包括这里面有一系列的命令等
+
+
+
+#DEFAULT_REQUEST_HEADERS = {
+#   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+#   'Accept-Language': 'en',
+#}
+这个可以把默认的请求头发送过去
+yield 也可以传header，这个请求头 
+
+
+#DOWNLOADER_MIDDLEWARES = {
+#    'app01.middlewares.App01DownloaderMiddleware': 543,
+#}
+这个是中间件
+
+
+
+这个是做智能的请求的
+# Enable and configure the AutoThrottle extension (disabled by default)
+# See https://doc.scrapy.org/en/latest/topics/autothrottle.html
+#AUTOTHROTTLE_ENABLED = True
+# The initial download delay
+#AUTOTHROTTLE_START_DELAY = 5    每一个请求去延迟几秒
+# The maximum download delay to be set in case of high latencies
+#AUTOTHROTTLE_MAX_DELAY = 60   最大延迟多少秒
+# The average number of requests Scrapy should be sending in parallel to
+# each remote server
+#AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+# Enable showing throttling stats for every response received:
+#AUTOTHROTTLE_DEBUG = False
+
+
+这个是做中间件的
+# Enable and configure HTTP caching (disabled by default)
+# See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
+#HTTPCACHE_ENABLED = True
+#HTTPCACHE_EXPIRATION_SECS = 0
+#HTTPCACHE_DIR = 'httpcache'
+#HTTPCACHE_IGNORE_HTTP_CODES = []
+#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+DEPTH_LIMIT=4  这个是深度，爬取的页数
+DEPTH_PRIORITY=0 或者1 深度或者广度优先
+队列的优先级
+默认等于0，这个是深度优先
+
+先把深度等于0的先拿过来
