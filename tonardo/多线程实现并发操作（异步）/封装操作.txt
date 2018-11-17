@@ -1,0 +1,85 @@
+reqeust=HttRequest(sk,host,callback)#############某个主机名有一个回调函数,注明一下，这个requets是已经封装好的东西，里面有3个东西#####
+#################注明一下，封装完成之后，可以直接对封装完成的数据进行调用使用
+
+
+
+
+reqeust.socket
+request.host
+reqeust.callback
+这个reqeust里面封装了3个参数，就是下面的函数进行的封装操作
+
+
+
+
+
+class HttRequest:
+    def __init__(self,sk,host,callback):
+        ##############已经封装了sk和主机名
+        self.socket=sk
+        self.host=host
+        self.callback=callback
+    def fileno(self):
+        return  self.socket.fileno()
+
+
+
+
+第二个封装操作：
+
+response=HTTpresponse(recv_data)
+#############注明一下：
+进行相对应的封装操作的时候，就可以直接进行调用
+通过response.header_dict进行调用使用，可以还有其他的额封装过去的东西
+
+
+
+
+
+############封装使用##########################################总的来说，即使过来的socket对象进行封装，response进行封装
+
+
+###################################每一个response都有一个请求头和一个请求体######################################################################
+class  HTTpresponse:
+    def __init__(self,recv_data):
+
+        self.recv_data=recv_data
+        self.header_dict={}
+        ################可以拿到这个分割出来的头文件信息
+        self.body=None
+        self.initlize()
+    def initlize(self):
+        print('对这个接收到数据进行分割操作.................................')
+        headers, body = self.recv_data.split(b'\r\n\r\n', 1)  #####找到第一个就是请求头和请求体的分割符
+        ########这个接受过来的数据有请求头，和请求体
+        header_list = headers.split(b'\r\n')  ##############由于原来的也是bytes类型，所以也需要根据这个来分割
+        ########接收到的头文件################################
+        # print(header_list)
+        for  h in header_list:
+            # self.header_dict[headers]=body
+            # print(h)
+            ####################可能有多个这个header文件，多个socket对象，就有多个接收文件，就有多个header头文件
+            #####这个是字节类型
+
+            h_str=str(h,encoding='utf-8')
+            v=h_str.split(':',1)###########注意：这个1的意思就是就只对这个第一个：进行分割，之后的：不进行分割##############
+            ##################################这个v进过分割会有2个数，应该是：之前的，一个合适：之后的数
+            # print(v)
+            #####################这个分割后的v会有2个数字，以：进行分割有2个数值，所以就进行判断
+            if  len(v)==2:
+                self.header_dict[v[0]]=v[1]
+                ################放进字典里面###########################
+
+
+
+调用封装的数据:
+
+
+##########################################################这个传过来的数据是response，里面封装了其他东西，在httpresponse这个函数里面有这个详细的封装信息################################
+def f1(data):
+    print('执行回调函数f1')
+    print('把数据放到数据库',data.header_dict)
+
+def f2(data):
+    print('执行回调函数f2')
+    print('把数据放到文件夹',data.header_dict)

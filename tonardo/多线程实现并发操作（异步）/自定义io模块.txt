@@ -1,0 +1,24 @@
+开发者：
+
+
+socket客户端，服务端
+连接会阻塞
+setblocking(false)连接和recv都不阻塞,不管阻塞还是非阻塞都会发送过去
+没有数据就报错(连接无响应，数据未返回）
+IO多路复用:
+r,w,e=select.select([socket1,socket2],[socket1,socket2],0.05)
+r=[socket1,]有人给我发送数据了
+
+w=[socket
+
+
+select内容不关心你是什么对象，只要你发对象过来了，就调用你的fileno方法，获取你的值
+socket里面有fileno方法，socket对象里面有文件描述符
+
+class Foo:
+def fileno(self):
+
+obj=socket()
+return obj.fileno()
+
+r,w,e=select.select((socket对象？，socket对象？,FOO(),{},{})select里面不一定是socket对象，只要能够返回socket文件描述符就可以了，fileno方法（socket）

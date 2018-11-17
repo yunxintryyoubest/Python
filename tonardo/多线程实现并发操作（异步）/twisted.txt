@@ -1,0 +1,60 @@
+这个可以完成好多好多的网络库
+
+
+
+
+
+
+
+from  twisted.internet  import  defer
+
+from  twisted.web.client import  getPage
+from  twisted.internet import  reactor
+
+
+
+
+
+def all_done(arg):
+    print('done')
+    reactor.stop()
+
+
+def one_done(arg):
+    print('one_done')
+
+
+@defer.inlineCallbacks
+def task(url):
+    print(url)
+
+    ################传了一个参数进去
+url_list=[
+    'http://www.cnblogs.com',
+    'http://www.baidu.com',
+    'http://www.baidu.com',
+    'http://www.baidu.com'
+]
+
+
+
+@defer.inlineCallbacks
+def task_list():
+    start_url_list=[
+            'http://www.baidu.com',
+    ]
+    defer_list=[]
+####################注明一下，这个是每执行完一个，就加一个进去
+    for url in url_list:
+        defer_obj=task(url)
+        defer_list.append(defer_obj)
+
+    yield  defer.DeferredList(defer_list)
+
+
+
+
+d=defer.DeferredList(url_list)
+#########这个先每一个执行一次，one_done，最后在执行这个all_done，就是总共比如4个，执行1一个减一个，当为0时在执行all_done
+d.addBoth(all_done)
+################最后执行完的时候，就执行all_done

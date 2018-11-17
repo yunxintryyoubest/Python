@@ -1,0 +1,49 @@
+gevent,greenlet（协程的模块）
+网络请求：异步io
+import  gevent
+from  gevent  import monkey
+monkey.patch_all()#############注意一下，这个原来的socket是来一个发一个，而这个是封装成异步的socket，可以多个,不加效果是没有的
+#########第二个gevent是协程的模块
+import requests
+
+
+def task(method,url,req_kwargs):
+    print(method,url,req_kwargs)
+    response=requests.request(method=method,url=url,**req_kwargs)
+    print(response.url,response.content)
+
+
+    #################发送请求
+# gevent.joinall(
+#     [
+#         gevent.spawn(task,method='get',url='http://www.baidu.com',req_kwargs={}),
+#         gevent.spawn(task,method='get',url='http://www.taobao.com',req_kwargs={}),
+#         gevent.spawn(task, method='get',url='http://www.taobao.com', req_kwargs={}),
+#         #################第一个参数是执行这个task函数#################
+#     ]
+# )
+
+################################解释一下，这第一个是执行的函数是task，后面是传的参数
+
+
+#
+from  gevent.pool import  Pool
+########################这里面是可以控制这个发送的数量的，最多可以发多少个协程请求
+# pool=Pool(None)
+pool=Pool(5)
+gevent.joinall([
+    gevent.spawn(task, method='get', url='http://www.baidu.com', req_kwargs={}),
+    gevent.spawn(task, method='get', url='http://www.taobao.com', req_kwargs={}),
+    gevent.spawn(task, method='get', url='http://www.taobao.com', req_kwargs={}),
+])
+
+# 一个请求一个协程，微线程，协程池，最多发多少个请求
+
+
+
+
+# 组合:gevent+requests>>>>>>>>>>>grequests这个模块是将这两个协程池和gevent协和一起的
+
+
+并发的操作
+

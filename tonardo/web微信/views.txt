@@ -1,0 +1,192 @@
+from django.shortcuts import render,HttpResponse,redirect
+
+# Create your views here.
+import requests
+import  time
+ctime=time.time()
+print('这个时间戳是:',ctime)
+print(ctime)
+def login(request):
+    print('登录....................')
+    import re
+    # response=requests.get('https://login.wx.qq.com/jslogin?appid=wx782c26e4c19acffb')
+
+    # response=requests.get(url='https://login.wx.qq.com/jslogin?appid=wx782c26e4c19acffb')
+    response=requests.get(url='https://login.wx.qq.com/jslogin?appid=wx782c26e4c19acffb& _ = %s'%ctime)
+
+    text=response.text
+    print(response.text)
+
+    # uuid=re.compile('window.QRLogin.code = 200; window.QRLogin.uuid = "(.*?)";',text)
+    uu=re.findall('uuid = "(.*?)";',text)
+    # print(uuid)
+    global  u1
+    print(uu)
+    u1=uu[0]
+    print('拿到这个动态变化的uuid')
+    print(u1)
+    return  render(request,'login.html',{'uuid':u1,'ctime':ctime})
+
+
+
+import re
+
+import  time
+import json
+def check_login(request):
+    print('开始check中。。。。。。。。。。。。。。。。。。')
+    tip = 1
+    status={'code':408,'data':None}
+##############################就是当你进入login的url里面的时候，就会触发ajax请求，然后就可以发请求过去
+    #################################登录之后这个请求的url会发生改变
+    response=requests.get(
+        url='https://login.wx.qq.com/cgi-bin/mmwebwx-bin/login?loginicon=true&uuid=%s&tip=%s&r=621846028& _ = %s'%(u1,tip,ctime)
+    )
+    #####################这个是按照这个微信的速度来的，pedding的速度。。。。。。。。。。。。。。。
+#########################先这个url发送请求过去#########################################
+    print(response.text)
+    text=response.text
+    # time.sleep(5)
+    if  'window.code=408' in text:
+        print('没有人扫码')
+        return  HttpResponse(json.dumps(status))
+    elif 'window.code=201' in text:
+        status['code']=201
+        tip=0
+        print('当你扫码之后的url是:')
+        ###############################当有人登录的话，这个tip就会变成0
+        useravatar=re.findall("userAvatar = '(.*?)';",text)
+        pic=useravatar[0]
+        status['data']=pic
+
+        ############################拿到这个头像#############################################
+        print('已经有人扫码，但没有登录')
+        return  HttpResponse(json.dumps(status))
+    elif 'window.code=200' in text:
+        ######################################当你点击确认登录的时候，这个状态码就是200
+        print('已经登录')
+        # print(response)
+        # print(response.text)
+        '''
+        window.code=200;
+window.redirect_uri="https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=AeEZ_tmHWhVoMilxTr4XLwes@qrticket_0&uuid=Qf1KiVeBjw==&lang=zh_CN&scan=1536988564";'''
+        ###########这个是跳转的页面
+        drop_login_url=re.findall('redirect_uri="(.*?)";',response.text)
+        login_page_url=drop_login_url[0]+'&fun=new&version=v2 '
+
+        login_url=requests.get(url=login_page_url)
+        #############################拿到这个跳转页面的url信息############################################
+        # print(login_url.text)
+        ticket_tag_dic={}
+
+        from  bs4  import BeautifulSoup
+        soup=BeautifulSoup(login_url.text,'lxml')
+        for tag  in  soup.find('error').children:
+            ticket_tag_dic[tag.name]=tag.get_text()
+            # print(tag.name)
+        print('打印出这个全部的标签和value值:')
+        # print(ticket_tag_dic)
+
+########################得到用户信息页面执行########################################################################
+################################上面已经执行完这个page页面了，接下来这个page页面往这个init发请求
+        '''
+        https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=605855338&lang=zh_CN&pass_ticket=H79BrECmBAUw2fdLDM3%252Fr8b1BuwFVgnFizZYtzR5tyllJcTl8AF%252BA2TcEdqM%252FJ9G
+
+        '''
+        get_user_info_url='https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=605855338&lang=zh_CN&pass_ticket='+ticket_tag_dic['pass_ticket']
+##############################################newpage执行完之后发送了一个post请求
+        '''
+        {,…}
+BaseRequest
+:
+{Uin: "1314067473", Sid: "Voh+3Atj+OYeXtHe", Skey: "@crypt_2d1ea938_3d671d329abf1427f860cd4fd1a9c77d",…}
+DeviceID
+:
+"e096507811546196"
+Sid
+:
+"Voh+3Atj+OYeXtHe"
+Skey
+:
+"@crypt_2d1ea938_3d671d329abf1427f860cd4fd1a9c77d"
+Uin
+:
+"1314067473"
+        '''
+        # get_info_dic={
+        #     'Uin':1314067473,
+        #     'Sid':ticket_tag_dic['wxsid'],
+        #     'Skey':ticket_tag_dic['skey'],
+        #     'DeviceID':"e096507811546196"
+        #
+        # }
+
+        get_info_data={
+            'BaseRequest':{
+                'DeviceID':"e096507811546196",
+                'Sid':ticket_tag_dic['wxsid'],
+                'Skey':ticket_tag_dic['skey'],
+                'Uin':ticket_tag_dic['wxuin']
+            }
+
+        }
+        ################################注明一下，这个要发送post请求过去，才可以接收到全部的页面信息
+        get_info_page_response=requests.post(
+            url=get_user_info_url,
+            json=get_info_data
+        )
+
+        # get_info_page_response=get_info_page_response.encoding('utf-8')
+        #####################不可以这样解码
+
+        get_info_page_response.encoding='utf-8'
+        #########注明一下，如果是data的话，就只能拿到key，而这个value拿不了，字典只能取key，不能取value
+
+        # get_info_page_response=requests.post(url=get_user_info_url)
+        # print('这个返回的页面是:',get_info_page_response.text)
+
+        print(type(get_info_page_response.text))
+
+
+        init_page_dict=json.loads(get_info_page_response.text)
+        print(type(init_page_dict))
+        # print(init_page_dict)
+
+
+        # for k,v in init_page_dict.items():
+        #     print(k,v)
+
+        contact_list=init_page_dict['ContactList']
+        # print(contact_list)
+        for item in contact_list:
+            print(item['PYQuanPin'],item['NickName'])
+        # print(init_page_dict)
+
+
+
+
+        return HttpResponse('登录成功')
+
+'''
+<error><ret>0</ret><message></message><skey>@crypt_2d1ea938_273099bc43efcdd6f12ae092bbb85ff5</skey><wxsid>u1JeFf013UvbQgH7</wxsid><wxuin>1314067473</wxuin><pass_ticket>Hh30WpuTDLASkG5oVGPfsLB7U%2FKjh5TEkqC8p0Vsp8gGOKlds%2BpEngZVi5IpBptM</pass_ticket><isgrayscale>1</isgrayscale></error>
+'''
+
+
+#     elif 'window.code=200' in text:
+#         status['code']=200
+#         print('这个是登录成功的状态>>>>>>>>>>>>>>>>>>>>>>>>')
+#         print(response.text)###################这个是登录成功的状态#################################
+# ##################当有人登录的时候
+#         #当你登录成功的话，就会产生一个新的url
+#
+#         from  bs4 import BeautifulSoup
+#         '''
+#
+#         https://login.wx.qq.com/jslogin?appid=wx782c26e4c19acffb&redirect_uri=https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage&fun=new&lang=zh_CN&_=1536985347196
+#         '''
+#         # re.findall('redirect_uri=(.*?)',)
+#         print('已经登录成功')
+#         return  HttpResponse(json.dumps(status))
+#     else:
+#         return  HttpResponse('check........................')
+##############################偷偷的发ajax请求####################################

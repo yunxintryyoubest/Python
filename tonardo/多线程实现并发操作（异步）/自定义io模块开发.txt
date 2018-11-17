@@ -1,0 +1,239 @@
+具有fileno方法，能够返回socket的就可以
+
+io多路复用：监听多个socket对象，利用其特性可以开发多个模块 
+
+
+
+异步io：自动完成多个io时，回调，非阻塞的socket+io多路复用
+非阻塞socket
+select自己对象，w，r伪造的并发
+不阻塞的情况可以发多个请求
+
+
+
+
+
+#
+#
+# import socket
+# import select
+# ###############真正的http请求本质,阻塞的
+# sk=socket.socket()
+# ###这个不仅仅是ip地址，也可以试其他的东西
+# sk.connect(('www.baidu.com',80,))
+# ##先连接
+#
+# print('连接成功了')
+#
+# # sk.send(b'GET / HTTP/1.0\r\nHost:www.baidu.com\r\n\r\n')
+# sk.send(b'GET / HTTP/1.0\r\nHost:www.baidu.com\r\n\r\n')
+# # sk.send(b'POST / HTTP/1.0\r\nHost:www.baidu.com\r\n\r\nk1=v1&k2=v2')
+# ##############发送post请求过去
+# data=sk.recv(8089)##############最多接收的大小
+# print(data)
+#
+# ############等待着服务端响应
+#
+# sk.close()
+
+
+
+
+
+################
+
+
+#
+# import socket
+# import select
+# ###############真正的http请求本质,阻塞的
+# sk=socket.socket()
+# sk.setblocking(False)
+# ###这个不仅仅是ip地址，也可以试其他的东西
+# sk.connect(('www.baidu.com',80,))
+# ##先连接
+#
+# print('连接成功了')
+#
+# # sk.send(b'GET / HTTP/1.0\r\nHost:www.baidu.com\r\n\r\n')
+# sk.send(b'GET / HTTP/1.0\r\nHost:www.baidu.com\r\n\r\n')
+# # sk.send(b'POST / HTTP/1.0\r\nHost:www.baidu.com\r\n\r\nk1=v1&k2=v2')
+# ##############发送post请求过去
+# data=sk.recv(8089)##############最多接收的大小
+# print(data)
+#
+# ############等待着服务端响应
+#
+# sk.close()
+
+##########如果是原来的方法就是非常low了，就是想让它阻塞的时候，还可以做其他的事情
+
+import select
+import socket
+
+
+############封装使用##########################################
+
+
+###################################每一个response都有一个请求头和一个请求体######################################################################
+class  HTTpresponse:
+    def __init__(self,recv_data):
+
+        self.recv_data=recv_data
+        self.header_dict={}
+        ################可以拿到这个分割出来的头文件信息
+        self.body=None
+        self.initlize()
+    def initlize(self):
+        print('对这个接收到数据进行分割操作.................................')
+        headers, body = self.recv_data.split(b'\r\n\r\n', 1)  #####找到第一个就是请求头和请求体的分割符
+        ########这个接受过来的数据有请求头，和请求体
+        header_list = headers.split(b'\r\n')  ##############由于原来的也是bytes类型，所以也需要根据这个来分割
+        ########接收到的头文件################################
+        # print(header_list)
+        for  h in header_list:
+            # self.header_dict[headers]=body
+            # print(h)
+            ####################可能有多个这个header文件，多个socket对象，就有多个接收文件，就有多个header头文件
+            #####这个是字节类型
+
+            h_str=str(h,encoding='utf-8')
+            v=h_str.split(':',1)###########注意：这个1的意思就是就只对这个第一个：进行分割，之后的：不进行分割##############
+            ##################################这个v进过分割会有2个数，应该是：之前的，一个合适：之后的数
+            # print(v)
+            #####################这个分割后的v会有2个数字，以：进行分割有2个数值，所以就进行判断
+            if  len(v)==2:
+                self.header_dict[v[0]]=v[1]
+                ################放进字典里面###########################
+
+
+
+
+
+
+class HttRequest:
+    def __init__(self,sk,host,callback):
+        ##############已经封装了sk和主机名
+        self.socket=sk
+        self.host=host
+        self.callback=callback
+    def fileno(self):
+        return  self.socket.fileno()
+#################返回相应对象的socket对象的fileno方法
+class AsyncRequest:
+    def __init__(self):
+        self.conn=[]
+        self.connection=[]#######################用于检测是否链接成功，有值的haunt就表示谁还没有链接成功，移除了谁的话就表示谁已经连接成功了
+        #########sonn和connectiom里面有socket对象
+    def add_request(self,host,callback):
+        try:
+            sk = socket.socket()  ###############创建了一个socket对象
+            sk.fileno()
+            ###############注明一下这个fileno案发是socket里面的已经有的
+            sk.setblocking(False)
+            sk.connect((host, 80,))
+        except Exception as e:
+            print(e)
+
+        reqeust=HttRequest(sk,host,callback)#############某个主机名有一个回调函数,注明一下，这个requets是已经封装好的东西，里面有3个东西#####
+        #####################sk是创建的socket对象，hist是传过来的主机名，conn和connection里面封装年个东西，一个是socket对象，一个是传过来的主机名
+        ######发请求
+        self.conn.append(reqeust)#######把socket对象放进去
+        self.connection.append(reqeust)#######################################
+        ###把sk加进这里面来
+################################################################事件循环#################################################################################
+    def run(self):
+        while True:
+            rlist,wlist,elist=select.select(self.conn,self.connection,self.conn,0.05)#############最多卡0.05秒###############
+            ####这个是进行监听，最后是异常，注明一一下，只要这个监听的有这个socket对象返回的fileno方法就可以了，不一定就是socket对象
+########################注明一下，这个conn里面不仅仅是socket对象，而且还有已经封装好的socket和host
+
+            for w in  wlist:#############################
+                ###########w里面封装了host主机名
+                #####每一个w就是一个socket对象
+                #########如果主机名在里面的话，表示谁这个已经连接成功
+                print(w.host,'已经连接成功了')
+                tpl='GET / HTTP/1.0\r\nHost:%s\r\n\r\n'%(w.host,)#####################这个w.host就是www.baidu.com',
+                w.socket.send(bytes(tpl,encoding='utf-8'))
+                ################注明一下，这个链接一次就可以了
+                self.connection.remove(w)########connection为空的话表示全部已经连接成功了，并且已经全部发送数据出去了
+
+            for r in rlist:
+                recv_data=bytes()
+                print(r.host)
+                while True:
+                    try:
+                        chunk=r.socket.recv(8089)
+                        ############解释数据，有数据就去拿数据，没有数据就会报错
+                        recv_data+=chunk
+                        ################因为这个拿到的数据可以是不全的，所以要对这个数据不停的接收完全
+
+                    except Exception as e:
+                        break
+                    print(r.host,'有数据返回了',recv_data)
+                    ########真正用户返回时的东西
+
+                    #############################把这个接受的数据传给这个函数#######################################################################
+                    response=HTTpresponse(recv_data)
+#######################################在这个函数进行封装#########################################################################################
+                    # headers,body=recv_data.split(b'\r\n\r\n',1)#####找到第一个就是请求头和请求体的分割符
+                    # ########这个接受过来的数据有请求头，和请求体
+                    # header_list=headers.split(b'\r\n')##############由于原来的也是bytes类型，所以也需要根据这个来分割
+                    # ########接收到的头文件################################
+                    # print(header_list)
+                    ##############当执行这个成功后可以拿到这个接受过来的数据recv_data，在把这个接受过来的数据放到你想要放的地方
+                    r.callback(response)
+                    ##############r里面封装 3个东西，一个是socket对象，一个是host主机名，一个是回调函数，所以可以取值
+
+                    r.socket.close()
+                    ##############当接收成功的haunt，这个对应的socket就会关闭
+                    self.conn.remove(r)
+                    #########这个意思是不会再监听这个socket对象，移除这个对象出来
+
+                    if len(self.conn)==0:
+                        print('已经全部执行完了')
+                        break
+
+
+#############这个传过来的参数是上面已经执行成功的，已经接收到数据的参数，当然也可以是主机名
+# def f1(recv_data):
+#     print('执行回调函数f1')
+#     print('把数据放到数据库',recv_data)
+#
+# def f2(recv_data):
+#     print('执行回调函数f2')
+#     print('把数据放到文件夹',recv_data)
+
+
+##########################################################这个传过来的数据是response，里面封装了其他东西，在httpresponse这个函数里面有这个详细的封装信息################################
+def f1(data):
+    print('执行回调函数f1')
+    print('把数据放到数据库',data.header_dict)
+
+def f2(data):
+    print('执行回调函数f2')
+    print('把数据放到文件夹',data.header_dict)
+
+
+url_list=[
+    {'host':'www.baidu.com','callback':f1},
+    {'host': 'www.cnblogs.com', 'callback': f1},
+    {'host': 'www.sina.com', 'callback': f1},
+    {'host': 'www.taobao.com', 'callback': f2},
+]
+###############执行回调函数
+
+
+req=AsyncRequest()
+
+for item in url_list:
+    req.add_request(item['host'],item['callback'])
+##########实例话这个对象，把这个url一个一个加进入，传参
+
+req.run()
+
+
+
+
+
+#########################本质上就是一个线程就解决了异步的效果

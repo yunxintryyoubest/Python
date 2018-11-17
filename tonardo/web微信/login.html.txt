@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+{#<h1>这个拿到的动态变化的是:{{ uuid }}和时间戳是{{ ctime }}</h1>#}
+    <img  id='qrcode'  src="https://login.weixin.qq.com/qrcode/{{ uuid }}">
+{#    <img src="https://login.wx.qq.com/jslogin?appid={{ uuid }}">#}
+
+
+<script src="/static/jquery-3.1.1.js"></script>
+
+<script>
+    $(function () {
+         check_login()
+    });
+    function check_login() {
+            $.ajax({
+        url:"/check_login.html",
+        dataType:'JSON',
+        type:'GET',
+        success:function (arg) {
+{#            #####################注明一下，这个是会隔一段时间发一次请求#}
+{#            alert('success check ')#}
+            console.log(arg)
+            if  (arg.code==408){
+                    check_login()
+                console.log('无人扫码')
+            }else  if (arg.code==201){
+                console.log('已经有人扫码，当没有人登录')
+                $('#qrcode').attr('src',arg.data)
+            check_login()}
+{#            ###########################在发一次请求，监听有没有人登录}#}
+{#                ####################更改这个属性，src的属性#}
+{#                ########################当有人扫码时，就会更改这个src，注意，这个在js中去字典的值是通过点的方式来取的#}
+
+{#            }else{#}
+{#                $('#qrcode').attr('src',arg.data)#}
+{#                    console.log('有人登录')#}
+{#            }#}
+{#            elif (arg['code']==201){#}
+{#                console.log('有人扫码，但没有人登录')#}
+{#            }#}
+{#            else(arg['code']==200){#}
+{#            }#}
+        }
+
+    })
+
+    }
+</script>
+</body>
+</html>
+
+
+
+
+{##}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Title</title>#}
+{#</head>#}
+{#<body>#}
+{#    <img style="height: 340px;width: 340px;" id="qrcode" src="https://login.weixin.qq.com/qrcode/{{ u1 }}">#}
+{#    <script src="jquery-3.1.1.js"></script>#}
+{#    <script>#}
+{#        $(function () {#}
+{#            checkLogin()#}
+{#        })#}
+{#        $(function () {#}
+{#           checkLogin()#}
+{#        });#}
+{#        $(function () {#}
+{##}
+{##}
+{#            checkLogin()#}
+{##}
+{#        })#}
+{##}
+{##}
+{#        function checkLogin() {#}
+{#            $.ajax({#}
+{#                url: '/check-login.html',#}
+{#                type: 'GET',#}
+{#                dataType: 'JSON',#}
+{#                success:function (arg) {#}
+{#                    checkLogin()#}
+{#                    console.log('check...................................')#}
+{#                    ##############发请求过来#}
+{#                    alert('success check ................................')#}
+{#                    if (arg.code == 408){#}
+{#                        checkLogin()#}
+{#                    }else if (arg.code == 201){#}
+{#                        $('#qrcode').attr('src',arg.data);#}
+{#                        checkLogin()#}
+{#                    }else if(arg.code == 200){#}
+{##}
+{#                    }#}
+{##}
+{#                }#}
+{#            })#}
+{#        }#}
+{##}
+{#    </script>#}
+{#</body>#}
+{#</html>#}

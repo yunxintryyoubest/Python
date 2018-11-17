@@ -1,0 +1,226 @@
+性能：
+
+傻等:requests.get()
+机智：
+
+requets.get
+
+
+
+
+面试：多线程与进程的区别
+线程是工作的最小单元
+线程是存在于进程里面
+线程可以共享资源
+共享资源
+
+大的分类：
+io：线程
+
+计算：进程
+
+
+一个py文件,一个程序，开一个进程
+
+计算：涉及到cpu，进程
+
+gil锁（注明一下，这个是每一个进程上面哟有一个GIL锁，每次只允许一个线程通过）
+
+一个进程只能被一个cpu调用
+
+
+
+
+
+涉及到io的话就用线程
+i/o不用通过cpu,虽然有gil限制，但是这个时间是非常短的,切换时间（就是这个cpu告诉这个线程做什么的时间是非常短的）
+中间的时间非常短
+
+############注明一下：这个io密集型的话，就用线程
+
+但涉及到计算的话，就用进程
+
+
+角色：使用者
+--多线程:
+
+
+多线程：CPU1
+cpu2  同时运行
+
+
+
+这个多线程：
+就是可以多个线程执行io操作，这个切换时间是非常短的，可以忽略不计的
+
+
+
+
+
+
+
+#
+# ##############可以实现并发，但是当请求发送出去后中间时期是空闲的
+# '''可以实现并发,但是，请求发出去后，需要等待，中间线程等着'''
+#
+# from  concurrent.futures   import  ThreadPoolExecutor
+# ####################线程池
+#
+#
+# import time
+# def task(url):
+#     time.sleep(3)
+#
+#     response=requests.get(url)
+#     print(url,response)
+# pool=ThreadPoolExecutor(5)
+#
+# url_list=[
+#     'http://www.baidu.com',
+#     'http://www.zhihu.com',
+#     'http://www.sina.com'
+# ]
+#
+#
+#
+#
+# import requests
+# for url in url_list:
+#
+#     pool.submit(task,url)
+#
+#
+# pool.shutdown(wait=True)
+#
+# ###############每一个线程都在等着
+
+
+
+
+
+# #####################直接返回处理
+# ######################通过回调函数进行处理
+#
+#
+#
+#
+#
+#
+
+
+##############编写方式2
+
+
+#
+# ##############可以实现并发，但是当请求发送出去后中间时期是空闲的
+'''可以实现并发,但是，请求发出去后，需要等待，中间线程等着'''
+
+from  concurrent.futures   import  ThreadPoolExecutor
+
+# from  concurrent.futures   import ProcessPoolExecutor
+###########################################这个是多进程
+####################线程池
+#############通过回调函数进行处理
+
+import time
+def task(url):
+    # time.sleep(3)
+
+    response=requests.get(url)
+    # print(url,response)
+    return  response
+pool=ThreadPoolExecutor(5)
+
+url_list=[
+    'http://www.baidu.com',
+    'http://www.zhihu.com',
+    'http://www.sina.com'
+]
+
+def done(future,*args,**kwargs):
+    ###################################这个future不用管，就是一个方法，可以拿到这个response的值出来，意思就是future.result()就是拿到的这个返回的response的值
+    response=future.result()
+    print(response.status_code,response.content)##############拿到这个response就可以拿到它的content和其他的里面的方法
+    # print(args,kwargs)
+
+
+import requests
+for url in url_list:
+
+    v=pool.submit(task,url)
+    ########加了一个回调函数##########################
+    v.add_done_callback(done)
+    #############这个意思是当这个task执行完成之后，就会返回一个回调函数，执行这个done函数,这个下载和回调函数可以分开来写
+    # v.add_done_callback(done)
+    ##可以加多个回调函数  每个回调函数执行一遍，实现异步效果
+
+
+pool.shutdown(wait=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+角色：开发者
+
+
