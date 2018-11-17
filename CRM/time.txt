@@ -1,0 +1,41 @@
+datetime
+时间的加减，time不可以
+
+In [18]: datetime.datetime.now()
+Out[18]: datetime.datetime(2018, 8, 24, 11, 55, 0, 621816)
+
+In [19]: datetime.datetime.now()+datetime.timedelta(3)
+Out[19]: datetime.datetime(2018, 8, 27, 11, 55, 33, 848916)
+
+In [20]: datetime.datetime.now()+datetime.timedelta(-39)
+Out[20]: datetime.datetime(2018, 7, 16, 11, 55, 48, 323635)
+
+
+
+
+time：
+In [22]: time.ctime()
+Out[22]: 'Fri Aug 24 11:56:29 2018'
+
+
+In [27]: time.strftime('%Y-%m-%d')
+Out[27]: '2018-08-24'
+
+
+In [29]: time.gmtime()
+Out[29]: time.struct_time(tm_year=2018, tm_mon=8, tm_mday=24, tm_hour=3, tm_min=58, tm_sec=5, tm_wday=4, tm_yday=236, tm_isdst=0)
+
+
+
+In [35]: datetime.datetime.now().replace(day=1)
+Out[35]: datetime.datetime(2018, 8, 1, 12, 9, 34, 509510)
+
+
+
+In [124]: datetime.datetime.now()
+Out[124]: datetime.datetime(2018, 8, 24, 20, 35, 23, 757435)
+
+In [125]: a=datetime.datetime.now()
+
+In [126]: a.year
+Out[126]: 2018

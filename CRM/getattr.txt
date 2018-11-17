@@ -1,0 +1,25 @@
+In [35]: c=models.CustomerInfo.objects.first()
+
+In [36]: c
+Out[36]: <CustomerInfo: stu3>
+
+In [38]: getattr(c,'consult_courses')
+Out[38]: <django.db.models.fields.related_descriptors.create_forward_many_to_many_manager.<locals>.ManyRelatedManager at 0x209cb765ba8>
+
+In [39]: getattr(c,'consult_courses').all()
+Out[39]: <QuerySet [<Course: Linux>]>
+
+In [41]: set(getattr(c,'consult_courses').all())
+Out[41]: {<Course: Linux>}
+
+
+##########################################################################################
+
+In [16]: a.related_model.objects.all()
+Out[16]: <QuerySet [<Course: linux>, <Course: Python>, <Course: Linux>]>
+
+
+In [19]: b=set(a.related_model.objects.all())
+
+In [20]: b
+Out[20]: {<Course: linux>, <Course: Python>, <Course: Linux>}

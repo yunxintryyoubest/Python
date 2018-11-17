@@ -1,0 +1,91 @@
+SmallIntegerField
+TextField
+
+base.html整个模板的静态的公共文件
+base.html：
+{%block extra-css%}{% enblock %} 
+额外的css样式加进来
+
+
+login里面：
+{% block extra-css%}
+<link href='static/css/sing.css' rel='stylesheet'>
+ 
+{% enblock%}
+
+
+render渲染html页面
+这个request是一个对象也可以用在html页面里面，比如request.user
+
+
+href='{% url 'logout' %}'
+跳转到了一个页面logout，在urls里面要加上这么一个logout
+
+
+<span>不占位置
+可以写在上面或者下面
+
+
+ontoonefile 反向查  (userprofile这个表去onetoone另一个表）
+request.user.userprofile.字段   后面跟反向的小写表名
+
+fk反向查  request.user.小写表名
+
+
+
+request.user.userprofile.role.all
+循环拿出这个表的所有role
+
+
+request.user.userprofile.role.select_related一样与all
+
+
+include：
+
+url(r'^CRM',include('app01.urls')),
+
+
+
+
+子表：
+（继承主表的那部分代码，替换掉原来的代码）
+{% extend 'kingadmin/index.html' %}
+{% block body %}
+
+jhjafff
+
+{% endblock %}
+
+主html里面加{% block body %}，{% endblock %}，就是要替换的部分，在子表里面，
+
+
+{% block right-content-container %}
+<h2>class='page-header'>board</h2>
+{%endblock%}
+把右边的容器block掉
+
+In [96]: a
+Out[96]: <CustomerInfo: stu14>
+
+
+In [95]: a.consult_courses.all()
+Out[95]: <QuerySet [<Course: linux>, <Course: Python>, <Course: Linux>]>
+
+
+a._meta.fields FK
+a._meta.related_objects  方向关联
+拿到所关联的表
+In [102]: a._meta.many_to_many
+Out[102]: (<django.db.models.fields.related.ManyToManyField: consult_courses>)
+
+
+
+
+In [101]: a._meta.fields_map
+Out[101]:
+{'CustomerInfo_consult_courses+': <ManyToOneRel: app01.customerinfo_consult_courses>,
+ 'customerfollowup': <ManyToOneRel: app01.customerfollowup>,
+ 'customerinfo': <ManyToOneRel: app01.customerinfo>,
+ 'student': <ManyToOneRel: app01.student>}
+
+

@@ -1,0 +1,99 @@
+第一个：
+将所有的app拿出来(settings)已经注册的app
+for ........
+__import__
+mod = __import__('%s.kingadmin' % app_name)
+mod=importlib.import_module(app_name,'kingadmin')
+print(mod.kingadmin)
+
+
+
+
+通过已经表（已经自定义）拿出他所在的app和它的表和自定义函数
+app_name=model_class._meta.app_label
+model_name=model_class._meta.model_name
+
+
+
+思路：
+
+首先从setting里面拿到所有的app（自己定义的app），自动发现已经注册的app
+在site里面启动app，拿到有自定义的类和所关联的表和app（在页面显示），当点击那个表时就进入那个页面（在各自的app里面渲染）
+
+
+
+
+
+从头到尾就2个参数，一个是表，一个是自定义的类
+
+
+
+
+a.status
+a.get_status_display()
+model.CustomerInfo._meta.fields
+获取这个model这个表所有字段对象，获取这个CustomerInfo的所有字段对象
+
+models.Customer._meta.get_field('status')
+取一个字段的对象
+取这个字段对象的所有值出来
+In [6]: b.choices
+Out[6]: ((0, '未报名'), (1, '已报名'), (2, '已退学'))
+为空就没有值
+
+
+b=models.CustomerInfo._meta.get_field('status')
+这个拿到的是这个表的status字段
+
+b.choices
+这个就是这个字段全部的状态
+0,‘未报名，2，'已经报名‘
+
+In [21]: b.get_choices
+Out[21]: <bound method Field.get_choices of <django.db.models.fields.SmallIntegerField: status>>  
+
+#拿出大于等于这个日期的
+In [8]: models.CustomerInfo.objects.filter(date__gte='2017-4-21')
+Out[8]: <QuerySet [<CustomerInfo: stu2>, <CustomerInfo: stu1>, <CustomerInfo: stu3>, <CustomerInfo: stu3>]>
+
+
+
+
+
+
+get_field是取得一个字段
+getattr（obj，‘name’)
+可以取表的一个字段的所有信息,obj是表名
+
+In [13]: a=models.CustomerInfo._meta.fields
+取这个表的所有字段
+
+
+In [22]: a=models.CustomerInfo.objects.first()
+
+In [23]: getattr(a,'name')
+Out[23]: 'stu2'
+
+In [28]: a
+Out[28]: <CustomerInfo: stu2>
+
+a是一个对象那个，可以取里面的值，a.source和a.date等（对象）
+下面这个status是返回的是0,1,2,3等，通过display可以取相应 的文本信息,choice需要display 
+
+
+In [30]: a.get_status_display()(拿到这个status为0的文本信息，展示出来）
+Out[30]: '未报名'
+
+In [31]: a.status
+Out[31]: 0
+
+
+
+拿到这个字段<django.db.models.fields.SmallIntegerField: status>,注意要分类型，这个类型是有choices的，而这个表（first（）等）是没有这个的choices的，还有display，还有.,还有getattr
+
+
+In [113]: d.get_internal_type()
+Out[113]: 'DateField'
+
+
+choices和get_choices（）一样，但是有点区别，get_choices()字段没有choice的也可以获取得到，他的信息出来

@@ -1,0 +1,4 @@
+模板语言中，可以if  else一行写到底一系列操作
+
+python:
+data_ele="<option value=''>%s</option>"%(if not date[0]  pass  else "%s-%s-%s"%(date[0].year,date[0].mouth,date[0].day),date[1])

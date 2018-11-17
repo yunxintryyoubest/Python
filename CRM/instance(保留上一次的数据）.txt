@@ -1,0 +1,43 @@
+注意：这instance是只有修改页面才需要，而add页面是不需要的，所以在tag那里要做判断，如果是修改的话，得到字段
+的数据就是getattr(model_obj.instance,字段（属性）)
+而修改页面拿到这个课程数据是:
+getattr(model_obj,字段（属性））
+
+
+对象.instance
+假如这个对象是整个app的话，这个instance可以拿到这个app里面的某个表的某个字段的那条数据的信息（相当于placeholder）
+从而保留在编辑的页面（修改）
+
+原理：    可以做修改页面的时候，保留上一次的数据，在页面渲染出来
+views里面可以传字段过来，如果是表的字段的话，就可以拿到这个字段的值
+如果views传来一个id为多少的一个对象（就是一条数据）的话，那么就是具体的一个对象了
+如果for循环了一下这个对象（在html里面）的话，就可以拿到这个对象（这个数据）的之前全部字段信息（在页面渲染出来）
+总之：form_obj就是一条数据（具体就是一条表单数据，某个具体到某个人的一整条数据）
+form_obj_instance这个是一个对象，比如stu12，stu11等一条数据（一个对象）
+
+
+form_obj_instance这个
+相当于models.CustomerInfo.objects.filter(id=1)或者是first（）等一个对象  
+
+
+
+views：
+    obj=admin_class.model.objects.get(id=obj_id)###############拿到某一个字段的信息，一个对象
+
+    form_obj=model_form(instance=obj)把这个对象（每一个字段）传到html里面
+
+
+    #返回到了model_form里面（form_handle的创建from组件那里,在实例化一下，就拿到了那个dynamic_form，就可以在前段渲染出来，直接生成html插件（动态modelform组件）
+
+###################注意：这这个form_obj是这个app的全部表的数据（也就是一个对象）
+
+
+
+
+
+html：
+
+    <h2>{{ form_obj.instance }}</h2>
+
+{#######注意：这个#}
+

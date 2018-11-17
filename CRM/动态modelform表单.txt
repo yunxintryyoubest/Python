@@ -1,0 +1,98 @@
+
+######动态生成那个form组件（html插件）
+from django.forms import ModelForm
+from  app01 import models
+
+
+#################################这个的功能是htm里面生成html组件
+#自动生成html标签，form组件的功能，让这两张表联合唯一,这个的功能是创建html插件
+class CustomerInfo(ModelForm):
+    #联合唯一
+    class Meta:
+        model=models.CustomerInfo#####拿到了单个表的所有字段
+        # fields=['name','consultant','status']#####这个只能fields
+        fields='__all__'
+        #dara是自动auto的，不能加上去
+
+
+
+
+
+    def __new__(cls, *args, **kwargs):
+        print("__new__",cls,args,kwargs)
+      #做了一个自定制
+############注意：cls.base_fields:这个是这个表的全部字段的数据
+        print(cls.base_fields)#############一个有序的字典，里面是元组形式
+        for field_name in cls.base_fields:
+            field_obj=cls.base_fields[field_name]##########拿到的是一个个的字段对象  customerinfo,(source,'QQ)source，consuant等字段对象
+            field_obj.widget.attr.update({'class':'form-control'})######################对每一个字段进行操作，属性，更新为class：control加了一个class属性进去（在每一个字段里面）生成html插件
+
+
+        return  CustomerInfo.__new__(cls)
+############这个是app01下面的表customerinfo的new方法
+
+
+
+
+#######函数里面可以写类
+def  create_dynamic_model_from(admin_class):
+    # 动态生成
+
+    class Meta:
+        model=admin_class.model##########拿到了所有表
+        #拿到这个表名
+        fields='__all__'###########拿到了所有表的字段
+
+
+
+
+
+
+    def __new__(cls, *args, **kwargs):
+        print("__new__", cls, args, kwargs)
+        # 做了一个自定制
+        ############注意：cls.base_fields:这个是这个表的全部字段的数据
+        print(cls.base_fields)  #############一个有序的字典，里面是元组形式
+        for field_name in cls.base_fields:
+            field_obj = cls.base_fields[field_name] ##########拿到的是一个个的字段对象  customerinfo,(source,'QQ)source，consuant等字段对象
+            field_obj.widget.attrs.update({'class': 'form-control'})  ######################对每一个字段进行操作，属性，更新为class：control加了一个class属性进去（在每一个字段里面）生成html插件
+
+        return ModelForm.__new__(cls)########返回全部表的字段（意思是全部表的字段都改变样式）ModelForm就是全部表
+
+    ############这个是app01下面的表customerinfo的new方法
+
+
+
+
+
+
+
+    dynamic_form=type('Dynamicmodelform',(ModelForm,),{'Meta':Meta,'__new__': __new__})
+    #第一个是类名，第二个是它跟着的参数，必须是一个元组，可以涉及多继承的关系，所以可以加一个逗号，，后面是一个字典形式，第一个可以自己定义这个名称，引用的是meta这个内存地址，实例化一下就是全部数据,没有实例化之前是一个类
+
+    print(dynamic_form)
+    #动态生成form组件，html插件
+
+
+
+
+
+
+
+    return  dynamic_form
+    #吧这个form返回，就可以用它来实例化了
+    #type第一个是类Dynamicmodelform，里面第二个是自定义的类，在加上类下面的函数（类下面的函数），括号里面是有关系的
+
+
+
+#####new方法在init之前，在new里面拿到的所有字段
+
+
+
+
+
+
+
+
+
+

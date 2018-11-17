@@ -1,0 +1,102 @@
+ 
+
+
+
+a._meta.fields_map拿到所有的外键关联
+a._meta.fields FK外键
+a._meta.fields many_to_many
+
+
+
+ul 和  li列表
+
+delete   html:
+{%  get_delete_data obj app_name  model_name  as all_related_obj_eles%}
+{############这个表所关联的所有数据都将被删除包括它所关联的其他表有他的数据）#}
+{{ all_related_obj_eles|safe }}
+
+
+tag:
+
+
+@register.simple_tag
+def get_delete_data(obj ,app_name,model_name):
+#########obj是本表，你所进入的表
+    ele='<ul>'
+    ele+='<li>+obj+</li>'
+    for rever_fk in obj._meta.related_objects:
+        ##拿到所有它关联的所有表
+
+            related_table_name = rever_fk
+            related_look_up_key = '%s_set' % related_table_name
+            # 反向拿到它的表对象
+            related_obj = getattr(obj, related_look_up_key).all()
+            # 反向拿到它所关联的表的所有数据(某个表的反向表obj）,
+            if rever_fk.get_internal_type() == 'ManyToManyField':
+        ####假如它与关联的表不是manytomany的关系的话，就不查找他的表了，意思是只有与它的关联的表的关系是manytomany的话才去查找，否则不深入查找其他表了
+                ele += '<li><a href="/kingadmin/%s/%s%s/change"></a>%s与%s相关的数据将被删除</li>' % (i._meta.app_label, i._meta.model_anme, i.id, i, obj)
+
+            else:
+
+                for i in related_obj:
+                    ele += '<li>%s<ul>' % related_table_name
+                    ele+=display_all_related_objs(i)
+
+    ele += '</ul></li>'
+    ele += '</ul>'
+    return mark_safe(ele)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+href="{%  url  'obj_delete' app_name model_name form_obj.instance.id %}"
+
+In [107]: a.delete()
+Out[107]:
+(21,
+ {'app01.CustomerFollowUp': 0,
+  'app01.CustomerInfo': 7,
+  'app01.CustomerInfo_consult_courses': 14})
+
+
+
+
+
+In [101]: a._meta.fields_map
+Out[101]:
+{'CustomerInfo_consult_courses+': <ManyToOneRel: app01.customerinfo_consult_courses>,
+ 'customerfollowup': <ManyToOneRel: app01.customerfollowup>,
+ 'customerinfo': <ManyToOneRel: app01.customerinfo>,
+ 'student': <ManyToOneRel: app01.student>}
+
+In [102]: a._meta.many_to_many
+Out[102]: (<django.db.models.fields.related.ManyToManyField: consult_courses>
+
+In [110]: a.student_set
+Out[110]: <django.db.models.fields.related_descriptors.create_reverse_many_to_one_manager.<locals>.RelatedManager at 0x12bbfcea780>
+
+
+
+a.referral_from
+

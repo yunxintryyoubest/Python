@@ -1,0 +1,14 @@
+base.html一般存放js，css等静态布局
+其他页面就继承他
+index.html是存放布局的
+销售的放在crm里面
+
+执行admin
+127.0.0.1:8000/admin/
+
+
+index.html和login.html都是可以去base.html里面拿js，css文件的
+
+
+
+

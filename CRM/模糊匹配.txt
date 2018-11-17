@@ -1,0 +1,24 @@
+script代码
+
+
+{############这个seacch会区分大小写，所以把输入的值全部变成了个大写，在把数据都变成大写，搜索就按大写来搜索了, 所以不管输入的值是大写还是小写都没有问题了#}
+    function  Fuzzserch(val) {
+        console.log($(val).val())
+{#        ####input的话显示的值是val，而其他标签是text或者html就可以显示#}
+        var  input_data=$(val).val().toUpperCase()
+        $(val).next().children().each(function () {
+
+{#            ####这个this改成了val下一个标签的option了，意思是this找的是option的东西了，已经改变了,touppercase大写去搜索#}
+            if( $(this).text().toUpperCase().search(input_data) !=-1){
+                    $(this).show()
+            }
+            else{
+                $(this).hide()
+            }
+        })
+    }
+
+html：
+
+
+<input type="search"  id ='fuzzsearch' oninput="Fuzzserch(this)"  placeholder="filter">

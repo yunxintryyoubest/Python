@@ -1,0 +1,39 @@
+_meta有：
+c=models.CustomerInfo._meta.get_field('name')
+某个字段的_meta
+
+In [163]: c
+Out[163]: <django.db.models.fields.SmallIntegerField: source>
+In [168]: c.get_internal_type()
+Out[168]: 'SmallIntegerField'
+
+In [165]: c.get_choices()
+Out[165]:
+[('', '---------'),
+ (0, 'QQ群'),
+ (1, '51CTO'),
+ (2, '百度推广'),
+ (3, '知乎'),
+ (4, '转介绍'),
+ (5, '其它')]
+
+In [164]: c.choices
+Out[164]: ((0, 'QQ群'), (1, '51CTO'), (2, '百度推广'), (3, '知乎'), (4, '转介绍'), (5, '其它'))
+
+
+
+
+
+
+
+queryset：对象
+models.CustomerInfo.objects.all()
+某个表的queryset
+
+In [161]: b
+Out[161]: <QuerySet [<CustomerInfo: stu2>, <CustomerInfo: stu1>, <CustomerInfo: stu3>, <CustomerInfo: stu3>]>
+
+b.什么可以取值
+
+get_字段_display
+显示这个字段有choices的内容出来（status等有choice）

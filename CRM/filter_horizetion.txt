@@ -1,0 +1,99 @@
+水平筛选
+
+field.label中文
+field.name  英文 
+
+先拿到字段的对象
+
+a=.........._meta.get_field('')
+a.rel_class
+c.rel.to
+c.rel.to.objects.all()
+c.related_model
+
+
+
+tag.py里面的
+
+：
+In [11]: getattr(a,'consult_courses').all()
+Out[11]: <QuerySet [<Course: Linux>]>
+
+In [12]: b1=models.Course.objects.all()
+
+In [13]: b1
+Out[13]: <QuerySet [<Course: linux>, <Course: Python>, <Course: Linux>]>
+
+In [14]: b1=set(models.Course.objects.all())
+
+In [15]: b1
+Out[15]: {<Course: linux>, <Course: Python>, <Course: Linux>}
+
+
+
+拿到了一个表的课程（已经选择的课程）
+In [79]: c1=models.CustomerInfo.objects.last()
+
+In [80]: c2=set(getattr(c1,'consult_courses').all())
+
+In [81]: c2
+Out[81]: {<Course: Linux>}
+
+
+In [82]: b1-c2
+Out[82]: {<Course: linux>, <Course: Python>}
+
+
+
+如果之前是.all的话就是queryset对象集合
+
+
+
+
+
+related_model拿到这个表所关联的表
+a1=models.CusomerInfo._meta.get_field('consult_courses')
+#### consult_courses这个是CostomerInfo这个表的字段
+
+In [89]: a1.related_model
+Out[89]: app01.models.Course
+拿到Courses
+
+
+
+
+html：
+
+
+
+ {% if field.name in admin_class.filter_horizontal %}
+{#        <div ><label >{{ field.name }}</label></div>#}
+        <div class='col-lg-5'>
+        <div>
+<select multiple   id="id_{{ field.name  }}_from" >
+    {% get_avaiable_m2m_data  field.name  form_obj   admin_class as avaiable_m2m_data %}
+{#            #as后面相当于存了一个变量，循环这个返回的queryset的集合#}
+    {% for obj in avaiable_m2m_data %}
+    <option  ondblclick="Moveselectedoption(this, 'id_{{ field.name }}_to');" value="{{ obj.id }}">{{ obj }}</option>
+    {% endfor %}
+</select>
+</div>
+ <div class='col-lg-5'>
+<select multiple  id="id_{{ field.name }}_to" class="right_option" name="{{ field.name }}" >
+{######这里要加个name属性才可以提交,注意，否则不可以提交过去，区分作用吧#}
+{% get_selected_data  field.name form_obj  as avaiable_m2m_data1 %}
+
+{% for obj in avaiable_m2m_data1 %}
+<option  ondblclick="Moveselectedoption(this, 'id_{{ field.name }}_from');"value="{{ obj.id }}">{{ obj }}</option>
+{% endfor %}
+</select>
+</div>
+</div>
+</div>
+
+
+
+            {% else %}
+        {{ field }}
+       {% endif %}
+

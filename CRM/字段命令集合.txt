@@ -1,0 +1,38 @@
+a._meta.fields
+a._meta.get_field
+a.get_internal_type()
+a.related_objects(查询关联的表,拿到之后就可以拿到它所关联的某个表的数据了） 
+a.costomerinfo_set.all()
+反向拿到它所关联的全部表
+
+
+
+
+
+In [133]: a._meta.related_objects
+Out[133]:
+(<ManyToOneRel: app01.customerinfo>,
+ <ManyToOneRel: app01.student>,
+ <ManyToOneRel: app01.customerfollowup>)
+
+In [16]: a.related_model.objects.all()
+Out[16]: <QuerySet [<Course: linux>, <Course: Python>, <Course: Linux>]
+
+In [134]: a._meta.related_objects[0]
+Out[134]: <ManyToOneRel: app01.customerinfo>
+
+In [135]: a._meta.related_objects[0].name（拿表名）
+Out[135]: 'customerinfo'
+
+
+###找到所有关联的，再去拿到它的数据
+In [138]: getattr(a,'customerinfo_set')
+Out[138]: <django.db.models.fields.related_descriptors.create_reverse_many_to_one_manager.<locals>.RelatedManager at 0x12bbfd31390>
+
+In [139]: getattr(a,'customerinfo_set').all()
+Out[139]: <QuerySet []>
+
+
+
+a.costomerinfo_set.all()
+反向拿到它所关联的全部表

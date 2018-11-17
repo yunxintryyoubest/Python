@@ -1,0 +1,117 @@
+减少从数据库一次性取太多的数据
+select * from tablename limit offset 50 limit 10
+从第50放开始取
+
+只是生成了一个查询对象
+一个生成器  .all()
+
+注：
+有分页对象p：
+p.num_pages  拿出所有分页的个数
+p.count 总共多少个数据
+p.page_range  这个是在上面范围内  range（0,4）
+某个分页：
+page1.object_list拿出分页的内容，第一页
+page1.paginator 等于p分页对象
+page1.number   是当前页
+page2.previous_page_number()  1
+page1.next_page_number（）  2
+
+
+>>> page2.has_next()
+True
+>>> page2.has_other_pages()
+True
+>>> page1.has_previous()
+False
+
+
+
+
+
+
+>>> from django.core.paginator import Paginator
+>>> objects=('alex','john','ahun','hu','li','qi')#中括号也可以
+>>> p=Paginator(objects,2)#每两个对象的分，每一页2个
+>>> p
+<django.core.paginator.Paginator object at 0x0000021F12379E48>
+>>> page1=p.page(1)#第一页从1到3，不包括3
+>>> page1
+<Page 1 of 3>
+>>> page1.object_list#列出所分的对象
+('alex', 'john')
+>>> p.count
+6
+>>> p.num_pages#总共分了多少页
+3
+
+>>> page2=p.page(3) #相当于page2分了第3页的内容，每一页是2个对象
+
+>>> page2.object_list #page2的内容
+('li', 'qi')
+
+>>> page2=p.page(2)
+>>> page2     #相当于总共3页中的第二页
+<Page 2 of 3>
+
+>>> page2.has_next()
+True
+>>> page2.has_other_pages()
+True
+>>> page1.has_previous()
+False
+>>> page1.object_list
+('alex', 'john')
+>>> p.count
+6
+>>> qu.number######这个是当前页
+2
+
+>>> qu.paginator.num_pages#####这个是总页数   和p.num_pages一样   qu的定义：qu=p.page(2)  p对qu的操作，分的是第二页
+3
+
+#之前的那页
+>>> qu.previous_page_number()
+1
+>>> qu.next_page_number()##下一页
+3
+
+>>> p.page_range##########这个是分页对象p的取值范围
+range(1, 4)
+
+
+注意：
+qu.paginator=p（p是分页的对象）
+
+>>> qu.paginator
+<django.core.paginator.Paginator object at 0x0000021F12379E48>
+>>> p
+<django.core.paginator.Paginator object at 0x0000021F12379E48>
+
+
+
+
+
+]
+
+contact_list=Contact.objects.all()
+并不是所有的数据取出来了
+
+
+
+
+
+
+
+
+>>> qu.object_list
+('ahun', 'hu')
+>>> for i in qu:print(i)
+...
+ahun
+hu
+
+
+#之前的那页
+>>> qu.previous_page_number()
+1

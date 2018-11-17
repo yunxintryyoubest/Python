@@ -1,0 +1,48 @@
+>>> sort={'alex':1,'ho':0}
+
+>>> sort.values()
+dict_values([1, 0])
+
+>>> list(sort.values())[0]
+1
+
+
+
+
+
+Q：
+
+导入Q模块
+
+In [40]: from django.db.models import Q
+
+In [41]: q=Q()
+
+In [43]: q.connector####这个是and的关系，这个关系可以自己改
+Out[43]: 'AND'
+
+
+In [44]: q.connector='or'##########可以改成其他关系or，and等等
+
+In [51]: q.children.append({'aelx':'323'})#字典形式
+
+In [52]: q
+Out[52]: <Q: (or: {'aelx': '323'})>
+
+
+In [75]: q.children.append(('contact_contains','33'))  
+#元组形式
+
+
+In [75]: models.CustomerInfo.objects.filter(q)
+
+#筛选,可有多个数据（q里面，以or的关系查找，或的关系）
+
+
+
+
+In [84]: q2
+Out[84]: <Q: (AND: ('aele', '122'))>
+
+In [85]: q3
+Out[85]: <Q: (OR: ('contact_contains', '33'), ('CustomerInfo', ' stu6'))>

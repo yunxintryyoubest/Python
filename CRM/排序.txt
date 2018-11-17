@@ -1,0 +1,4 @@
+In [28]: obj.order_by('-id')
+Out[28]: <QuerySet [<CustomerInfo: stu7>, <CustomerInfo: stu6>, <CustomerInfo: stu5>, <CustomerInfo: stu3>, <CustomerInfo: stu3>, <CustomerInfo: stu1>, <CustomerInfo: stu2>]>
+
+这个是按id倒着排序

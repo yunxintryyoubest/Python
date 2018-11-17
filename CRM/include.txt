@@ -1,0 +1,25 @@
+{######注明：当这个模板（html文件）其他人在用着的时候，不能include，只能另外创建一个新的文件include进来#}
+{% include 'king/table_list_change_comoenent.html' %}
+
+这个也是共用一个html文件，添加和修改
+table_list_change_comoenent.html：
+
+
+
+
+
+<form method="post">
+  {% csrf_token %}
+    <div class="form-group">
+        {% for field in form_obj %}
+    <label for="exampleInputPassword1">{{ field.label }}</label>
+                {{ field }}
+    <span style="color: red"> {{ field.errors.0 }}</span>
+      {% endfor %}
+
+{#####  offset可以往右移多少col-sm这个是可以往右边拉多少#}
+</form>
+
+<div class="col-sm-offset-10 col-sm-1"></div>
+<button class="btn btn-info" type="submit">保存</button>
+

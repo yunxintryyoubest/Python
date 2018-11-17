@@ -1,0 +1,18 @@
+from django import conf
+就可以导入里面的setting，取setting里面的文件
+print(conf.setting.INSTALED_APPS)
+拿出setting里面的已经安装的app，打印出来
+
+
+
+import importlib
+importlib.import_module(name,pack)
+
+动态导入另一个模块kingadmin
+for app_name in conf.setting.INSTALLED_APPS:
+try:
+mod=__import__('%s.kingadmin'%app_name)
+print(mod.kingmod)
+except ImportError:
+pass
+把kingadmin.py 导入到views里面

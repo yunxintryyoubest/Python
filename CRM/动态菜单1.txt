@@ -1,0 +1,114 @@
+admin.py:
+from django.contrib import admin
+
+# Register your models here.
+
+from  app01 import models
+
+
+#自定制admin
+
+class CustomerAmin(admin.ModelAdmin):
+    list_display = ['name','source','contact_type']
+    #让这个表的什么字段显示出来，后面可以自己加
+    list_filter = ['source','consultant']
+    #这个是过滤，可以按什么字段进行过滤，后面还可以自己加字段
+    search_fields = ['contact','consultant_name']
+#搜索，搜索这个表的那个字段，后面要加字段
+
+
+
+admin.site.register(models.CustomerInfo,CustomerAmin)#放在这个后面，就可以定制这个表的admin了
+admin.site.register(models.CustomerFollowUp)
+admin.site.register(models.ClassList)
+admin.site.register(models.Course)
+admin.site.register(models.CourseRecord)
+admin.site.register(models.StudyRecord)
+#将表在放到admin后台管理里面
+
+
+
+views:
+from django.shortcuts import render
+
+# Create your views here.
+
+
+
+# from django.contrib.auth.decorators import  login_required
+#装饰器#@login_required，写在你要views里面
+
+from django.contrib.auth import authenticate,login,logout
+#验证
+#销售首页
+def dashboard(request):
+
+    username=request.POST.get('username')
+    password=request.POST.get('password')
+
+#验证，把user封装在requets里面
+
+    user=authenticate(username=username,password=password)
+    #验证,用户名对象，从数据库拿出来了
+#只是验证成功了，但是没有生成session
+    if user:
+        print('passed authehcation')
+        login(request,user)#生成了session,写在了session
+
+
+    # return  render(request,'crm/dashboard.html')
+    return  render(request.GET.get('next','/'))
+#登录没有成功的话就跳转到下一个页面，否则的话就首页
+
+
+def logout(request):
+
+   logout(request)
+    #把requets里面的用户信息给清空，就是退出，request是一个对象
+
+
+
+
+
+index.html：
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+
+
+{%  for row in request.user.userprofile.role.select_related %}
+{% for menu in role.menus.select_related %}
+{#    #在role这张表里面循环打印出menus#}
+<li ><a href="{%  if url_type == 0 %}{{ menu.url_name }}{% else %}{%  url  menu.url_name %}{% endif %}">{{ menu.name }}</a></li>
+{#    #假如这个type=0的话就返回这个href#}
+{% endfor %}
+{% endfor %}
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+{#            输出:{{ request.user.userprofile.role.all }}#}
+{#            输出:{{ request.user.userprofile.role.select_related }}#}
+              {%  for row in request.user.userprofile.role.all %}
+{#                  #那个用户所关联的角色所在的菜单选项#}
+                  {% for menu in row.menus.all %}
+                  {{ menu.url_type }}
+                      <li><a href="{%  if menu.url_type == 0 %}{{ menu.url_name }}{% else %}{{ menu.url_name }}{% endif %}">{{ menu.name }}</a></li>
+{#                      当选择1的话就是静态的，当为2的话就是动态的，menu.url_name 跳转的页面#}
+                  {% endfor %}
+                {% endfor %}

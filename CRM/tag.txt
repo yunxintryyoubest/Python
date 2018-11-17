@@ -1,0 +1,31 @@
+from django.template import Library
+from django.utils.safestring import mark_safe
+
+register=Library()
+
+@register.simple_tag
+def build_table_row(obj,admin_class):
+    #传过来的第一个是所关联的表名(比如customerinfo)，第二个是自定义的类（类里面有list_display，filter)
+    ele=""
+
+    for colunmn_name in admin_class.list_display:
+        #拿出所有的字段信息，admin里面的list_display（字段),字段
+        colunmn_obj=admin_class.model._meta.get_field(colunmn_name)
+        #拿到这个字段<django.db.models.fields.SmallIntegerField: status>,注意要分类型，这个类型是有choices的，而这个表是没有这个的choices的，有display，还有.
+
+
+        #做判断，假如这个字段有choices的话就显示这个表（obj）的文本信息，多了一步，以为有的字段有选择（choices），有选择的话就不回显示文本信息，单纯的数字，通过映射就可以显示出来
+        if colunmn_obj.choices:
+            column_data = getattr(obj,'get_%s_display'% colunmn_name)()#表名加display,colunmn_obj这个是字段
+            #obj是表名query类型，可以映射
+        else:
+            colunmn_data=getattr(obj,colunmn_name)
+        #通过映射拿到这个字段的值，第一个是表的对象，第二个是这个表的一个字段，就拿到了这个字段的信息
+        td_ele="<td>%s</td>"%colunmn_data
+        #colunmn_data这个是数据（某个字段的数据）
+
+        ele+=td_ele
+        #所有加的html语言，已经是多个td标签
+
+        return  mark_safe(ele)
+    #返回ele到html里面

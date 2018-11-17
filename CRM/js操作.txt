@@ -1,0 +1,64 @@
+$($('select')[0]).attr('id')
+########拿这个select标签id值（第一个select）
+"id_contact_type"
+
+
+
+注意：
+input和其他标签的name=‘alex’，后端可以直接调用request.POST.get('alex')就好了
+
+
+prop是验证有没有被选
+$('this option').prop('selected',true)
+拿到this下面的option标签，this是父标签
+
+$('select[name]')
+拿到多个select标签里面有name属性的select标签
+
+$('select[name] option')
+拿到这个多个select标签里面有name属性的select标签下面的option标签
+
+
+input就只有value是显示的值
+而其他标签是text（）是显示的值
+
+
+
+$('input[row_select]').prop('checked',true)
+#判断这个checkbox是否被选中的状态
+
+
+$(':check')找到被选择的
+$('input[row_select]').filter(':checked')拿到input标签下面的已经被选择的了（checkbox）
+
+
+
+  $.each(select_objs,function () {
+从当前这个状态里面遍历每一个select_objs，当前$.each应该是$(this)
+ select_ids=[]
+ select_ids.push($(this).val())
+这个把当前的值传进这个字典里面
+
+
+
+找：
+$('input[row_select]').filter('checked')
+var  selected_action=$("select[name='action']").val()取值，在select标签下面早到这个值为多少的 
+
+
+后台取数据：
+js代码：这里写一个name的目的主要是为了后台取数据方便
+
+var input_ele='<input type="hidden" + name="selected_ids"+ value=stringify(select_ids)"+">"'
+
+
+取数据：
+ids=request.POST.get('selected_ids')就拿到了这个字符串形式的
+
+json.loads（ids）就转化为对象
+
+
+
+
+
+

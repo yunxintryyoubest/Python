@@ -1,0 +1,21 @@
+In [3]: a=models.CustomerInfo.objects.last()
+
+In [4]: a
+Out[4]: <CustomerInfo: stu14>
+
+
+In [6]: getattr(a,'consult_courses')
+Out[6]: <django.db.models.fields.related_descriptors.create_forward_many_to_many_manager.<locals>.ManyRelatedManager at 0x27ef4f39c50>
+
+In [7]: a_obj=getattr(a,'consult_courses')
+
+In [8]: a_obj.all()
+Out[8]: <QuerySet [<Course: Linux>]>
+
+
+In [10]: a_obj.select_related()
+Out[10]: <QuerySet [<Course: Linux>]>
+
+field_obj=admin_class.model._meta.get_field(field_name)
+print('sueccess-----------------------------------------------------------------')
+obj_list=field_obj.related_model.objects.all()

@@ -1,0 +1,35 @@
+from django.shortcuts import render
+
+# Create your views here.
+
+
+
+# from django.contrib.auth.decorators import  login_required
+#装饰器#@login_required，写在你要views里面
+
+from django.contrib.auth import authenticate,login,logout
+#验证
+#销售首页
+def dashboard(request):
+
+    username=request.POST.get('username')
+    password=request.POST.get('password')
+
+#验证，把user封装在requets里面
+
+    user=authenticate(username=username,password=password)
+    #验证,用户名对象，从数据库拿出来了
+#只是验证成功了，但是没有生成session
+    if user:
+        print('passed authehcation')
+        login(request,user)#生成了session,写在了session
+
+
+    # return  render(request,'crm/dashboard.html')
+    return  render(request.GET.get('next','/'))
+#登录没有成功的话就跳转到下一个页面，否则的话就首页
+
+
+def logout(request):
+    logout(request)
+    #把requets里面的用户信息给清空，就是退出，request是一个对象

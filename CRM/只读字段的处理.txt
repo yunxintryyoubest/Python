@@ -1,0 +1,172 @@
+属性是.
+
+
+
+form_handle:
+
+
+######动态生成那个form组件（html插件）
+from django.forms import ModelForm
+from  app01 import models
+
+
+#################################这个的功能是htm里面生成html组件
+#自动生成html标签，form组件的功能，让这两张表联合唯一,这个的功能是创建html插件
+class CustomerInfo(ModelForm):
+    #联合唯一
+    class Meta:
+        model=models.CustomerInfo#####拿到了单个表的所有字段
+        # fields=['name','consultant','status']#####这个只能fields
+        fields='__all__'
+        #dara是自动auto的，不能加上去
+
+
+
+
+
+    def __new__(cls, *args, **kwargs):
+        print("__new__",cls,args,kwargs)
+      #做了一个自定制
+############注意：cls.base_fields:这个是这个表的全部字段的数据
+        print(cls.base_fields)#############一个有序的字典，里面是元组形式
+        for field_name in cls.base_fields:
+            field_obj=cls.base_fields[field_name]##########拿到的是一个个的字段对象  customerinfo,(source,'QQ)source，consuant等字段对象
+            field_obj.widget.attr.update({'class':'form-control'})######################对每一个字段进行操作，属性，更新为class：control加了一个class属性进去（在每一个字段里面）生成html插件
+
+
+        return  CustomerInfo.__new__(cls)
+############这个是app01下面的表customerinfo的new方法
+
+
+##########from生成meta的时候判断要不要exclude
+
+#######函数里面可以写类
+def  create_dynamic_model_from(admin_class,form_add=False):
+    #######默认是修改form_add=False的表单，true是增加
+    # 动态生成
+
+    class Meta:
+        model=admin_class.model##########拿到了所有表
+        #拿到这个表名
+        fields='__all__'###########拿到了所有表的字段
+        # exclude=admin_class.readonly_fields
+        #把不可读的字段加进来，排出去
+        if  not form_add:#################修改
+            exclude = admin_class.readonly_fields
+            admin_class.form_add=False  ######只要是修改的话，这个form_add就是false，自始至终这个admin_class实例都是同一个，这必须的修改这个属性为false，是为了避免上一次的添加改为true，就仍然是添加菜单了
+        else:
+            admin_class.form_add=True
+            #假如是添加的话就是true，添加就不做处理，不是只读状态了
+    # {  # ##当执行完添加操作时，admin_class的这个form_add还是true，当执行add的时候addmin_class还是true，没有刷新，在执行修改就为true状态了，而默认是false，所有在修改是必须修改这个admin_class的属性值#}
+
+    def __new__(cls, *args, **kwargs):
+        print("__new__", cls, args, kwargs)
+        # 做了一个自定制
+        ############注意：cls.base_fields:这个是这个表的全部字段的数据
+        print(cls.base_fields)  #############一个有序的字典，里面是元组形式
+        for field_name in cls.base_fields:
+            field_obj = cls.base_fields[field_name] ##########拿到的是一个个的字段对象  customerinfo,(source,'QQ)source，consuant等字段对象
+            field_obj.widget.attrs.update({'class': 'form-control'})  ######################对每一个字段进行操作，属性，更新为class：control加了一个class属性进去（在每一个字段里面）生成html插件
+            # if field_name in  admin_class.readonly_fields:
+            #     field_obj.widget.attrs.update({'disable':'true'})
+            #     print('--nre_meta',cls.Meta)
+            #     # cls.Meta.exclude.append(field_name)
+            # print(cls.Meta.exclude)
+
+
+
+
+
+        return ModelForm.__new__(cls)########返回全部表的字段（意思是全部表的字段都改变样式）ModelForm就是全部表
+
+    ############这个是app01下面的表customerinfo的new方法
+
+
+
+
+
+
+
+    dynamic_form=type('Dynamicmodelform',(ModelForm,),{'Meta':Meta,'__new__': __new__})
+    #第一个是类名，第二个是它跟着的参数，必须是一个元组，可以涉及多继承的关系，所以可以加一个逗号，，后面是一个字典形式，第一个可以自己定义这个名称，引用的是meta这个内存地址，实例化一下就是全部数据,没有实例化之前是一个类
+
+    print(dynamic_form)
+    #动态生成form组件，html插件
+
+
+
+
+
+
+
+    return  dynamic_form
+    #吧这个form返回，就可以用它来实例化了
+    #type第一个是类Dynamicmodelform，里面第二个是自定义的类，在加上类下面的函数（类下面的函数），括号里面是有关系的
+
+
+
+#####new方法在init之前，在new里面拿到的所有字段
+
+
+
+
+
+
+
+
+
+
+
+
+
+compenent.html:
+
+{% load kingadmin_tags %}
+
+<form method="post">
+  {% csrf_token %}
+
+    <div class="form-group">
+
+        {% for field in form_obj %}
+    <label for="exampleInputPassword1">{{ field.label }}</label>
+                {{ field }}
+    <span style="color: red"> {{ field.errors.0 }}</span>
+      {% endfor %}
+
+{#####  offset可以往右移多少col-sm这个是可以往右边拉多少#}
+
+           {% if not admin_class.form_add %}
+        <div class="form-group">
+{#               //如果这是修改表单的话就做下面这些，如果是添加的话，就不执行这些，只读状态#}
+
+
+{#               ##当执行完添加操作时，admin_class的这个form_add还是true，当执行add的时候addmin_class还是true，没有刷新，在执行修改就为true状态了#}
+        {% for field in admin_class.readonly_fields %}
+{#            ######上面是form_obj是对象，要加label，取名字，下面是循环元组，不用加label#}
+    <label for="exampleInputPassword1">{{ field }}</label>
+                <p>{% get_obj_field_val form_obj field %}</p>
+    <span style="color: red"> {{ field.errors.0 }}</span>
+      {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+
+
+
+
+
+
+<div class="col-sm-offset-10 col-sm-1"></div>
+<button class="btn btn-info" type="submit">保存</button>
+    </div>
+</form>
+
+
+
+
+
+
+
