@@ -1,0 +1,5 @@
+ajax拿到了支佛，当做一个参数，提交到后台
+找到这个标签
+
+from  django.views.decorators.csrf import  csrf_exempt
+免除这个csrf验证

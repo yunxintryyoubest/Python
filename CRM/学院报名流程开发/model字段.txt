@@ -1,0 +1,18 @@
+PositiveSmallIntegerField只能为正数（2字节，small）
+DateField 日期date = models.DateField(auto_now_add=True)自增
+
+status_choices = ((0,'未报名'),(1,'已报名'),(2,'已退学'))
+status = models.SmallIntegerField(choices=status_choices)####做选择
+
+
+verbose_name中文名称，通过obj.verbose_name可以拿中文
+
+null=True 可以为空
+
+class Meta:联合唯一，注意里面的是字段，联合唯一的方式这个表的字段（当有的字段有外键，所以与另一个表有联合唯一的作用）
+    unique_together =  ('branch','class_type','course','semester')
+
+
+TextField文本信息
+BooleanField布尔值，只能两个状态，true和false
+has_homework = models.BooleanField("本节有作业",default=True)

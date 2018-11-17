@@ -1,0 +1,13 @@
+<input	disabled=‘true’>不可见状态 
+$(':disabled').removeattr('disable')就可以把有这个attr属性disable的标签，的disable属性给去掉（removeclass等）
+注意：取标签的时候，name可以直接:name后面的值，还有disanled也可以:disabled
+
+
+
+
+
+
+onclick的return是和js的return搭配使用,onclick=return fun(this);
+js的return 有return false  和return True
+如果发现表单有问题的话，就return   false
+return true的话表单会提交， return false的就不会提交

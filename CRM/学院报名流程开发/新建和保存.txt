@@ -1,0 +1,49 @@
+CRM_FILE_UPLOAD_DIR=os.path.join(BASE_DIR,'crm/upload_files/enrollment_data')
+
+这个是配置下载地址
+当创建新的文件时，直接在后面加东西，加路径
+
+
+import os
+####免除csrf这个验证
+@csrf_exempt
+def fileupload(request,enrollment_id):
+    print(request.FILES)
+####文件上传
+    print('文件上传路径',conf.settings.CRM_FILE_UPLOAD_DIR)
+    enrollment_url= os.path.join(conf.settings.CRM_FILE_UPLOAD_DIR,enrollment_id)
+    #######在这个配置好的绝对路径后面加一个路径/enrollment_id，id加进去了
+#######################注意一下，这个是绝对路径，要加os.path.join
+    if  not os.path.isdir(enrollment_url):
+        #######假如没有这个加的路径的话,就创建一下这个目录
+        os.mkdir(enrollment_url)
+    file_obj=request.FILES.get('file')
+    print('接收成功',request.FILES)
+        #######如果创建的话就拿到这个路径下面的东西
+    with open(os.path.join(enrollment_url,file_obj.name),'wb')as f:
+        ####以wb二进制的格式打开,注意，这里把这个拿到的文件放进去了,打开这个id里面文件,file_obj是一个文件，要拿到它的名字
+        for chunks in  file_obj.chunks():
+            f.write(chunks)
+            ######已经把文件保存进去了
+
+
+
+
+
+
+字段集合：
+>>> os.mkdir('dd')
+>>> os.path.isdir('dd')
+True
+
+列出这个目录下所有的文件
+
+
+
+
+
+
+
+操作：
+>>> os.mkdir('new')
+>>> os.listdir()##########列出当前文件下的所有东西

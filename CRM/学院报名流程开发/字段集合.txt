@@ -1,0 +1,16 @@
+en_obj=models.Stu.objects.get(id=1)
+obj=forms.customerinfo(instance=id,data=request.POST)(forms是自定制form那里modelforms）
+if obj is_valid()
+for field in obj.Meta.readonly_fields:
+field_val=getattr(en_obj.customer,field)
+注意：这个en表的字段customer是一个外键，em_obj.customer是一个外键对象（拿到的是了一个表的一个对象也是数据）
+field是一个字段（属性）,只读列表那里的属性
+obj.clean_data[field]=field_val
+把这个数据填充到clean_data里面，把这个只读字段的数据填充到这个字段里面（可能被用户修改）
+readonly的目的是不让用户修改
+
+
+obj.validationError()表单错误后面可以直接加自己定制的错误
+obj.add_error(field,'')字段错误，后面要加字段名和错误信息
+obj是一个对象，表对象（一条数据）
+

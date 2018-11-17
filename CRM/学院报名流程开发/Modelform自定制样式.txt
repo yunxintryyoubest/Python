@@ -1,0 +1,52 @@
+from  django.forms import ModelForm
+from  app01 import  models
+
+class CustomerInfo(ModelForm):
+    def __new__(cls, *args, **kwargs):
+        print('__new__',cls)
+        for field_name in cls.base_fields:
+            #######这个base_fields可以拿到所有的字段信息
+            field_obj=cls.base_fields[field_name]
+            field_obj.widget.attrs.update({'class':'form-control'})
+
+            if field_name in cls.Meta.readonly_fields:
+                field_obj.widget.attrs.update({'disabled','true'})
+                print(cls.Meta)
+                # readonly_fields是meta下面的
+
+        return  ModelForm.__new__(cls)
+    ################注明：这个new是可以自定制样式的，widget
+
+
+    class Meta:
+        model=models.CustomerInfo
+        #######对某个表进行操作
+        fields='__all__'
+        exclude=['consult_content''status','consult_courses',]
+        readonly_fields=['contact_type','contact',]
+
+
+    #####下面的这个meta是自定义把字段加进相应的条件里，new在执行一遍
+
+
+
+
+
+原理：这个meta是cls类里面的类，cls是上面这个类，__new__，而meta是下面的这个类
+cls这个类是可以自定义样式的（attr）,而meta这个类时可以把条件写进去
+执行顺序：先执行meta，在执行__new__.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

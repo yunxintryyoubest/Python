@@ -1,0 +1,66 @@
+这个enblock是把里面的东西给排除在外，而把block外面的东西给拿到，这个enblock的放置位置有关系
+
+   {% block  stu_enrollment %}
+          <h2 class="page-header">Dashboard</h2>
+                {% endblock %}
+
+
+继承了index_html的属性
+{%extend 'index.html'%}继承这个网页的东西，block里面可以自己加东西
+{% block  stu_enrollment %}
+里面可以自己加东西
+{% endblock %}
+
+
+
+{%enblock body%}
+{%enblock%}
+没有东西了，自己写东西在block里面
+
+
+
+注意：
+enblock里面的东西是拿不了的，只有enblock外面的东西才可以拿到
+index.html:
+{%enblock body%}
+
+内容
+
+
+{% block  stu_enrollment %}
+   <h2 class="page-header">Dashboard</h2>
+{% endblock %}
+
+内容
+
+
+{%enblock%}
+
+导入css文件：
+{% block extra-css %}
+<link href="/static/plugins/dist/dropzone.css" rel="stylesheet">
+{% endblock %}
+
+导入js文件：
+{% block extra_js %}
+<script src="/static/plugins/dropzone.js"></script>
+{% endblock %}
+
+
+
+
+
+如果父类在里面又加了一个block，那么子类也应该在里面加一个block
+父类：
+{%block body%}
+{%block js%}
+{%enlock %}
+{%enblock%}
+子类：
+{%block body%}
+{%block js%}
+{%enlock %}
+{%enblock%}
+如果子类有block body的话，那么这个block js应该也在body里面，否则的话就在外面
+
+

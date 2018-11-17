@@ -1,0 +1,19 @@
+<select class="form-control" name="class_id">
+这个在前段的select有name属性，就可以在view里面直接request.post.get('class_id')
+就可以拿到了
+views：request.POST.get('class_id')
+
+consult=request.user.userprofile.id
+这个可以直接取这个user表关联的了一个表userprofile的id
+
+
+注明：
+下面第一个instance是get请求方式时，提交数据到前台（保留上一次的数据），
+而第二次post请求时，是进行验证，将这个前端已经传过来的数据拿到forms里面进行验证，传2个参数
+if request.method=='GET':
+    form_obj=model_form(instance=obj)#####某个字段的信息
+
+elif  request.method=='POST':
+      form_obj=model_form(instance=obj,data=request.POST)###将数据提交到后台那里进行验证，这个是实例化的过程
+      if form_obj.is_valid():
+            form_obj.save()##     直接保存，就已经修改好了
