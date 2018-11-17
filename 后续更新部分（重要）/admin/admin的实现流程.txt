@@ -1,0 +1,125 @@
+admin的启动流程：
+启动
+注册
+设计url
+
+
+
+
+dajngo把每一个app的admin.py的代码都执行一遍
+
+流程：
+当启动文件的时候
+执行init的方法，执行全部的admin.py的文件
+def autodiscover():
+    autodiscover_modules('admin', register_to=site)
+def autodiscover():
+    autodiscover_modules('admin', register_to=site)
+自动执行全部的amdin.py的文件
+
+django执行有两种模式，一个是debug模式，一个是正常执行的模式 
+
+讲解：
+最开始执行的就是admin.py的文件  
+
+
+
+
+
+执行流程：
+当你print(id(obj))
+import  admin的时候，就已经在加载这个admin的文件了
+里面有site的模块，site文件里面有一个单例对象
+所以不管你是这样的写admin.site.register都是在调用这个单例对象
+然后传参数进去，第一个参数是models表，第二个是可以不传
+可以为空，当你后面的admin_class不传参数的时候，默认是AdminSiter里里面自带的modeladmin的方法，具体就是这样匹配，{model:modeladmin}
+当你传参数进去的时候，后面modeladmin就是你传的这个admin_class的自定义方法，分别写入对应的字典里面，每一个都有相对应的admin_class，都是根据键值对的形式放进这个字典里面的
+
+
+存进这个字典里面是这个类变量，分别匹配相对应的内存空间
+
+
+def register(self, model_or_iterable, admin_class=None, **options):
+admin_class = admin_class or ModelAdmin
+       if isinstance(model_or_iterable, ModelBase):
+           model_or_iterable = [model_or_iterable]
+
+
+
+如果自己没有配置这个amdin的话，就会使用默认的modeladmin，后面的这个参数可以为空
+{model,modeladmin}
+{model,model_admin}自己配置的admin_class
+
+
+
+
+
+
+
+
+_register 这个是告诉其他人这个变量不对外公开
+
+class  Authconfig(admin.Modelconfig):
+pass
+
+admin.site.register(Authon,Authonconfig)
+
+在modelbase里面会自动创建两张默认的表，后面的表示自己创建的（继承父类）
+
+
+
+
+
+
+
+当你启动另一个app的时候，也会默认调用这个admin.sirte.register里面的方法，启动程序是从上往下执行，所以此时admin里面有settings前面的app已经注册的表，所以哟啊在app02里面打印出有多少张表的话，得加上前面已经注册的表（就是单例对象，不管谁调用，都是启动一个程序，一直往下面执行）
+
+
+
+
+当执行第二个app的是个，这个admin不去源码取，而是去这个上一个app里面生成的pyc文件里面取，在进行注册
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

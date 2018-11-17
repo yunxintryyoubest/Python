@@ -1,0 +1,7 @@
+tmep=[dic,dic,dic]
+	列表里面放字典
+	
+	批量处理，创建数据
+userinfo.object.bulk_create(temp)
+
+getlist批量取到所有的值出来

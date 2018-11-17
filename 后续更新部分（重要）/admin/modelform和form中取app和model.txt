@@ -1,0 +1,17 @@
+·½Ê½£ºi.field.queryset.model._meta.app_label
+i.field.queryset.model._meta.model_name
+
+
+
+
+from   django.forms   import ModelForm
+from   app01.models import   *
+from  django.forms import widgets as wig
+
+class  self_model_form(ModelForm):
+
+    class Meta:
+        model=Student
+        fields='__all__'
+
+

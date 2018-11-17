@@ -1,0 +1,28 @@
+        '''批量处理所有的请求，批量删除（默认是有的）........'''
+        if request.method == 'POST':
+            print('++++++' * 1000)
+            # print(request.POST)###如果没有values的话，就拿到这个文本值
+
+            func_name = request.POST.get('action_choice')
+            # print(func_name)###取到函数字符串名字,批量删除,values值
+            chocie_checkbox = request.POST.getlist('dev_choice')  ##取到列表形式的里面的值,注意，重点
+            # print(chocie_checkbox)
+            # print('()'*1000)
+            fun = getattr(self, func_name)  ##取到函数方法
+            queryset = self.model.objects.filter(pk__in=chocie_checkbox)
+            fun(queryset)  ##已经是方法了，self已经传了进去，所以只需要传一个参数就可以了
+
+        #######注明一下，当成一个实例方法去调用的时候，可以少传一个参数进去，上面的getattr已经拿到了这个类下面的实例方法
+
+
+
+
+
+admin部分：
+class  Bookadmin(modeladmin.Self_Modeladmin):##基层的是上面的类，在上面进行渲染
+    list_display=['book_author','book_addr','book_price','book_addr']##当子类存在这个list_display的时候，就去子类里面取值
+    def  get_modify(self,queryset):
+        ##对你已经确认的数据进行操作,可以是update，delete等操作,query.update(nane='xx')或者是其他的
+        pass#注意，在方法里面是不可以直接取值的
+    get_modify.short_description='批量修改数据'#所以直接在这个方法下面定义属性，封装起来，后期直接调用就好了，注意的一点
+    actions = [get_modify,]

@@ -1,0 +1,80 @@
+pop功能：
+如何在一对多和多对多后渲染
++对应的跳转路劲
+保存添加记录的同时，将原页面对应的下拉菜单中添加该记录 
+
+这个是在admin里面添加数据的时候出现的菜单
+
+
+
+
+首先要有一个父类调用这个方法，匹配想对应的路径
+
+
+
+
+$('#option').attr('selected','selected')
+select下面的option中一个被选中（动态选中）
+
+
+父类部分：
+第一步：当点击某一个按钮的时候，就出现窗口（样式可以自己定义）
+<button class="sub"  onclick="but_sub()">+</button>
+
+<script>
+
+    function  but_sub() {
+        {#window.open('http://www.baidu.com','','width=400,height=400')#}
+        //当加了后面设置的样式之后，可以弹出小的窗口，一个新的窗口出来
+                window.open('/pop/','','width=800,height=400,top=200,left=200')
+        //默认是在左上角，这个后面是可以调整这个距离顶部和左边的距离,访问这个路径的时候就设置了窗口
+
+    }
+    function bar(data) {
+        console.log('data')
+        $('.body_main').text(data)
+    }//父类在写了一个js代码，子类调用,当子类执行完成之后就打印出结果来
+
+
+
+</script>
+
+
+
+
+
+子类部分：
+响应部分：
+<script>
+
+    {#window.opener.bar()//执行父方法的函数，父方法啊是谁调用了这个窗口的js代码,当执行完成操作的时候，跳到这个页面来#}
+
+
+    window.opener.bar('{{ book_name }}')//在这里可以做出响应，对那个父类调用的这个方法,可以返回数据回去
+    window.close()//执行完 之后关闭
+
+
+</script>
+
+
+
+
+注意：这个父类调用的是什么方法，响应的子类也用他的这个方法
+bar
+
+
+window.open()
+function  bar({
+父类定义函数名字，bar
+
+子类：
+window.opener.bar(返回的数据)
+
+返回数据到bar这个父类里面
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+class  Bookadmin():##基层的是上面的类，在上面进行渲染
+    list_display=['book_author','book_addr','book_price','book_addr']##当子类存在这个list_display的时候，就去子类里面取值
+    def  get_modify(self):
+        print('suc')
+
+    get_modify.short_description = '批量修改数据'  ##注意，在方法里面是不可以直接取值的,只有在类下面才可以直接定义属性和方法
+    actions = [get_modify,]
+
+get_func=getattr(Bookadmin,'get_modify')##取到里面的方法
+get_func('fun')####拿出来直接进行传参进去,如果在当前的类下面的操作的时候，self已经是当前的类，必须在传参数进去了
+
+'''
+取到里面的方法，直接传参进去
+for也可以实现
+getattr也可以取到里面的方法
+直接是可以没有是没有实例化里面的方法
+
+取到方法，可以在外面调用，在外部再传参数进去
+'''

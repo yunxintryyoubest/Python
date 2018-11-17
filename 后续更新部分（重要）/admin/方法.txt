@@ -1,0 +1,12 @@
+if  isinstance（a,int）判断这个前面的类型和后面是否相等
+callback(fun)  判断里面的值是不是函数
+init 传入参数的时候，是类传入参数的时候执行
+get_field('id").related_model.objects.all()拿到想关联的表的全部数据
+
+
+
+
+
+json.dumps(res,ensure_ascii=False)
+后面是做转义
+

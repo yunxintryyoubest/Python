@@ -1,0 +1,34 @@
+from django.utils.safestring import   mark_safe
+class Book_admin(admin.ModelAdmin):
+    ##自定制字段action，放在list_display里面进行渲染出来
+    def  action(self):
+        ##这传入的self相对应的表的类对象
+        return mark_safe('<a href="#">删除</a>')
+    list_display = ['num_user','user','room_name','time',action]
+    '''
+    讲解一下这个原理：
+    上面的这个函数的自定义字段的操作，是在modeladmin里面实际是这样来判断下面的list_display是字段，还是函数
+    当是函数，就拿这个返回值，拿到这个html在渲染出来（用模板语言）在后端进行的渲染，在浏览器里面解析出相对应的页面出来
+    当这个是字段的话，就是某一个表里面的字段，
+    实现代码：
+    tmp=[]
+    a=self.model.objects.all()
+    ##这个slef.model是表对象，就是Book
+    for  model_obj  in a:
+       for field  in  list_display:
+          if callback(field):
+            print("是函数")
+            val=field(model_obj)
+            #这是进行的实例化操作，拿到这个返回的值，在浏览器解出来（在前端渲染出来）
+            tmp.appned(val)
+          else:
+            print('是字段')
+            val=field
+            tmp.append(val)
+           
+           ##在前端for循环一下，拿到所有的包括自定制的字段 
+    print(dic)
+    {%for  i in dic%}
+        <a>{{i}}</a>
+    {%endfor%}
+    '''

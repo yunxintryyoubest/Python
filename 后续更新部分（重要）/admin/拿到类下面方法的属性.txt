@@ -1,0 +1,13 @@
+class  Bookadmin():##基层的是上面的类，在上面进行渲染
+    list_display=['book_author','book_addr','book_price','book_addr']##当子类存在这个list_display的时候，就去子类里面取值
+    def  get_modify(self):
+        pass
+
+    get_modify.short_description = '批量修改数据'  ##注意，在方法里面是不可以直接取值的,只有在类下面才可以直接定义属性和方法
+    actions = [get_modify,]
+for i in   Bookadmin.actions:
+    print(i)
+    if  hasattr(i,'short_description'):
+        print('suc')
+    else:
+        print('fail')
