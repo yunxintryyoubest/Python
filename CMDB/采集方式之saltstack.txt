@@ -1,0 +1,178 @@
+中间不通过ssh
+依赖第三方工具
+saltstack-master
+salt.cmd('c1.com','ipconfig')
+可以在中间执行命令，c1.com可以指定主机名是什么
+
+利用rpc的方式
+salt-master和客户端中间有一个队列，客户端在队列里面放命令，然后队列去slt-master里面取
+就是客户端就直接去队列里面取就好了，没有的话就等着
+
+
+
+客户端：saltstack-slave
+远程管理工具
+
+
+
+
+
+优点：快，开发成本低
+缺点：依赖saltstack软件
+
+
+#安装saltstack
+# wget -O  -  https://repo.saltstack.com/apt/ubuntu/14.04/amd64/latest/SALTSTACK-GPG-KEY.pub | sudo apt-key add  -
+
+
+# yum install salt-master装服务端的时候
+# yum install salt-minior
+
+#执行slave的时候   yum install salt-master
+
+
+#master  配置文件，监听本机ip   vim/
+
+#启动master  /etc/init.d/salt-master start
+
+# slave:yum install salt-minon
+# slave准备
+'''
+配置文件，连接那个master
+
+vim/ /etc/salt/minion
+master ：远程master地址
+
+启动slave： /etc/init.d/salt-minion start
+
+
+创建关系：
+master已经主动连接了(master)
+saLT-key -L
+看看那些连接自己
+
+accepted ketys：
+已经接收的
+
+unaccept keys：
+未接收的
+
+接收的话：
+slat-key -a         c1.com 接收那个连接自己
+执行命令:
+slat 'c2.com' cmd.run   'ipconfig'
+*
+import salt
+
+from salt import client
+local =client.LoaclClient()
+result=local.cmd('c1.com','cmd.run',['ifconfig'])
+
+result.keys()
+result.values()
+结果
+
+slave：
+salt是一个py文件
+
+
+
+
+
+连接远程服务器执行命令
+
+import subprocess
+
+result=subprocess.getoutput('salt' 'c1.com' cmd.run 'ifconfig')
+
+c1.com这个是连接的名称
+
+
+
+
+import salt.client
+
+
+local=salt.client.LocalClient()
+
+result=local.cmd('c2.com' 'cmd.run' [ifconfig'])
+
+#发送数据
+
+result.post('http://www.127.0.0.1:8000/assets.html',data=data_dict)
+
+
+
+
+
+
+
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
