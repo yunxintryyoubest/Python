@@ -1,0 +1,143 @@
+strlen(name)查看字节长度   
+
+strlen   a
+
+incr：统计登录数
+127.0.0.1:6379> set login 0
+OK
+127.0.0.1:6379> incr login
+(integer) 1
+127.0.0.1:6379>
+127.0.0.1:6379>
+127.0.0.1:6379> incr login
+(integer) 2
+127.0.0.1:6379> incr login
+(integer) 3
+127.0.0.1:6379>
+
+incrfloat 浮点增加
+127.0.0.1:6379> INCRBYFLOAT  login 2.2
+"19.599999999999998"
+127.0.0.1:6379> INCRBYFLOAT  login 2.2
+"21.799999999999997"
+127.0.0.1:6379> INCRBYFLOAT  login 2.2
+
+decr（self,name,1）自减
+
+append age aaaa 往后面加值
+
+
+
+hash操作  有些像Python的字典dict
+
+127.0.0.1:6379> hmset info sex alex ho girl（往里面放值进去）
+OK
+127.0.0.1:6379> hget info sex（单个取值）
+"alex"
+127.0.0.1:6379> hmget info sex ho（多个取值）
+1) "alex"
+2) "girl
+127.0.0.1:6379> hgetall info(取出全部数据）
+1) "sex"
+2) "alex"
+3) "ho"
+4) "girl"
+127.0.0.1:6379> hlen info
+(integer) 2
+127.0.0.1:6379> hkeys info（获取这个info里面所有的key）
+1) "sex"
+2) "ho"
+127.0.0.1:6379> hvals info（获取这个info里面所有的value）
+1) "alex"
+2) "girl"
+127.0.0.1:6379> hexists info sex
+(integer) 1
+127.0.0.1:6379> hdel info sex
+(integer) 1
+127.0.0.1:6379> hincrby info age 2（这个年龄增加多少）
+(integer) 12
+127.0.0.1:6379> hscan info 0 match *e(匹配有什么字符或者数字的）
+1) "0"
+2) 1) "age"
+   2) "12"
+127.0.0.1:6379> hscan info 0 match *o（右边匹配的）
+1) "0"
+2) 1) "ho"
+   2) "girl"
+
+127.0.0.1:6379> lpush st xiao ni(从左边存数据）
+(integer) 2
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "xiao"
+rpush(从右边存数据)
+127.0.0.1:6379> llen st
+(integer) 2  查看元素个数
+
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "xiao"
+127.0.0.1:6379> linsert st before xiao ho(在xiao之前插入一条数据）
+(integer) 3
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "ho"
+3) "xiao"
+
+127.0.0.1:6379> lset st 1 Ni(把第一个值赋值成Ni）
+OK
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "Ni"
+3) "xiao"
+
+127.0.0.1:6379> lrem st 1 Ni（在Ni之前删除一个）
+(integer) 1
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "xiao"
+
+lpop st 删除第一个值（从左边开始，有rpop右边开始）
+127.0.0.1:6379> lindex st 1（从左边取第1个值）
+"xiao"
+
+127.0.0.1:6379> lpush st 1 3 5 6 7(从左边加值）
+(integer) 7
+127.0.0.1:6379> lrange st 0 -1
+1) "7"
+2) "6"
+3) "5"
+4) "3"
+5) "1"
+6) "ni"
+7) "xiao"
+127.0.0.1:6379> ltrim st 1 3（从第一个切到第3个取出来）
+OK
+127.0.0.1:6379> lrange st 0 -1
+1) "6"
+2) "5"
+3) "3"
+127.0.0.1:6379> rpush  st_list xaoh xiaoq（从右边开始存数据进去）
+(integer) 3
+127.0.0.1:6379> lrange st_list 0 -1
+1) "xiaor"
+2) "xaoh"
+
+127.0.0.1:6379> lpushx st_list xiaoh（这个是当这个列表存在的时候就往里面添加至加进去，如果不存在的话就添加不了值进去）
+(integer) 4
+127.0.0.1:6379> lpushx st_lis xiaoh
+(integer) 0
+127.0.0.1:6379> lrange st_list 0 -1
+1) "xiaoh"
+2) "xiaor"
+3) "xaoh"
+4) "xiaoq"
+127.0.0.1:6379> lrange st_lis 0 -1
+(empty list or set)
+127.0.0.1:6379> llen st_list（查看个数）
+(integer) 4
+
+
+127.0.0.1:6379> blpop st st1 30（一个列表往另一个列表放东西）
+1) "st"
+2) "6"

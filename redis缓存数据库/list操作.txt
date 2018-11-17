@@ -1,0 +1,163 @@
+列表操作
+127.0.0.1:6379> lpush st xiao ni(从左边存数据）
+(integer) 2
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "xiao"
+rpush(从右边存数据)
+127.0.0.1:6379> llen st
+(integer) 2  查看元素个数
+
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "xiao"
+127.0.0.1:6379> linsert st before xiao ho(在xiao之前插入一条数据）
+(integer) 3
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "ho"
+3) "xiao"
+
+127.0.0.1:6379> lset st 1 Ni(把第一个值赋值成Ni）
+OK
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "Ni"
+3) "xiao"
+
+
+
+127.0.0.1:6379> lrem st 1 Ni（在Ni之前删除一个，这个删除的个数可以自己定义）
+(integer) 1
+127.0.0.1:6379> lrange st 0 -1
+1) "ni"
+2) "xiao"
+
+lpop st 删除第一个值（从左边开始，有rpop右边开始）
+127.0.0.1:6379> lindex st 1（从左边取第1个值，查看这个列表的第一个值）
+"xiao"
+
+127.0.0.1:6379> lpush st 1 3 5 6 7(从左边加值）
+(integer) 7
+127.0.0.1:6379> lrange st 0 -1
+1) "7"
+
+
+
+127.0.0.1:6379> lpushx st_list xiaoh（这个是当这个列表存在的时候就往里面添加至加进去，如果不存在的话就添加不了值进去）
+(integer) 4
+127.0.0.1:6379> lpushx st_lis xiaoh
+(integer) 0
+127.0.0.1:6379> lrange st_list 0 -1
+1) "xiaoh"
+2) "xiaor"
+3) "xaoh"
+4) "xiaoq"
+127.0.0.1:6379> lrange st_lis 0 -1
+(empty list or set)
+127.0.0.1:6379> llen st_list（查看个数）
+(integer) 4
+
+
+
+
+127.0.0.1:6379> LPOP st_list(删除这个列表的左边第一个值，也有rpop）
+"xiaom"
+127.0.0.1:6379> lrange st_list 0 -1
+1) "xiaoh"
+2) "nn"
+3) "xaoh"
+4) "xiaoq"
+
+
+切片：
+127.0.0.1:6379> lrange  st_list 0 -1
+1) "nn"
+2) "xaoh"
+3) "xiaoq"
+
+
+127.0.0.1:6379> ltrim st_list 0 1
+OK
+127.0.0.1:6379> lrange st_list 0 -1取这个列表的第一个到第二个值中间的所有的值）
+1) "nn"
+2) "xaoh"
+
+
+从一个列表拿值到另一个列表里面：
+127.0.0.1:6379> lrange st_list 0 -1
+1) "nn"
+2) "xaoh"
+127.0.0.1:6379> rpoplpush  st_list st_list2
+"xaoh"
+127.0.0.1:6379> rpoplpush  st_list st_list2
+(nil)
+127.0.0.1:6379> rpoplpush  st_list st_list2（把st_list的值一个一个从右边放值到另一个列表里面，一个一个没有在这个原来的列表里面)
+"nn"
+
+删除这个列表里面的值:
+127.0.0.1:6379> BLpop  st_list2 1（从左边开始删除这个列表里面的值，注意这个后面的是超时时间，当这个列表里面没有值的话，就等待一秒钟）
+1) "st_list2"
+2) "nn"
+127.0.0.1:6379> lrange st_list2  0 -1
+1) "xaoh"
+
+
+
+可以同时删除多个列表里面得值：
+127.0.0.1:6379> lrange st_list 0 -1
+1) "56"
+2) "4"
+3) "6"
+4) "5"
+5) "3"
+6) "1"
+127.0.0.1:6379> lrange st_list2 0 -1
+1) "xaoh"
+2) "4"
+3) "2"
+4) "5"
+5) "3"
+6) "5"
+7) "3"
+
+这个可以删除多个列表里面的值：
+
+127.0.0.1:6379> brpoplpush st_list st_list2 1
+"1"
+127.0.0.1:6379>
+127.0.0.1:6379> brpoplpush st_list st_list2 1
+"3"
+127.0.0.1:6379> brpoplpush st_list st_list2 1
+"5"
+127.0.0.1:6379> brpoplpush st_list st_list2 1
+"6"
+127.0.0.1:6379> brpoplpush st_list st_list2 1
+"4"
+127.0.0.1:6379> lrange  st_list 0 -1
+1) "56" 
+
+当删除这个列表
+里面的值就会删除这个列表里面的值
+
+
+expire  st_list  3
+设置超时时间3秒
+rename 改名  rename  op  opp
+
+
+总共16个db，select 后面加数字可以切换db
+
+select 切换到0这个db
+move name 1就是把0这个db下面的name移动到了1这个下面
+就可以在db1下可以找到
+
+
+
+
+
+
+/etc/init.d/redis-server stop
+/etc/init.d/redis-server start
+/etc/init.d/redis-server restart
+

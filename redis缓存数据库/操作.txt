@@ -1,0 +1,120 @@
+启动：redis-server
+可以持久化
+redis-cli
+连接本机redis
+
+redis-py
+
+连接方式
+连接池
+操作：
+string操作
+hash操作
+list
+set
+sort set操作
+
+
+ex-expire  超时（多久失效）
+px  毫秒
+
+
+
+set
+
+set name 'alxe li'
+
+get name 
+
+keys *拿到所有得值
+
+ex：
+
+(nil)空
+127.0.0.1:6379> set sex 'male' ex 3
+OK  设置时间3秒后超时(setex）
+127.0.0.1:6379> setex name 2 sss
+OK
+127.0.0.1:6379> get name
+(nil)
+
+
+px：过期时间（毫秒）(setpx）
+
+
+nx ：如果 设置为True，这只有name不存在时，当前set操作才执行
+
+xx：如果设置为True，这只有name存在时，当前set操作才执行
+
+存在就修改
+
+
+mset:批量设置
+127.0.0.1:6379> mset iphone 5800 xiaomi 2344 oppo 3232
+OK
+
+mget：批量获取
+127.0.0.1:6379> mget iphone oppo
+1) "5800"
+2) "3232"
+
+
+
+getset：（可以修改，首先获得是原来的旧值，后来的是修改成功的新值）
+127.0.0.1:6379> getset xiaomi 2799
+"2333"
+127.0.0.1:63
+
+
+
+getrange：从哪到哪取值
+127.0.0.1:6379> get name
+"alex"
+127.0.0.1:6379> getrange name 0 2
+"ale"
+
+
+setbit：二进制的第几位设置
+python操作：
+ord<'a'>把这转化为acsii的值97
+bin<'97'>在转化为二进制形式
+cha<'67'>拿到这个对应的值
+
+
+
+
+setbit   bitcount 方法查看上千万访问量
+127.0.0.1:6379> setbit usercount 100 1
+(integer) 0
+127.0.0.1:6379> setbit usercount 220 1
+(integer) 0
+127.0.0.1:6379> setbit usercount 230 1
+(integer) 0
+127.0.0.1:6379> setbit usercount 230 1
+(integer) 1
+127.0.0.1:6379> setbit usercount 430 1
+(integer) 0
+127.0.0.1:6379> bitcount usercount
+(integer) 4
+127.0.0.1:6379> setbint usercount 88
+(error) ERR unknown command 'setbint'
+127.0.0.1:6379> setbit usercount 88 1
+(integer) 0
+127.0.0.1:6379> setbit usercount 18 1
+(integer) 0
+127.0.0.1:6379> bitcount usercount
+(integer) 6
+127.0.0.1:6379> getbit usercount 18
+(integer) 1
+127.0.0.1:6379> getbit usercount 1
+(integer) 0
+
+
+每一个用户来分配一个id，比如99，就在二进制里面第99位占一个1，来一个43434，就分配第43434这个空间为1（setbit usercount 43434 1），一个用户占一个1，那个1就是第几个id
+
+查看有多少个1，就是bitcount usercount
+
+查看这个id的状态，是否存在getbit usercount 18
+(integer) 1存在（查看的是id为18的用户是否存在）
+
+通过这个方法可以查看非常多数据的用户有多少，一亿才占10M内存空间

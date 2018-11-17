@@ -1,0 +1,159 @@
+set操作：
+
+
+127.0.0.1:6379> sadd s_set 1 4 54 43 654 434（可以设置这个集合放值）
+(integer) 6
+127.0.0.1:6379> smembers s_set
+1) "1"
+2) "4"
+3) "43"
+4) "54"
+5) "434"
+6) "654"
+
+127.0.0.1:6379> scard s_set
+(integer) 6
+
+
+
+求这两个集合的差值：
+
+
+127.0.0.1:6379> smembers s_set
+1) "1"
+2) "4"
+3) "43"
+4) "54"
+5) "434"
+6) "654"
+127.0.0.1:6379> smembers s_set2
+1) "1"
+2) "2"
+3) "32"
+4) "43"
+5) "54"
+127.0.0.1:6379> sdiff s_set s_set2（注意一下，这个是取这个s_set 有s_set2没有的值）
+1) "4"
+2) "434"
+3) "654"
+127.0.0.1:6379> sdiff s_set2 s_set
+1) "2"
+2) "32"
+
+
+把这两个集合的差值放进另一个集合里面
+127.0.0.1:6379> sdiffstore s-set3 s_set s_set2
+(integer) 3
+
+127.0.0.1:6379> smembers s-set3
+1) "4"
+2) "434"
+3) "654"
+
+
+取交集：
+
+127.0.0.1:6379> sinter s_set s_set2
+1) "1"
+2) "43"
+3) "54"
+sinterstore（ s-set4 s_set s_set2）交集存到另一个地方
+
+
+smove(src,dst,value)
+spop(name)
+
+
+
+127.0.0.1:6379> srandmember s_set 2(随机获取某2个元素）
+1) "4"
+2) "654"
+127.0.0.1:6379> srandmember s_set 2
+1) "54"
+
+127.0.0.1:6379> srem s_set 1 54（删除这个集合的多个值（可以的单个））
+(integer) 2
+2) "1"
+
+
+取这多个集合的并集：
+
+
+127.0.0.1:6379> sunion s_set s_set2
+1) "1"
+2) "2"
+3) "4"
+4) "32"
+5) "43"
+6) "54"
+7) "434"
+8) "654"
+
+
+查找：
+
+127.0.0.1:6379> sscan s_set  0 match  4
+1) "0"
+2) 1) "4"
+127.0.0.1:6379> sscan s_set  0 match   $*
+1) "0"
+2) (empty list or set)
+127.0.0.1:6379> sscan s_set  0 match   4*
+1) "0"
+2) 1) "4"
+   2) "43"
+   3) "434"
+
+
+根据权重来进行：
+127.0.0.1:6379> zadd z_set  1 alex（这个1是权重）
+(integer) 1
+(1.82s)
+127.0.0.1:6379> zadd z_set  4  xaiooyu
+(integer) 1
+127.0.0.1:6379> zadd z_set  -19  xauili
+(integer) 1
+127.0.0.1:6379> zranbcg z_set 0 -1
+(error) ERR unknown command 'zranbcg'
+127.0.0.1:6379> zrange z_set 0 -1
+1) "xauili"
+2) "alex"
+3) "xaiooyu"
+
+
+127.0.0.1:6379> zrange z_set 0 -1  withscores
+1) "xauili"
+2) "-19"
+3) "alex"
+4) "1"
+
+127.0.0.1:6379> help  zrangebyscore（这个是可以取这个得分在多少区间的）
+
+  ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]
+  summary: Return a range of members in a sorted set, by score
+  since: 1.0.5
+  group: sorted_set
+
+127.0.0.1:6379> zrangebyscore  z_set  1 10
+1) "alex"
+2) "xaiooyu"
+(1.81s)
+5) "xaiooyu"
+6) "4"
+
+
+127.0.0.1:6379> zrevrange z_set 0 -1 withscores（这个可以按照倒叙来）
+1) "xaiooyu"
+2) "4"
+3) "alex"
+4) "1"
+5) "xauili"
+6) "-19"
+
+127.0.0.1:6379> zrank z_set  xauili（这个可以取排名）
+(integer) 0
+
+127.0.0.1:6379> zscore  z_set alex（获取某个人的分数）
+"1"
+
+zinterstore  zset3  2 z_set z_set2agreegate sum(这两个的权重相加)

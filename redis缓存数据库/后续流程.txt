@@ -1,0 +1,10 @@
+进入这个redis-cli
+auth认证这个
+auth  .......
+
+ps -ef | grep -i redis
+
+pipe管道
+pipe.set('name','alex')
+
+
