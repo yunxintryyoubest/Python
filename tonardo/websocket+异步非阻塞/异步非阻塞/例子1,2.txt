@@ -1,0 +1,114 @@
+同步：
+需要等待上一个执行完才能下一个请求
+#!/usr/bin/env python3
+# _*_coding:utf-8 _*_
+#@Time    :2018/9/20 下午 08:44
+#@Author  :yunxin
+#@FileName: 异步非阻塞1.py
+#@Project名称: Tonardo
+
+
+import  tornado.websocket
+import tornado.web
+import tornado.ioloop
+from  tornado import gen
+from  tornado.concurrent import  Future
+##############这个是异步的模块
+class  MainHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self, *args, **kwargs):
+        import time
+        time.sleep(8)
+        # future=Future()
+        # tornado.ioloop.IOLoop.current().add_timeout(time.time()+5,self.done)
+        ################当等待5秒后，这个就自动执行回调函数
+        print('first come')
+        self.write('first')
+        # yield  future
+        ###################特殊的写法，需要yield一个futur
+
+    def done(self):
+        self.write('main')
+        self.finish()
+
+
+class Handler(tornado.web.RequestHandler):
+    def get(self, *args, **kwargs):
+        print('second')
+        self.write('second')
+
+
+
+application=tornado.web.Application([
+    (r'/main',MainHandler),
+    (r'/second',Handler),
+])
+#############监听这个路由映射###############################################
+application.listen(8000)
+tornado.ioloop.IOLoop.instance().start()
+
+
+
+
+
+
+异步出使用：
+导入future模块：
+from  tornado import Future
+from tornado import gen
+
+#!/usr/bin/env python3
+# _*_coding:utf-8 _*_
+#@Time    :2018/9/20 下午 08:44
+#@Author  :yunxin
+#@FileName: 异步非阻塞1.py
+#@Project名称: Tonardo
+
+
+import  tornado.websocket
+import tornado.web
+import tornado.ioloop
+from  tornado import gen
+from  tornado.concurrent import  Future
+##############这个是异步的模块
+class  MainHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self, *args, **kwargs):
+        import time
+        # time.sleep(8)
+        future=Future()
+        tornado.ioloop.IOLoop.current().add_timeout(time.time()+5,self.done)
+        ################当等待5秒后，这个就自动执行回调函数，一定要导入这个时间延迟的，才能体现出来，不能是time.sleep
+        print('first come')
+        # self.write('first')
+        yield  future
+        ###################特殊的写法，需要yield一个futur
+
+    def done(self):
+        self.write('main')
+        self.finish()
+
+
+class Handler(tornado.web.RequestHandler):
+    def get(self, *args, **kwargs):
+        print('second')
+        self.write('second')
+
+
+
+application=tornado.web.Application([
+    (r'/main',MainHandler),
+    (r'/second',Handler),
+])
+#############监听这个路由映射###############################################
+application.listen(8000)
+tornado.ioloop.IOLoop.instance().start()
+
+
+
+
+
+
+
+
+

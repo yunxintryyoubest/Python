@@ -1,0 +1,122 @@
+io多路复用，监听有没有变化
+if isinstancr(result,future)
+假如这个result是future的话 
+for  conn in sa.dict.keys():
+#############拿到所有的key值
+
+
+
+inputs=[]这个里面监听的是socket对象，也就是conn
+async_requets={}
+result=func(request)
+######$执行这个func函数
+if isinstancr(result,future)：
+async_requets[r]=result#这个里面就放入这个future对象，注明一下，这个里面是{conn:fututre}
+conn是客户端建立的连接，后面是这个conn的future对象，如果有的话，就放入这个字典里面
+conn是socket对象
+假如这个rsult的话就让他一直等着，不做任何操作
+
+这样执行完成之后:
+这个字典里面就是async_requets={conn:fututre} 一个socket对象，后面紧跟着这个future对象
+
+
+for conn in async_requets.keys:
+future==async_requets[conn]这个拿到就是future对象
+if future.result:
+######这个就是里面有东西的时候，就是这个状态是true的时候，断开这个链接
+以为之前设置这个状态
+
+
+conn.sendall(funure.result)
+conn.close()
+del async_requets[conn]
+inputs.remove(conn)
+就是当这个future有值的话，就关闭这个连接
+inputs里面也移除这个conn（已经建立的连接）
+这个已经一直等着的字典里面也移除这个一直等着的conn 
+
+
+
+f=none
+def main():
+global f
+f=Future()
+return f这个就是之前已经设置了这个future状态，就是为true，会有一直等着 
+
+def stop(reqest)
+global f
+f.result=b'fdfdfdfdfdfdf'
+return 'stop'
+设置这个result的值
+
+
+一开始result设置的值为None 
+
+
+routers(
+('/main/',main),
+('/index'/,index),
+('stop/',stop),]
+
+就是当执行这个stop的时候，main就会断开，否则一直在等着，没有result这个状态值
+
+
+
+
+
+首先先判断是不是生成器
+
+
+
+
+
+
+#########################################################################################
+没有手动stop的就可以设置一个超时时间 
+
+
+
+
+如果##############
+def __init__(self,timeout=0):
+self.result=None
+slef.timeout=timeout##后面是传入进来的值
+self.start=time.time()
+
+
+
+
+
+
+
+for  conn in  async_requets.keys():
+start=future.start##############这个拿到的是刚开始执行这个请求的时间
+timeout=future.timeout###############这个是超时时间
+ctime=time.time()
+
+对这个进行判断：
+if start+timeout<=ctime:
+这已经超时的话，就显示出来已经超时，就是当前时间加上超时时间的话小于当前时间的话
+就说明已经过了超时时间了，已经超时 
+
+
+
+异步：future
+有一个标识判断是否已经完成当前请求，如果完成的话，当前标识的状态就会改变，这个链接就会断开，就不会在一直等着
+就可以知道这已经完成
+总得来说就可以根据 这个future的标识的状态来判断是否断开链接
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,70 @@
+super加上当前类几可以执行父类的方法
+子类super一下的话，就执行这个父类
+
+
+class  C:
+这个是父类
+def inittilliez(self)：如果是通过A去找父类的haul，那么这个self就是A这个类，而不是C这个类
+class A(C):
+def f1():
+
+super(A,self).f1()
+这个A是自己，后面这f1是父类的函数，如果继承了某个函数的haul，就往上找
+如果没有继承的话，就深度优先或者广度优先找这个fi的方法
+
+
+obj=FOO()
+FOO.fi()
+
+通过FOO.f1(obj)执行这个函数
+
+
+
+首先先创建对象，执行init构造方法
+
+inittialie（）
+这个看自己取创建钩子
+
+
+
+指定执那就操作：
+父类加上class FOO():
+
+def inittilize():
+super('FOO',slef).inittilize
+python是支持多继承的
+
+
+
+
+
+
+
+加入是第一次来的session
+第一步：随机生成字符串
+第二步：写入用户cookie
+第三步：后台存储
+
+
+
+
+setitem方法：
+class Bar(object):
+def __init__(self):
+passs
+def __setitem__(self,key,value):
+这个key就好obj的adad，value是1212
+pass
+def __getitem__(self,key):
+pass
+def __delitem__(self,key):
+pass
+
+
+
+
+
+
+obj=Bar()
+obj['adad']=1212     
+默认如果是这种形式的话就会调用这种setitem方法，默认会这样调用

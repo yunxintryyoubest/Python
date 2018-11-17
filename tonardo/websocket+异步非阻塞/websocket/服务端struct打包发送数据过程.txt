@@ -1,0 +1,20 @@
+####################################注明一下，OX这个是16进制的
+
+##################加一个消息头，就可以判断这个消息什么时候结束了
+def send_msg(conn,msg_bytes):
+    import  struct
+    token=b'\81'
+    length=len(msg_bytes)
+    if length<126:
+        ################3注明一下 ，如果你发的数据小于126的话，就以下面的B这种方式打包，下面的代表了规则
+        token+=struct.pack('B',length)
+    elif  length<=0XFFFF:
+        token+=struct.pack('!BH',126,length)
+    else:
+        token+=struct.pack('!BQ',127,length)
+
+    msg=token+msg_bytes
+
+    conn.send(msg)
+
+    return  True

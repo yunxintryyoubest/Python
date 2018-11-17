@@ -1,0 +1,39 @@
+self.redirect('http://www.baidu.com')
+这个可以跳转到其他页面,并且 
+self.redirect('/home')
+self.render('login.html')
+这个是只能跳转到本地的页面
+self.render('main.html')
+要补齐这个.html
+
+self.set_cookie('dsfd','ooooo')
+这个是设置cookies，name是之前的值，而这个value是后面的值 
+coo=self.get_cookie('dsfd')
+########################这个可以用cookies做，也可以sessin，sessions的haul就可以不把敏感的信息发给用户
+#####################直接在session里面保存就可以了，随机字符串
+
+get_argument 
+文件上传：self.request.files['dsdsd']
+头文件信息：self._heaers
+
+
+如果要自己设置加密的cookies的话
+可以在account里面设置 
+self.set_secure_cookie('dsfd','ooooo')
+########################给这个cookies签名，就会进行加密处理
+在这个login里面进行设置:
+coo=self.get_secure_cookie('dsfd')#######################进行解密
+        ############这个是得到这个cookies的方式
+        #################注明一下，这个是取你的计算机里面取这个cookies，如果没有这个cookies的话，就认为你没有这个凭证，就不让你登陆
+        if not  coo:
+
+
+在settings里面设置:
+settings = {
+    "template_path": 'views',
+    'cookie_secret':'dsdsdvsssssssssdv'
+    ####################这个是自己的秘钥，进行加密解密
+}
+自己设置秘钥，才可以对这个设置的秘钥进行解密
+加密cookies以来配置文件
+

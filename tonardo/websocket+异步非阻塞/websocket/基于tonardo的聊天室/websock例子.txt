@@ -1,0 +1,186 @@
+
+app.py：
+#!/usr/bin/env python3
+# _*_coding:utf-8 _*_
+#@Time    :2018/9/20 下午 03:21
+#@Author  :yunxin
+#@FileName: app.py
+#@Project名称: Tonardo
+
+
+import  tornado.web
+import tornado.ioloop
+import  tornado.websocket
+#################注意，这个导入这个websocket模块########################
+############这个相当于views#######
+class  IndexHandler(tornado.web.RequestHandler):
+    def get(self, *args, **kwargs):
+        self.render('index.html')
+
+
+
+
+
+
+########################下面是聊天处理#########################################
+
+"""
+'''
+###客户端好服务端已经建立连接了
+执行2步操作：
+连接
+握手
+'''
+"""
+user=set()
+#############设置一个列表，把全部的用户都加进去#######################################################就是全部的夜壶都可以看见这个消息了
+class ChatHandler(tornado.websocket.WebSocketHandler):
+    #######################当客户端和服务端建立连接的时候，就会执行这步open函数,这个open函数也是已经定义好的，不能修改
+    def open(self,*args,**kwargs):
+        print('success  connect')
+
+##################每来一个用户就是一个对象，这个self就是不同的用户，注意区分
+
+
+######################这个是可以接受消息的,这个已经定义好的，不能修改
+    def on_message(self,message):
+        ################已经帮你解析好了，可以获取这个消息了，这个是自带的
+        user.add(self)
+        ##################把这个self加这个列表里面，每来一个用户就进行连接
+    ################这意思是每发一条消息就就你选哪个生成一个标签,把这个content每一个用户，（消息标签）
+        content=self.render_string('message.html',msg=message)
+#############################这个是另外加的一个标签模板，可以拿出来调用，self.render，前面加一实例就可以拿到这个新增的标签,render_string的特殊用法
+
+
+
+
+
+
+        for client in user:
+            client.write_message(content)
+            ###############当有一个用户发送消息的时候，全部的用户都可以接受到消息
+        # self.write_message(message)
+        #######这个是客户端回复消息，write_message
+
+
+    def on_close(self):
+        ############客户端主动关闭连接的时候，移除这个用户
+
+        user.remove(self)
+
+
+###########################这个是settings
+def run():
+    settings={
+        'template_path':'templates',
+        'static_path':'static',
+
+    }
+
+    application=tornado.web.Application([
+        (r'/',IndexHandler),
+        (r'/chat',ChatHandler),
+    ],**settings)
+    ##############这个是路由映射
+
+    ##################开启端口，监听这个函数
+    application.listen(8000)
+    tornado.ioloop.IOLoop.instance().start()
+
+
+if __name__ == '__main__':
+    run()
+##################首先先执行的是settings
+
+
+index.html：
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container{
+            border: 1px solid #dddddd;
+            height:  400px;
+            overflow: auto;
+        }
+
+
+
+    </style>
+</head>
+<body>
+<!--############整个页面一个框-->
+<div style="width: 750px;  margin: 0 auto">
+
+    <!--############auto是居中显示-->
+    <h1>index界面</h1>
+    <div class="container"></div>
+    <div class="input">
+        <!--//每一个div都是一个小盒子，只要没有加样式的话就不会显示出来-->
+        <input type="text" placeholder="请输入" id="msg">
+        <input type="button" value="发送" id="btn" onclick="sendmsg();">
+    </div>
+</div>
+
+<script src="/static/jquery-3.1.1.js"></script>
+<script>
+
+    ws=new WebSocket("ws://127.0.0.1:8000/chat")
+    //注明一下，这个是访问的chat界面,这个chat也是固定的流程
+    // ############################当有用户发送消息的时候，所有的onmesage都会触发
+    ws.onmessage=function (ev) {
+        console.log(ev)
+
+        $('.container').append(ev.data)
+        // #############接受到这个消息，每接受一个消息，具在这个container里面加一个标签
+    }
+    function  sendmsg() {
+        ws.send($("#msg").val())
+        //找到这个发送消息的文本，给他发送消息
+    }
+    //这个是当服务端主动终止的时候
+   ws.onclose=function (ev) {
+
+   }
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+message.html：
+
+
+<li>{{msg}}</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

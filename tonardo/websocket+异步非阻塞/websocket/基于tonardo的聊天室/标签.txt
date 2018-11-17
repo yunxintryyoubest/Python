@@ -1,0 +1,18 @@
+加框：
+<style>
+    .container{
+        border: 1px solid  #dddddd;
+    }
+</style>
+
+auto是居中显示  
+<div style="width: 750px;  margin: 0 auto">
+    <!--############auto是居中显示-->
+    <h1>index界面</h1>
+    <div class="container"></div>
+    <div class="input"></div>
+</div>
+
+
+
+overflow: auto;当数据特别多的时候就出现滚动条了

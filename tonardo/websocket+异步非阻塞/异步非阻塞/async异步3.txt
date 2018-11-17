@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+# _*_coding:utf-8 _*_
+#@Time    :2018/9/20 下午 09:19
+#@Author  :yunxin
+#@FileName: 异步非阻塞2.py
+#@Project名称: Tonardo
+
+#########################################原理解释，当这个main一直在响应中的时候，另外一个程序也可以执行
+#########################################不会妨碍其他程序的进行
+
+
+import tornado.web
+import  tornado.ioloop
+from  tornado.concurrent import   Future
+from  tornado import gen
+
+
+
+class   MianHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self,*args,**kwargs):
+        from  tornado import  httpclient
+        http=httpclient.AsyncHTTPClient()
+        import  time
+        # time.sleep(6)
+        yield  http.fetch('http://www.youtube.com',self.done)
+        ###############里面有个fetch对象，自动返回这个done,当执行完后就会执行这个done
+        #################这个fetch里面逳一个futurem，请求回来的时候，返回这个result
+
+    def done(self,*args,**kwargs):
+        self.write('mian')
+        self.finish()
+        ############这个finsh是自带的，不用自己配置
+    # def finsih(self):
+    #     print('finsh')
+
+
+class  IndexHnadler(tornado.web.RequestHandler):
+    def get(self,*args,**kwargs):
+        self.write('second')
+
+application=tornado.web.Application([
+    (r'/main',MianHandler),
+    (r'/second',IndexHnadler),
+])
+#############监听这个路由映射###############################################
+application.listen(8000)
+tornado.ioloop.IOLoop.instance().start()
+
+
+
+
+
+
+

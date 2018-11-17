@@ -1,0 +1,7 @@
+import hashlib
+
+v=time.time()
+#####这个v是随机生成的
+md5_time=hashlib.md5(v)
+md5_time.update(bytes(v,encoding='utf-8'))
+return  md5_time.hexdigest()

@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+# _*_coding:utf-8 _*_
+#@Time    :2018/9/20 下午 09:19
+#@Author  :yunxin
+#@FileName: 异步非阻塞2.py
+#@Project名称: Tonardo
+
+
+import tornado.web
+import  tornado.ioloop
+from  tornado.concurrent import   Future
+from  tornado import gen
+###############################################这个原理就是：可以让一个请求一直等着，当另一个请求执行的时候，这个状态就会改变，然后这个main就会终止，设置了result等待状态的改变。。。。。。。。。。
+
+
+class   MianHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self,*args,**kwargs):
+        from  tornado import  httpclient
+        http=httpclient.AsyncHTTPClient()
+        # yield  http.fetch('http://www.youtube.com',self.done)
+        global  future
+        future=Future()######################让这个mian函数一直等着
+        future.add_done_callback(self.done)################等待着某个时刻这个主动断开
+        yield future
+        ####################当你之心http请求的时候，如果没有孩子返回的haul，就有孩子等等着
+        #####################当你有人发请求的时候，就一直的等着，当有人发
+
+
+    def done(self,*args,**kwargs):
+        self.write('mian')
+        self.finish()
+        ############这个finsh是自带的，不用自己配置
+    # def finsih(self):
+    #     print('finsh')
+
+
+class  IndexHnadler(tornado.web.RequestHandler):
+    def get(self,*args,**kwargs):
+        future.set_result(None)#############################这里设置了某个值，当这个执行的时候，main函数就会断开
+        ####################在这里设置了其他值的，当mai请求挂起的时候，这个请求终止的话，main请求也会终止,就是这个future的状态已经发生了改变
+
+        self.write('second')
+
+application=tornado.web.Application([
+    (r'/main',MianHandler),
+    (r'/second',IndexHnadler),
+])
+#############监听这个路由映射###############################################
+application.listen(8000)
+tornado.ioloop.IOLoop.instance().start()
+
+
+
+
+
+
+

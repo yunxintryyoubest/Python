@@ -1,0 +1,15 @@
+模板引擎：
+更接近python
+{{li[0]}}
+
+{%for i in rang(10)%}
+{%end%}
+直接end就可以了，不过是if或者是for
+
+模板引擎就是做切割
+
+li[0]
+li[1]
+li[2]
+
+''.join(li)
