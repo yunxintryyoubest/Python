@@ -1,0 +1,135 @@
+.^*+?{}[]|()\
+
+\    转义字符     （重点：反斜杠后边跟元字符去除特殊功能，比如\$,\*,\(,\)等等
+反斜杠后边跟普通字符实现特殊功能，比如\d，\s
+\d匹配任何十进制数，相当于类[0-9]
+\D匹配任何非数字字符，它相当于类[^0-9]
+\s匹配空白字符
+\S匹配非空白字符
+\w匹配任何字母数字字符，它相当于类[a-zA-Z0-9_]
+\W匹配任何非字母数字字符，与\w相反
+\b匹配任何一个特殊字符边界，比如空格，&，#等
+
+
+.什么都可以匹配，除了\n换行符号
+^以什么开头的，只能在字符串的开头匹配内容（重点，只能匹配开头）
+$最后的字符只能是要求的内容，比如：re.findall('a..x$',adadsxdaadv')（重点：只能匹配末尾）
+匹配不成功，后面最后4个为aadv，x没有匹配到，只能匹配最后4个字符
+*匹配0到无穷次，最后可以没有    贪婪匹配     重复                  （重点：前面要匹配的最后那个字符在后面可以有也可以没有，
+0到无穷次） 
++匹配1到无穷，最少前面有一个才能匹配成功，最后那个字符必须有才可以匹配  重复  (重点：匹配1次到无穷次，最后那个匹配的字符必须有）
+至少有一个，包括它本身
+例子：re.findall('alex*','adafdgfale')
+可以匹配到，结果为ale（a，l，e都可以匹配到，*可以要求最后那个字符x
+没有，所以可以匹配到
+re.findall('alex+','adafdgfale')
+不可以匹配到，结果为[]，最后的+要求最后匹配的字符至少有一个才可以匹配成功，必须有对应的才可以
+[] 里面没有特殊符号
+重点：
+>>> re.findall('a[fdfs]','adfdfgas')
+['ad', 'as']
+>>> re.findall('a[a-z]','dafaadasdfdf')
+['af', 'aa', 'as']
+>>> re.findall('a[a-z0-9]','fddad9a9fa0ads')
+['ad', 'a9', 'a0', 'ad']
+>>> re.findall('a[a-z]*','fddad9a9fa0ads')
+['ad', 'a', 'a', 'ads']
+>>> re.findall('a[dada]','fddfadafaadsa')
+['ad', 'aa']
+>>> re.findall('a[dada]*','fddfadafaadsa')
+['ada', 'aad', 'a']
+>>> re.findall('a[dada]+','fddfadafaadsa')
+['ada', 'aad']
+>>> re.findall('a[a-z0-9]*','daadada9ad9ada')
+['aadada9ad9ada']
+>>> re.findall('a[a-z]*','daadada9ad9ada')
+['aadada', 'ad', 'ada']
+>>> re.findall('a[0-9]*','dsa98772ada')
+['a98772', 'a', 'a']
+>>> re.findall('a[0-9]+','dsa98772ada')
+['a98772']
+
+
+
+>>> re.findall('\([^a-z]*\)','12+231*(32+54+43*(43+7))')#查到所有括号里面的内容
+['(32+54+43*(43+7))']
+>>> re.findall('\([^()]*\)','12+231*(32+54+43*(43+7))')#查到最里面的那个括号里面的内容
+['(43+7)']
+
+
+
+？0和1的范围
+re.findall('alex?','asfdsfale')
+结果为['ale']匹配最后的的那个字符，要求内容中x可以有也可以没有，？会替代
+
+>>> re.findall('dfd?','ddfadafa')
+['df']
+>>> re.findall('dfda?','ddfadafa')
+[]
+
+
+｛｝｛1，｝==*
+｛1，｝==+
+｛0，1｝==？
+｛6｝重复6次
+
+
+
+惰性匹配，0次匹配
+
+
+>>> re.findall('fdf{3}','fdsdffffff')
+[]
+>>> re.findall('fdf{0,3}','fdsfdffffff'）　　　　　＃匹配0到3次，0次可以找到，3次从的也可以
+['fd', 'fdfff']
+记住一点，最后那个字符匹配多少次，就写出多少个
+>>> re.findall('fdf{3}','fdsfdffffff')
+['fdfff']
+
+
+
+
+
+
+
+>>> re.findall('.*b','htp://www.baidu.com/s?wd=baiducom')#尽可能多的匹配，贪婪匹配
+['htp://www.baidu.com/s?wd=b']
+>>> re.findall('.*?b','htp://www.baidu.com/s?wd=baiducom')#惰性匹配
+['htp://www.b', 'aidu.com/s?wd=b']
+
+
+
+
+
+
+
+>>> re.findall('\d+','da13242ada31334')
+['13242', '31334']
+>>> re.findall('\d+?','da13242ada31334')
+['1', '3', '2', '4', '2', '3', '1', '3', '3', '4']
+
+
+
+
+>>> re.findall('\d*','da13242ada31334')#    *代表前面0次也可以,\d前面没有字符也可以匹配,所以匹配出来了空白字符
+['', '', '13242', '', '', '', '31334', '']
+>>> re.findall('\d+','dad13223322ds323')#   +代表前面必须有一个字符
+['13223322', '323']
+
+
+
+
+
+
+
+
+
+
+
+
+特殊字符要加\反斜杠，使它普通话，*，+,(,)^=,^是特殊字符，有歧义
+>>> re.findall('ww*baid\nu&com','ww*baid\nu&com')
+[]
+>>> re.findall('ww\*baid\nu&com','ww*baid\nu&com')
+['ww*baid\nu&com']
+

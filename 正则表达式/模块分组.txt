@@ -1,0 +1,103 @@
+search  返回的是对象
+括号里面加问号冒号可以去优先级     ?:
+>>> re.findall('www.(baidu|sina).com','saadwww.baidu.comdsdsdf')
+['baidu']
+>>> re.findall('www.(?:baidu|sina).com','saadwww.baidu.comdqwsdsdf')
+['www.baidu.com']
+>>> 
+
+可以通过分组的形式写出来，什么group（）
+
+>>> re.search('[a-z]+','ad78dfda78dsf989').group()
+'ad'
+
+
+
+
+>>> re.search('(?P<name>[a-z]+)(?P<age>[0-9]+)','alex27tony789hu85da52').group()
+'alex27'
+>>> re.search('(?P<name>[a-z]+)(?P<age>[0-9]+)','alex27tony789hu85da52').group('age')
+'27'
+>>> re.search('(?P<name>[a-z]+)(?P<age>[0-9]+)','alex27tony789hu85da52').group('name')
+'alex'
+
+
+
+
+
+findall不可以通过group（）找出来
+可以通过元祖的形式的写出来
+
+
+>>> re.findall('\d+','sfd3422ds4fd4f23')
+['3422', '4', '4', '23']
+>>> list=re.findall('\d+','sfd3422ds4fd4f23')
+>>> list[1]
+'4'
+
+
+
+
+re.split分割
+
+根据要求作为分割符，分的不能保留
+
+
+>>> re.split(' ','hello world my')
+['hello', 'world', 'my']
+>>> re.split('o','hello world my')
+['hell', ' w', 'rld my']
+>>> re.split('[ |]','hello world|my')
+['hello', 'world', 'my']
+>>> re.split('[ab]','abfc')
+['', '', 'fc']
+
+
+
+
+
+替换：re.sub替换
+>>> re.sub('\d','A','dsfhjh32kkjd23as23fsd34d23')#第一个是你要选择替换的东西（单个数字，如果是\d+则是多个数字，贪婪模式）
+第二个是你要替换的内容，第三个是被选择替换的内容
+'dsfhjhAAkkjdAAasAAfsdAAdAA'
+>>> re.sub('\d','A','dsfhjh32kkjd23as23fsd34d23',3)#后面加3则替换3次
+'dsfhjhAAkkjdA3as23fsd34d23'
+>>> 
+
+
+
+re.subn(显示你替换了多少次）
+>>> re.subn('\d+','A','fdf31dfffd32132ds3')
+('fdfAdfffdAdsA', 3)
+>>> re.subn('\d','A','fdf31dfffd32132ds3')
+('fdfAAdfffdAAAAAdsA', 8)
+
+
+
+
+match只匹配开头的数据
+
+>>> re.match('\d+','jdkd32323')
+>>> re.match('\d+','33jdkd32323')
+<_sre.SRE_Match object; span=(0, 2), match='33'>
+
+
+
+
+
+
+
+
+#括号里面的整体分组打印出来
+re.findall('(?:abc+)','abcccabcchjdjkabc')
+['abccc', 'abcc', 'abc']
+>>> re.findall('(?:abc)+','abcccabcchjdjkabc')
+['abc', 'abc', 'abc']
+>>> re.findall('abc','abcabcabcdksabckjabcahjkjd')
+['abc', 'abc', 'abc', 'abc', 'abc']
+>>> re.findall('(?:abc)+','abcabcabcdksabckjabcahjkjd')
+['abcabcabc', 'abc', 'abc']
+>>> 
+
+
+
