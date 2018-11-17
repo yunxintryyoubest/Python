@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+
+
+<button class="get_service">提交</button>
+
+
+
+<script src="http://cdn.static.runoob.com/libs/jquery/1.10.2/jquery.min.js"></script>
+
+
+
+
+
+<script>
+    function alex(arg) {
+          console.log(arg);
+          console.log(typeof arg);
+          var data=JSON.parse(arg);
+          console.log(data);
+          console.log(typeof data);
+   }
+
+    function get_jsonp_data(url) {
+            var ele_script=$("<script>");
+            ele_script.attr("src",url)
+            ele_script.attr("id","jsonp");
+            $("body").append(ele_script);
+            $("#jsonp").remove()
+    }
+
+     $(".get_service").click(function () {
+
+         $.ajax({
+             url:"http://127.0.0.1:8008/service/",
+             success:function (data) {
+                 console.log(data)
+             }
+         })
+
+     })
+
+
+
+     $(".get_service-2").click(function () {
+
+         get_jsonp_data("http://127.0.0.1:8008/service/?callbacks=alex")
+
+
+     });
+
+
+
+
+    // 终极形式
+
+      $(".get_service-3").click(function () {
+
+         $.ajax({
+             url:"http://127.0.0.1:8008/service/",
+             type:"get",
+             dataType:"jsonp",     // 伪造ajax  基于script
+             jsonp: 'callbacks',
+             //jsonpCallback:"alex",
+             success:function (data) {
+                 console.log(data)
+             }
+         })
+
+
+     })
+
+
+      // 应用
+
+      $(".get_service-4").click(function () {
+
+         $.ajax({
+             url:"http://www.jxntv.cn/data/jmd-jxtv2.html",
+             type:"get",
+             dataType:"jsonp",     // 伪造ajax  基于script
+             jsonp: 'callbacks',
+             jsonpCallback:"list",
+             success:function (data) {
+                 //console.log(data.data);
+
+                 var html="";
+                 $.each(data.data,function (index,weekday) {
+                     console.log(weekday); // {week: "周一", list: Array(19)}
+ 
+                     html+='<p>'+weekday.week+'</p>';
+                     
+                     $.each(weekday.list,function (j,show) {
+                        html+= '<p><a href='+show.link+'>'+show.name+'</a></p>'
+                     })
+
+
+                 });
+
+                 $("body").append(html)
+
+             }
+         })
+
+
+     })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+在action和href默认不写全这个路劲，是因为默认是走同源的
+
+
+
+
+
+
+dom操作：
+
+    
+    $('#sub').click(function () {
+        var   ele_scr=$("<script>")
+            //这步是创建一个script的标签，dom操作
+        ele_scr.attr('src','http://www.baidui.com')
+        {####在这个script创建的标签里面加上一个属性src#}
+        ele_scr.attr('id','jsonp')
+        //在这个创建的标签下加上一个属性，wield之后可以移除掉这个创建的标签
+        $('body').append(ele_scr)
+        $('#jsonp').remove()
+        
+    })
+
+
+
+
+
+
+
+
+创建标签和移除标签的操作
+
+
+    $('#sub').click(function () {
+        alert('323')
+        $.ajax({
+             url:"http://127.0.0.1:8080/server/",
+             type:"get",
+             dataType:"jsonp",     // 伪造ajax  基于script
+             jsonp: 'callbacks',
+             //jsonpCallback:"alex",
+             success:function (data) {
+                 console.log(data)
+            alert(data)}
+        })
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+例子：
+
+
+
+import json
+def server(request):  # jsonp
+
+    print("技师egon")
+
+    func=request.GET.get("callbacks")
+    print("func",func)
+    info={"name":"egon","age":34,"price":200}
+    msg='跨域'
+
+    # return HttpResponse(" %s('%s')"%(func,json.dumps(info)))
+    return   HttpResponse('%s(%s)'%(func,json.dumps(msg)))
+####注明一下，这个前面要加上这个请求的callback才可以执行这个请求func，否则拿不了数据出来，return  httpresponse('ok')是回调不了这个数据出来，在success里面，要加上这个回调的函数callback才可以，而且要加json进行序列化才可以拿到这个数据出来  
+
+
+
+
+
+
+另一个django的html部分：
+
+
+    $('#sub').click(function () {
+        alert('323')
+        $.ajax({
+            url: "http://127.0.0.1:8080/server/",
+            type: "get",
+            dataType: "jsonp",     // 伪造ajax  基于script
+            jsonp: 'callbacks',
+            {#jsonpCallback: "list",#}
+            success: function (data1) {
+            console.log(data1)
+                alert(data1)
+            }
+        })
+    })
+
+
+
+
+
+
+
+
+
+

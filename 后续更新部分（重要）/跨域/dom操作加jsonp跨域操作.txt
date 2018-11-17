@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script  src="/static/jquery-3.1.1.js"></script>
+</head>
+<body>
+
+
+
+<button  id="sub">提交</button>
+
+<div  class="get_ele">节目列表:
+</div>
+
+{#//            url:'http://127.0.0.1:8000/server/?callbacks=func',#}
+
+<script>
+
+{##}
+{#    function  fun(arg){#}
+{#        alert(arg)#}
+{#       console.log("接受的请求")#}
+{#        var  ele=$('<script>')#}
+{#        ele.attr('id',arg)#}
+{#        $('body').append(ele)#}
+{#        console.log(arg)#}
+{##}
+{#    }#}
+//http://127.0.0.1:8080/server/?callbacks=jQuery311023926865849166745_1539843450363&_=153984345036完整的eurl的跨域请求
+    {#/为ajax的请求,基于script来的标签来创建的#}
+    $('#sub').click(function () {
+        alert('323')
+        $.ajax({
+            url: "http://www.jxntv.cn/data/jmd-jxtv2.html",
+            type: "get",
+            dataType: "jsonp",     // 伪造ajax  基于script
+            jsonp: 'callbacks',
+            jsonpCallback: "list",
+            success: function (data1) {
+                {#console.log(data1)#}
+                $.each(data1.data,function (index,data) {
+                    console.log(data)
+                     var   week_ele=$('<ul>')
+                    week_ele.text(data.week)
+                    week_ele.attr('id','week_ele')
+                    console.log(week_ele)
+                    $('.get_ele').append(week_ele)
+                    $.each(data.list,function (index2,data2) {
+                        console.log(data2.time,data2.link,data2.name)
+                        var  b=$('<a>')
+                        var c=$('<p>')
+                        c.text('播出时间:'+data2.time+'>>>>')
+                        b.attr('id','a')
+                        b.attr('href',data2.link)
+                        b.text('电视剧节目：'+data2.name)
+                        c.append(b)
+                        $('#week_ele').append(c)
+
+                    })
+                    {#$('body').append(week_ele)#}
+                    $('.get_ele').append(week_ele)
+
+                })
+
+            }
+
+        })
+    })
+                 {#$.each(data1.date)#}
+
+
+    //一个是索引，一个是字典，所以可以循环这个date里面就是这样
+    {#$.each(data,function (i,j) {#}
+    {##}
+    {#})#}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+后后面的加jsonpCallback: "list",
+这个是列表的而形式取数据，其他情况加上去
+
+</body>
+</html>

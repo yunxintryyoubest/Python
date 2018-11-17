@@ -1,0 +1,57 @@
+dom操作就是创建标签的过程
+var  a=$('<p>')
+上面的是用$来创建标签，下面是用拼接的方式来创建标签
+
+
+var  a='<p>'
+
+dom操作：text（）里面可以放文本
+attr('id','dsds')这个是赋值属性
+append这个可以在当前标签下面添加标签进来
+
+
+
+
+
+例子如下：
+
+
+
+    $('#sub').click(function () {
+        alert('323')
+        $.ajax({
+            url: "http://www.jxntv.cn/data/jmd-jxtv2.html",
+            type: "get",
+            dataType: "jsonp",     // 伪造ajax  基于script
+            jsonp: 'callbacks',
+            jsonpCallback: "list",
+            success: function (data1) {
+                {#console.log(data1)#}
+                $.each(data1.data,function (index,data) {
+                    console.log(data)
+                     var   week_ele=$('<ul>')
+                    week_ele.text(data.week)
+                    week_ele.attr('id','week_ele')
+                    console.log(week_ele)
+                    $('.get_ele').append(week_ele)
+                    $.each(data.list,function (index2,data2) {
+                        console.log(data2.time,data2.link,data2.name)
+                        var  b=$('<a>')
+                        var c=$('<p>')
+                        c.text('播出时间:'+data2.time+'>>>>')
+                        b.attr('id','a')
+                        b.attr('href',data2.link)
+                        b.text('电视剧节目：'+data2.name)
+                        c.append(b)
+                        $('#week_ele').append(c)
+
+                    })
+                    {#$('body').append(week_ele)#}
+                    $('.get_ele').append(week_ele)
+
+                })
+
+            }
+
+        })
+    })

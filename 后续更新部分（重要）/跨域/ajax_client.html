@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script  src="/static/jquery-3.1.1.js"></script>
+</head>
+<body>
+
+<div  class="get_ele">
+
+
+</div>
+<button  id="sub">提交</button>
+
+
+{#//            url:'http://127.0.0.1:8000/server/?callbacks=func',#}
+
+<script>
+
+{##}
+{#    function  fun(arg){#}
+{#        alert(arg)#}
+{#       console.log("接受的请求")#}
+{#        var  ele=$('<script>')#}
+{#        ele.attr('id',arg)#}
+{#        $('body').append(ele)#}
+{#        console.log(arg)#}
+{##}
+{#    }#}
+
+    {#/为ajax的请求,基于script来的标签来创建的#}
+    $('#sub').click(function () {
+        alert('323')
+        $.ajax({
+             url:"http://127.0.0.1:8080/server/",
+             type:"get",
+             dataType:"jsonp",     // 伪造ajax  基于script
+             jsonp: 'callbacks',
+             //jsonpCallback:"alex",
+             success:function (data) {
+                 console.log(data)
+            alert(data)}
+        })
+
+    })
+
+
+</script>
+
+</body>
+</html>

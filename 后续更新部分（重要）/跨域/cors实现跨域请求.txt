@@ -1,0 +1,23 @@
+def service(request):
+
+    info={"name":"yunxin","age":11,"price":0}
+
+    response=HttpResponse(json.dumps(info))
+    #response["Access-Control-Allow-Origin"]="http://127.0.0.1:8000"
+    #response["Access-Control-Allow-Origin"]="*"
+    return  response
+
+
+
+
+
+这种是直接ajax请求既可以发送过来，比较常用（cors跨域请求），不用设置什么其他参数（ajx发送的请求里面）
+
+
+
+
+
+    #response["Access-Control-Allow-Origin"]="*"
+这个是全部都不拦截了
+    #response["Access-Control-Allow-Origin"]="http://127.0.0.1:8000"
+这个是允许跨域的url
