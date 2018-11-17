@@ -1,0 +1,73 @@
+<table border="1">这个是表格边框为1px
+
+<th>ID</th>这个是放在框中间，且加粗
+
+<td>{{ row.id }}</td>放在框里面的左边，没有加粗，每一个td都是一列
+
+placeholder='年龄'这个是默认加的灰色字
+
+
+<p>
+    男:<input type="radio" name="gender" value="1">
+    女:<input type="radio" name="gender" value="0">
+    
+</p>
+这个是加选择的radio，男女
+
+a标签有点击功能，p标签没有点击功能
+<a href="/add_classes">添加班级</a>
+<p href="/add_teachers">添加老师</p>
+
+
+
+<tr>这个是换行
+
+thead和tbody
+
+
+
+
+text-align:center这个是将里面的文本放在中间
+
+
+
+radio这个是按钮（男女）class=radio-inline这个字只能单选
+
+
+
+$('name').text（）可以把标签的纯文本信息打印出来
+$('name').text（加的内容）这个可以对某个标签里面的内容进行赋值
+
+
+
+
+attr('na')可以找到这个属性的属性值（可以多个标签定义同一个属性na，就可以找到多个属性值（na=‘name’等等,这个name就是属性值））
+
+
+href
+和action都是下一页（要跳转到的下一页）
+
+
+
+checkbox
+radio
+input
+
+
+
+
+
+h1(标题）
+h2
+tr换行
+td一行
+
+
+
+opacity透明度
+
+
+
+
+
+
