@@ -1,0 +1,59 @@
+详细：
+0未初始化：尚未调用open方法
+1启动 已经调用open（）方法，未调用send方法
+2发送 已经调用send方法，为接收到响应
+3接收 已经接收到部分响应数据
+4完成 已经接收完全部响应的数据
+
+
+
+
+创建对象（要指定向什么方向发）
+
+设置回调函数 
+加请求头
+
+
+伪'ajax'
+form提供数据
+ifarme提供通道
+不刷新
+
+
+
+    function ajaxclick() {
+        $.ajax({
+            url:'/ajax1.html',
+            type:'GET',
+            data:{'p':123},
+            success:function (arg) {
+                console.log(arg)
+
+            }
+
+        })
+
+    }
+
+
+
+
+
+    function ajaxclick1() {
+        var xhr=new XMLHttpRequest();
+        //和它创建一个连接
+    xhr.onreadystatechange=function () {
+        if(xhr.readyState==4){
+{#                #接收完服务端发来的数据#}
+        console.log(xhr.responseText)
+
+    }
+}
+    xhr.open('GET','/ajax1.html?p=123');
+{#        #当某个状态进行更改，它会执行#}
+
+
+
+    xhr.send(null)
+
+    } 

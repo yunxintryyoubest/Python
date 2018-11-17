@@ -1,0 +1,37 @@
+django2的settings
+在最后加一个路径进去
+STATICFILES_DIRS=(
+    os.path.join(BASE_DIR,"statics"),
+)
+
+在blog后面新建一个statics静态文件,django是全局信息
+
+
+
+urls:
+先导入模块
+from django.conf.urls import url,include
+然后从上两级里面导入views
+from blog3 import views
+
+
+
+
+
+
+
+views：
+httpresponse是做出响应，    return HttpResponse('时间是%s'%t)
+render是可以做出操作的（index.html等把局部变量加进模块里面执行）  return  render(request,'index.html',{'time':t})
+local() 是局部变量的集合，local可以替代上面得这个字典
+    # return render(requset,"index.html",{"time":t,'name':name})
+    return render(request,'index.html',locals())
+
+
+
+
+return redirect('/login/')
+这个是本地有login函数，即view里面login函数
+
+
+return redirect("http://www.taobao.com")可以跳转到其他页面

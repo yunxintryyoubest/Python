@@ -1,0 +1,13 @@
+local（）局部变量
+def show_time(requset):
+
+    #return HttpResponse("hello")
+    t=time.ctime()
+    name='alex'
+
+    return render(requset,"index.html",{"time":t,'name':name})
+    return  render(request,'index.html',locals())
+
+直接用local（就可以了，代表这个函数里面的局部变量   全部的变量）
+
+局部变量用什么变量，html模板里面也用什么变量，可以直接将函数所有的变量传给模板

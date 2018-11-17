@@ -1,0 +1,8 @@
+{{% load %}}：加载标签库
+
+自定义fitter和simple_tag
+
+在app中创建templatetags模块（必须）
+
+创建任意.py文件，如：my_tag.py
+

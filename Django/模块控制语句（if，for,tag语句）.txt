@@ -1,0 +1,199 @@
+views:
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+import datetime
+import time
+class an():
+    def __init__(self,name,hobby):
+        self.name=name
+        self.hobby=hobby
+
+#
+# def show_time(request):
+#     t=time.ctime()
+#     return HttpResponse('时间是%s'%t)
+
+    # return  render(request,'index.html',{'time':t})
+
+
+
+def query(request):
+    date=time.ctime()
+    l=['1','2','3']
+    d={'name':'wa','age':'32','hobby':'fds'}
+    c=an('alex','nan')
+
+    t='he llo wo r l d'
+    t1='hE LLO WORLD'
+    t4=datetime.datetime.now()#实现日期功能
+
+    value='<a href="#">跳转</a>'
+    # return  render(request,'index.html',{'action':l})
+    t3=[]
+
+    return  render(request,'index.html',locals())
+
+
+
+
+def login(request):
+    return  HttpResponse('login success!')
+
+
+
+
+
+
+
+
+
+
+
+index.html：
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+    <style>
+            .fir{
+    color:red
+    }
+    </style>
+
+
+</head>
+<body>
+
+{#<form action="http://127.0.0.1:8080/show_time" method="post">#}
+<h1>hello  现在时间是{{date }}</h1>
+{#<h1>{{ action }}</h1>#}
+{#<h1>{{ action.1 }}</h1>#}
+{#<h1>{{ action.2 }}</h1>#}
+<h1>{{ l.2 }}</h1>
+<h1>{{ l.1 }}</h1>
+
+<h1>{{ c.name }}</h1>
+<h1>{{ c.hobby }}</h1>
+
+
+<h1>{{ d.age|add:12 }}</h1>#在原来的数字加12
+<h1>{{ t4|date:"Y" }}</h1>
+<h1>{{ t3|default:'空的列表' }}</h1>#列表为空时，默认是default后面的值
+<h1>{{ value|safe }}</h1>#可以实现标签的点击，下面也是
+
+{% autoescape off %}
+    <h1>{{ value }}</h1>
+{%  endautoescape %}
+
+
+<h1>{{ t1|capfirst }}</h1>#首字母大写
+<h1>{{ t4|date:'Y-m-d'}}</h1>#实现日期功能
+<h1>{{ t|cut:' ' }}</h1>#将空格去除
+<h1>{{ d.name }}</h1>
+
+{%  if d.age > 20 %}
+    <h1>hello{{ d.name }}</h1>
+{%  elif d.age > 10 %}
+    <h1>年龄大于10小余20</h1>
+{%  endif %}
+
+
+{%  for name in l %}
+{#    <h1>{{ forloop.counter0}}:{{ name }}</h1>#}#可以从0开始计数，也可以从1开始，也可以从任意一个数开始取决于 counter后面的数
+    <h1>{{ forloop.revcounter0}}:{{ name }}</h1>#倒序排列
+{% endfor %}
+
+#计数器
+
+
+{%  for name in l %}
+    {% if  forloop.first %}
+        <li class="fir">
+        {%  else %}
+        <li>
+        {%  endif %}
+{{ name }}
+    </li>
+ {%  empty %}
+    <h1>没有相关东西</h1>
+{%  endfor %}
+
+#实现第一个列表的值变红，也可以实现其他值变化，进行其他操作
+
+<form action="{%  url 'log' %}}" method="post">
+{#<form action="/login/" method="post">#}
+    <p>姓名<input type="text" name="user"></p>
+    <p>密码<input type="text" name="pwd"></p>
+    <P><input type="submit"></P>
+    {%  csrf_token %}
+</form>
+</body>
+
+
+</html>
+
+
+
+
+
+
+html：
+
+<form action="{%  url 'log' %}" method="post">
+    <p>姓名<input type="text" name="user"></p>
+    <p>密码<input type="text" name="pwd"></p>
+    <P><input type="submit"></P>
+    {%  csrf_token %}
+</form>
+
+注明：
+{%  url 'login' %}这个是通过url路由（urls）来进入server端，然后在视图函数（views）执行login函数,
+urls哪里要取一个别名才可以进行访问,'login'是别名
+url(r'^login',views.login，name='log'),
+
+这个是模板语言，通过模板语言来进行渲染，整个都是模板语言
+
+{%  csrf_token %}这个django会把它当成一个身份证，生成value下面唯一的值才可以访问服务端，否则会访问不了服务端（请求会被禁止），否则的话即登录成功
+<input type="hidden" name="csrfmiddlewaretoken" value="9gMc3ZTf9jBBWb7adT2txABDqoRyAH94l06foNw1nerfnWEnCArdsXRpaAs8zsqs">
+
+
+
+urls:
+"""django3 URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/dev/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls import url,include
+from blog3 import views
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+
+    # url(r'show_time/',views.show_time),
+
+
+    # url(r'time/(\d{4})/(\d{2})',views.year_month),
+    # url(r'^blog/', include('blog3.urls')),
+    url(r'query/',views.query),
+
+    url(r'^login',views.login,name='log'),
+
+]
+

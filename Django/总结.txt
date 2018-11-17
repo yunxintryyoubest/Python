@@ -1,0 +1,100 @@
+2.model操作
+
+a.类代表表
+
+b.字段：一列数据
+
+c.对象；一行数据
+
+
+一对多：
+foreign（代指关系表的一整行数据）
+__跨表
+多堆垛（字段）
+
+
+获取数据的类型
+
+[obj,obj....]一个一个的对象 .all和.filter
+
+[{'user':alex},{},{}...]    字典形式的queryset对象集合  .values
+
+[(),()...]     .values_list() 列表形式的queryset对象集合
+
+
+
+select 标签
+单选：
+$().val(1)
+
+$().val(2)
+
+多选：
+
+$().val()
+$().val(1,4,5)
+
+
+
+
+
+
+写ajax实例：
+
+
+
+
+
+
+
+
+
+创建project：
+
+
+
+js:
+$('#addModal').modal('show') 显示
+$('#addModal').modal('hide') 隐藏
+
+注意：
+id用#,class用.,标签不用加，直接标签名字就可以了
+
+radio，type=radio 
+是单选框
+
+checkbox是多选框
+
+
+绑定对话框：
+
+{##添加绑定这个对话框#}
+<script>
+
+    $(function () {
+        bind_events();
+    })
+
+
+
+    function bind_events() {
+        $('#addbtn').click(function () {
+            $('#addModal').modal('show')
+        })
+
+    }
+
+
+{#    id用#，class用.,标签不用加，直接标签名字就可以了#}
+</script>
+
+
+
+
+
+事件委托
+$('要绑定标签的上级标签).on('click','要绑定的标签','function(){
+})
+
+
+

@@ -1,0 +1,131 @@
+render 和redirect的区别
+
+render的页面需要模板语言渲染，需要的将数据库的数据加载到html，那么所有的这一部分出来写在一个视图函数中，必须还要
+写在login中，代码重复，没有解耦
+
+最重要的是：url没有跳转到了一个页面中，而是还在/login/，所以当刷新后又得重新登录
+
+
+views:<form action="{%  url 'login' %}" method="post">
+执行到html中的模板语言上面一句的时候，会进行url路由访问（urls）视图函数（views）
+
+
+
+组成：HTML代码+逻辑控制代码
+
+Template上下文，代指模板，是一个类，html是实例对象（HTML）
+context是里面的模板语言 {time:t}的{{time}}
+将context的模板语言渲染到html文件中来
+template调用render方法来渲染，传入context对象来渲染（渲染context对象），得到的结果是html文件
+
+
+
+ from django.template import Context,Template
+进入django环境from django.shortcuts import render,HttpResponse
+
+
+<form action="{%  url 'log' %}}" method="post">
+{#<form action="/login/" method="post">#}
+    <p>姓名<input type="text" name="user"></p>
+    <p>密码<input type="text" name="pwd"></p>
+    <P><input type="submit"></P>
+    {%  csrf_token %}
+</form>
+这个csrf是一个身份证，当你没有写这个的话，会被禁止访问，写入的话就生成唯一的value值，下次登录的时候会匹配时候正确才可以登录进去
+
+
+
+views:
+# Create your views here.
+import datetime
+import time
+class an():
+    def __init__(self,name,hobby):
+        self.name=name
+        self.hobby=hobby
+
+
+def show_time(request):
+    t=time.ctime()
+    return HttpResponse('时间是%s'%t)
+
+    # return  render(request,'index.html',{'time':t})
+
+
+
+def query(request):
+    date=time.ctime()
+    l=['1','2','3']
+    d={'name':'wa','age':'12','hobby':'fds'}
+    c=an('alex','nan')
+
+    t='he llo wo r l d'
+    t1='hE LLO WORLD'
+    t4=datetime.datetime.now()#实现日期功能
+
+    value='<a href="#">跳转</a>'
+    # return  render(request,'index.html',{'action':l})
+    t3=[]
+
+    return  render(request,'index.html',locals())
+
+t=Template('my name is {{name}}')
+c=Context({'name':'alex'})
+t.render(c)
+
+
+
+
+
+<h1>hello{{action.1}}</h1> 通过点去取值，action是一个列表，取第一个值
+
+<h1>hello{{action.1}}</h1>  取第二个值
+
+
+
+
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+</head>
+<body>
+
+<form action="http://127.0.0.1:8080/show_time" method="post">
+<h1>hello  现在时间是{{date }}</h1>
+{#<h1>{{ action }}</h1>#}
+{#<h1>{{ action.1 }}</h1>#}
+{#<h1>{{ action.2 }}</h1>#}
+<h1>{{ l.2 }}</h1>
+<h1>{{ l.1 }}</h1>
+
+<h1>{{ c.name }}</h1>
+<h1>{{ c.hobby }}</h1>
+
+
+<h1>{{ d.age|add:12 }}</h1>#在原来的数字加12
+<h1>{{ t4|date:"Y" }}</h1>
+<h1>{{ t3|default:'空的列表' }}</h1>#列表为空时，默认是default后面的值
+<h1>{{ value|safe }}</h1>#可以实现标签的点击，下面也是
+
+{% autoescape off %}
+    <h1>{{ value }}</h1>
+{%  endautoescape %}
+
+
+<h1>{{ t1|capfirst }}</h1>#首字母大写
+<h1>{{ t4|date:'Y-m-d'}}</h1>#实现日期功能
+<h1>{{ t|cut:' ' }}</h1>#将空格去除
+
+
+</body>
+
+
+</html>
+
+
+
+
