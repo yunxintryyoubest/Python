@@ -1,0 +1,48 @@
+对记录进行操作
+delete：删除
+delete from name where id=1;
+update ：修改
+update employee set salary=salary+20000 where name='alex';
+update employee set salary=salary+2000,age=38  where name='xailu';
+insert；插入
+INSERT  INTO employee VALUES (10,'丹丹',29,'男',3000,1,'销售部');
+
+insert into employee set name='liuxinag';
+
+mysql> INSERT  INTO employee(name,salary,department) value('xailu',20000,'python');
+
+
+多条数据:
+INSERT  INTO employee(name,salary,department) value('xailu',20000,'python')
+
+查找
+select * from 表名字
+****************************************************************************************************
+对字段进行操作：
+
+desc employee;显示这个employee的全部内容
+add 增加      alter table employee(表名字) add  work_time varchar(20);
+drop删除      alter table employee drop work_time;
+modify修改    mysql> alter table teacher modify id   TINYINT  AUTO_INCREMENT ;
+alter table employee change department depart  varchar(20) after salary;修改字段名字,列名
+rename table emp to employee;修改表名字
+create table a(id int);创建表a
+drop table a;删除表
+
+
+show create table 表名字;  展示表的全部字段信息
+
+
+对数据库进行操作：
+
+use databases
+
+drop database 名字；删除数据库里面的某个库
+create database 名字;创建数据库
+create database if not exists s1;
+show create database s1;展示数据库s1的全部信息
+
+use 名字;进入某个数据库里面
+select database();监测你进入的那个数据库
+
+alter database s1 character set utf8;

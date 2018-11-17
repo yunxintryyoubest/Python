@@ -1,0 +1,103 @@
+内连接：inner join
+
+select employee.name,department.name from employee,department where employee.id=department.id and empolyee.name='a'; 把a员工所在的部门筛选出来
+
+
+
+
+
+
+select employee.name ,department.name from  department   inner join employee     on empluee.id=department.id and empolyee.name='a'; 这个和上面结果是一样得，注意，inner join两边可以是交换的，结果都是相同的，两种方法都可以
+
+# --创建学生表*/
+CREATE  TABLE student(
+  id INT PRIMARY KEY  AUTO_INCREMENT,
+  name VARCHAR(20),
+  charger_id TINYINT,
+  FOREIGN KEY  （charger_id） REFERENCES classcharger(id)
+)ENGINE =INNODB;
+
+# 第一个是外键绑定的id REFERENCES关联 classcharger这个表的id
+# 主表，被绑定的表就是主表
+不能删除主表的某个信息，要把子表的内容先安置（要么删除主表这个外键绑定的子表记录，要么把子表的绑定外键（id）改成其他id）
+add constraint charger_fk_stu  (这个是自己定义的名字) FOREIGN KEY (charger_id) REFFRENCES（绑定）  classcharger
+这个可以自己加，自己定义外键秒
+
+CREATE  TABLE lession53.classcharger (
+  id TINYINT PRIMARY KEY  AUTO_INCREMENT,
+  name VARCHAR(20),
+  age INT,
+  is_married BOOLEAN
+
+
+);
+
+
+
+INSERT  INTO classcharger(name,age,is_married) VALUES ('冰冰',53,0),
+  ('丹丹',34,0),('嘿嘿',34,1),('小雅',35,0);
+
+
+
+
+
+
+
+
+INSERT INTO student2(name,charger_id) VALUES ('stu1',2),('stu2',2),('stu3',2),
+  ('stu4',4),('stu5',2),('stu6',3),('stu7',2);
+
+# 绑定了外键，不能插入1，以为外键那里的id只有2,3,4,5,有FOREIGN key的就是子表
+
+
+
+
+
+
+
+
+
+
+**********************************************************************************************************
+要把某个主键的内容给删除，必须把所绑定的子键对应的id记录给删除，否则删除不了主表的内容（除非主表的那个主键（id）没有绑定的子表的id）
+
+
+
+
+
+
+
+
+
+
+
+
+
+主表的主键比子表的外键更多
+
+
+
+# 给一个没有外键的表增加外键
+#  CONSTRAINT abc     取名字为abc，加不加这个名字都会有，不加用它给的，加就用你指定的
+# 指定表的那个主键
+# 关联到那个表的那个外键
+
+ALTER TABLE  student ADD CONSTRAINT abc
+FOREIGN KEY (charger_id)
+  REFERENCES  classcharger(id);
+
+# 给student增加一个外键
+
+
+
+
+
+
+
+
+
+
+
+# 每一个FOREIGN KEY都有一个名字
+ALTER  TABLE student DROP FOREIGN KEY abc;
+# 可以按这个外键名字删除就可以直接删除这个外键

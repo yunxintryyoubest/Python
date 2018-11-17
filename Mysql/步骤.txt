@@ -1,0 +1,5 @@
+show  database;
+user  s1;
+show  tables;
+user t1;
+desc t1;

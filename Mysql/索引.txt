@@ -1,0 +1,106 @@
+创建索引和删除索引时间是很慢的，但是表中加了索引后，查询内容是非常快的
+
+
+
+ 
+id  foreign key            key是索引的意思  
+select * from stu where id=1;这个是按id来进行索引的
+
+select * from stu where name='xiaha'；这个是按name来遍历，并不是索引
+
+
+
+
+
+
+
+成为唯一索引
+
+
+
+alter table stu modify name varchar(20) unique;   加了unique之后才是唯一索引，可以按name这个索引进行搜索
+
+unique 是后面加的约束条件，就成了唯一索引
+
+修改普通索引为唯一索引
+
+或者:
+
+
+创建时候加索引
+
+create table emp(id int,name varchar(20),index index_name (name));   index_name是索引名字，name是加的索引字段，当然也可以放id进去，也可以变成普通索引
+Query OK, 0 rows affected (0.38 sec)
+
+mysql> show create table emp;
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                        |
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| emp   | CREATE TABLE `emp` (
+  `id` int(11) DEFAULT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  KEY `index_name` (`name`) *******************************************   key   索引
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+
+
+
+在已经创建的表中加索引（普通索引）
+
+
+ create index  index_name  on aaa (name);
+
+创建索引  create  index
+index_name 为索引名字
+aaa是表名
+name是字段（也可以是其他字段）
+
+ KEY `index_name` (`name`)     key索引 index_name 索引名字   name索引字段
+
+
+
+drop index index_name on aaa;删除索引 ，index_name 是索引名字 aaa是表名
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+delimiter ! 可以修改分隔符，默认的分隔符是;也可以修改成了！也可以改成其他的
+
+
+
+往表aaa中加5000个数据
+
+
+
+CREATE  PROCEDURE  auto()
+  BEGIN
+    DECLARE  i INT DEFAULT 1;
+    WHILE (i<5000)DO
+      INSERT  INTO aaa VALUES(i,'yuan');
+      SET i=i+1;
+    END WHILE;
+  END;
+
+
+
+call auto():
+
+执行auto,就开始往表aaa中加数据了

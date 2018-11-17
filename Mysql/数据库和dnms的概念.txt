@@ -1,0 +1,31 @@
+数据库：存储数据的仓库，有组织可共享数据的集合
+关系型的数据库 DBMS
+
+甲骨文orcal
+IBM的db2
+sql server
+access
+mysql
+
+
+
+指令集：
+sql语句
+
+mysql -p密码
+mysql-P
+端口号
+
+
+show databases;查看已有的多个数据库
+
+use s1;进入s1数据库中
+
+select database();选择s1数据库
+show tables;查看s1数据库中的表格（多个）
+desc employee; 查看这个表格的设置的字段和类型
+select * from employee;查看这个employee表格的内容
+
+
+delete from emp;这个表一条一条记录的删除,留下一个空表
+truncate table emp;整个表直接删除,在创建字段（字段(id,name等，类型（int等）），速度更快，也留下一个空表

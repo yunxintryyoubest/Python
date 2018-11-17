@@ -1,0 +1,44 @@
+left join是以左边的字段为筛选条件，对应的没有这位空值（左外连接）
+
+select employee.emp_name,department.dept_name from department left join employee on employee.dept_id =department.dept_id;
+
+这个是以左边的部门为筛选条件，全部的部门都会显示出来，当有的部门没有员工时也会显示出那个部门，只是员工为空
+
+right join 右外连接（以右边的条件为筛选条件）
+
+
+没有加外键（已经删除了外键）
+mysql> select newt.name,newS.name from newS,newt where  newt.id=newS.charger_id and newt.name=' 嘿嘿';
+newt是老师的表，newS是学生表
+
+查询年龄大于30岁的老师所带的学生
+
+mysql> select newt.age,newt.name,newS.name as 所带的学生 from newS,newt where newS.charger_id=newt.id and newt.age>30;
++------+------+------------+
+| age  | name | 所带的学生 |
++------+------+------------+
+|   34 | 丹丹 | stu1       |
+|   34 | 丹丹 | stu2       |
+|   34 | 丹丹 | stu3       |
+|   34 | 丹丹 | stu5       |
+|   34 | 嘿嘿 | stu6       |
+|   34 | 丹丹 | stu7       |
+|   53 | 小放 | stu10      |
+|   43 | 小与 | stu11      |
+|   43 | 小换 | stu15      |
+|   43 | 小换 | stu16      |
++------+------+------------+
+
+
+
+
+mysql> create table newS1(select * from newS);可以复制了一个表的全部内容到newS1里面，备份（把newS的内容全部拷贝过来）
+但是一些主键不会拷贝过来（newS的一些约束条件）
+
+
+
+
+mysql> select * from newS where charger_id in (select id from newt where age>50);嵌套查询
+
+mysql>  select * from newS where exists(select name from newt  where age>80);
+Empty set (0.00 sec) 这个后面的where exists 只会返回true和false，返回true的话就会执行前面的部分，false就不会执行，为空

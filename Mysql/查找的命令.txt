@@ -1,0 +1,91 @@
+distinct 不重复
+where 过滤
+and 是多个条件筛选
+or  是多个筛选出来的数据
+bettwen 80 and 100 值在80 和100 之间（包括80和100）
+in (80,90,100)值是80或90或100
+like 'li%' 后面是模糊匹配，%可以是多个内容的  mysql> select * from employee where department like '技术%';
+like 'li_' 后面只能匹配一个，lix liy等等的，一个下划线匹配一个,也可以是 like 'li____' 
+is null 为空
+order by age; 按年龄升序排
+mysql> select * from employee where age>20 order by age;筛选出年龄大于20的按升序排
+mysql> select * from employee where age>20 order by age desc;就是降序了
+先执行from where select 最后order by（执行顺序） having 过滤(对之前所有的内容进行过滤，最后执行）
+
+
+
+分组：
+mysql> select * from employee group by gender;按性别分组,假如多个相同只显示第一个（相同的当成一个组集合）mysql> select * from employee group by 2;按字段的第二个来分
+
+mysql> select department ,sum(salary)as 这个部门的全部工资 from employee group by department;
++------------+--------------------+分组，聚合，分组（某个部门）里面的全部工资
+| department | 这个部门的全部工资 |
++------------+--------------------+
+| 技术部     |           31969.00 |
+| python     |           22000.00 |
+| 销售部     |           12000.00 |
+| NULL       |               NULL |
++------------+--------------------+
+
+
+
+count 是数个数
+mysql> select count(name) from employee where age>20;
+
+
+mysql> select * from employee where (ifnull(age,0)+ifnull(salary,0))>20000;取出总数大于20000的人（可以取null，当null的时候是为0的）
+
+avg 和min 是不取为null的，当加了的话就可以取为null的值了，比如sum（英语）/count(name)   是平均分
+当有人英语为null的话也会count也会加上他，当avg就不会算上这个为null的值，所有avg是会偏大一点
+mysql> select min(salary) from employee;
++-------------+
+| min(salary) |
++-------------+
+|     3000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select min(ifnull(salary,0)) from employee;
++-----------------------+
+| min(ifnull(salary,0)) |
++-----------------------+
+|                  0.00 |
++-----------------------+
+1 row in set (0.00 sec)
+
+
+limt:
+mysql> select * from employee limit 3;只取前3个信息
++----+-------+-----+--------+----------+------------+------------+
+| id | name  | age | gender | salary   | is_married | department |
++----+-------+-----+--------+----------+------------+------------+
+|  1 | alex  |  18 | 男     | 21700.00 |          1 | 技术部     |
+|  3 | xailu |  38 | NULL   | 22000.00 |       NULL | python     |
+|  4 | xialv |  26 | 男     |  3423.00 |          1 | 技术部     |
++----+-------+-----+--------+----------+------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from employee limit 2,2;// 跳过前两个信息，从第三个信息取，只取2条，到第四条信息为止
++----+-------+-----+--------+---------+------------+------------+
+| id | name  | age | gender | salary  | is_married | department |
++----+-------+-----+--------+---------+------------+------------+
+|  4 | xialv |  26 | 男     | 3423.00 |          1 | 技术部     |
+|  5 | 冰冰  |  18 | NULL   | 9000.00 |       NULL | 销售部     |
++----+-------+-----+--------+---------+------------+------------+
+2 rows in set (0.00 sec)
+
+
+
+使用正则查询：
+regexp
+
+
+name regexp  '^yu'后面是yu的条件（ name  like '^yu'）
+'yu%' 前面是yu的条件
+m(2)有2个m的条件
+
+
+
+
+
+

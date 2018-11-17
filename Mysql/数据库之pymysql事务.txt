@@ -1,0 +1,193 @@
+
+# 事务是指逻辑上的一组操作，组成这组操作的各个单元，要么全部成功，要么全部不成功
+START TRANSACTION  开启事务
+ROLLBACK  回滚事务，即撤销指定的sql语句（只能回退到insert delete update语句）
+COMMIT  提交事务，提交未存储的事务，保存到数据库
+
+SAVEPOINT  保留点，事务处理中设置的临时的在那位符，你可以对它发布回退（和整个事务回退不同）
+
+ROLLBACK 是回滚到上一次sql语句提交（commit）的地方，这次没有提交成功（出错）就会清空
+也就是撤销的意思，把这一次执行出错的sql语句撤销，回滚到上一次提交的地方（不会是上一次提交之前那里，以为上一次提交已经执行成功了，保存数据到数据库那里了，而这一次没有commit（保存数据到数据库那里），执行成功）
+
+
+
+import  pymysql
+
+conn=pymysql.connect(host='127.0.0.1',port=3306,user='root',passwd='1928551998',db='ls')
+
+
+
+cursor=conn.cursor()
+
+
+sql='CREATE  TABLE  test(id INT,name VARCHAR(20));'
+cursor.execute(sql)
+# sql是命令，可以包装一下，直接调用sql
+
+
+cursor.execute('你想执行的操作')
+
+
+rel=cursor.execute('你想执行的操作')
+print(rel)#这个打印的是多少条记录row(数字）
+
+
+
+
+print(cursor.fetchone())#取一条记录
+print(cursor.fetchall())#所有记录取出来
+
+print(cursor.fetchmany(3))#自己定义取多少条
+
+
+
+
+
+
+
+conn.commit()#创建表或者数据库的时候不用提交，执行其他操作的时候需要提交
+cursor.close()
+conn.close()
+
+
+
+
+
+print(cursor.fetchone())#这个光标在第一位取第一个记录
+print(cursor.fetchone())#这个光标在第二个，取第二个记录
+cursor.scroll(-1,mode='relative')#光标往上移一位，光标就在第一个记录哪里
+print(cursor.fetchone())#往下一位，光标在的两位，取的就是第二个记录
+
+
+
+
+conn.cursor(cursor=pymysql.cursors.DictCursor)
+# 调成字典形式的光标，打印出来也是字典形式的
+
+
+
+
+
+
+
+事务例子：
+
+import pymysql
+
+conn=pymysql.connect(host='127.0.0.1',port=3306,user='root',passwd='1928551998',db='ls')
+
+curson=conn.cursor()
+
+sql1='show databases;'
+
+rel=curson.execute(sql1)
+print(rel)
+# print(curson.fetchmany(2))
+print(curson.fetchall())
+
+sql2='use ls;'
+
+rel2=curson.execute(sql2)
+
+sql3='show tables;'
+rel3=curson.execute(sql3)
+
+print(curson.fetchall())
+sql4='select * from data;'
+rel4=curson.execute(sql4)
+print(curson.fetchall())
+
+
+try:
+
+    sql5="update data set money=money-5000 WHERE id=1;"
+    sql6="update data set money=money+5000 WHERE  id=2;"
+
+    curson=conn.cursor()
+
+    curson.execute(sql5)
+
+    # conn.commit()
+
+    curson.execute(sql6)
+    raise Exception
+
+    sql7 = 'select * from data;'
+    rel7 = curson.execute(sql7)
+    print(curson.fetchall())
+
+
+
+
+
+    curson.close()
+    conn.commit()
+
+except Exception as e:
+    conn.rollback()
+    conn.commit()
+
+
+
+    sql8 = 'select * from data;'
+    rel7 = curson.execute(sql8)
+    print(curson.fetchall())
+
+
+
+
+
+    print('出错')
+
+    curson.close()
+    conn.commit()
+
+except Exception as e:
+    conn.rollback()
+    conn.commit()
+
+
+
+    sql8 = 'select * from data;'
+    rel7 = curson.execute(sql8)
+    print(curson.fetchall())
+
+
+
+
+
+    print('出错')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

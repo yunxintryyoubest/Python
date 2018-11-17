@@ -1,0 +1,90 @@
+mysql --version  mysql版本
+mysql -u root -p
+password：1928551998 进入数据库
+
+use databases
+
+drop database 名字；删除数据库里面的某个库
+create database 名字;创建数据库
+create database if not exists s1;
+show create database s1;
+
+use 名字;进入某个数据库里面
+select database();监测你进入的那个数据库
+
+alter database s1 character set utf8;
+
+
+
+BIT 0和1
+AUTO_INCREMENT自增
+PRIMARY KEY唯一
+
+*************************************************************************************
+对字段进行操作
+desc employee;显示这个employee的全部内容
+add 增加      alter table employee(表名字) add  work_time varchar(20);
+drop删除      alter table employee drop work_time;
+modify修改    mysql> alter table teacher modify id   TINYINT  AUTO_INCREMENT ;
+alter table employee change department depart  varchar(20) after salary;修改字段名字,列名
+rename table emp to employee;修改表名字
+create table a(id int);创建表a
+drop table a;删除表
+************************************************************************************************
+对表的信息进行操作
+delete from 表名 where id=1;
+
+
+
+mysql> desc employee;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| id         | tinyint(4)  | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(25) | YES  |     | NULL    |                |
+| age        | smallint(6) | NO   |     | 18      |                |
+| gender     | varchar(20) | YES  |     | NULL    |                |
+| salary     | double(7,2) | YES  |     | NULL    |                |
+| is_married | tinyint(1)  | YES  |     | NULL    |                |
+| department | varchar(20) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+插入信息:
+mysql> insert into employee (id,age,name ,gender,salary,department,is_married)
+    ->                  values(1,18,'alex','男',1700,'技术部',1);
+
+
+
+
+
+
+mysql> INSERT  INTO employee(name,salary,department) value('xailu',20000,'python');
+
+
+多条数据:
+INSERT  INTO employee(name,salary,department) value('xailu',20000,'python'),
+('xiaoyu',5000,'销售部'),
+('冰冰',9000,'销售部');
+Query OK, 1 row affected (0.10 sec)
+
+
+插入具体数据:
+
+INSERT  INTO employee VALUES (10,'丹丹',29,'男',3000,1,'销售部');
+
+insert into employee set name='liuxinag';
+
+
+
+mysql> update employee set salary=salary+20000 where name='alex';修改alex的工资加2万
+
+and 是过滤
+
+
+
+
+更改
+
+mysql> update employee set salary=salary+2000,age=38  where name='xailu';
+
+删除:DELETE  FROM employee WHERE id=2 or id=11;删除2个，and是过滤，or是多个
+

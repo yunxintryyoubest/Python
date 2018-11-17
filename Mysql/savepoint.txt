@@ -1,0 +1,10 @@
+
+start transaction;开启事务，所有操作在事务里面完成
+savepoint 名字;
+roolback to savepoint对应的名字;
+
+这个是回到相应的节点，这个节点上面的操作还有，但下面的操作没有了，就是想回到那个节点都可以，只要你设置了savepoint  名字，roolback  to  名字就可以回到到这个节点为止所执行的操作
+
+
+
+

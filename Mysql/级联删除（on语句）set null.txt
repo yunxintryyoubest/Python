@@ -1,0 +1,30 @@
+父表与子表的内容一起删除(cascade方式)
+
+CREATE  TABLE newS(
+  id INT PRIMARY KEY  AUTO_INCREMENT,
+  name VARCHAR(20),
+  charger_id TINYINT,
+  FOREIGN KEY  (charger_id) REFERENCES newt(id) on DELETE CASCADE
+)ENGINE =INNODB;
+# on DELETE CASCADE级联删除,后面加上on DELETE CASCADE就是级联删除了
+
+
+
+
+
+# set null设置set null     当主表的内容被删除时，绑定的子表内容不跟着这删除，外键（id）置空,上面是跟着主表一起删除，set null是置空，即id为null
+CREATE  TABLE newS(
+  id INT PRIMARY KEY  AUTO_INCREMENT,
+  name VARCHAR(20),
+  charger_id TINYINT,
+  FOREIGN KEY  (charger_id) REFERENCES newt(id)  on DELETE  SET NULL 
+)ENGINE =INNODB;
+
+在子表里面删除外键（set null 不是foreign key 而是key）
+alter table newS drop foreign key 子表的外键名字;（show create table newS 可以显示子表的全部字段信息）
+
+
+（在子表里面加外键）
+alter table newS add constraint newS_fk_newt（这个外键名字可以自己取） foreign key (charger_id) references newt(id) on delete set null;
+
+子表的外键绑定主表的主键，set null方式
