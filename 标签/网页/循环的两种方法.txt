@@ -1,0 +1,13 @@
+$.each(obj,function () {
+        
+    })
+
+
+
+
+
+
+    
+$('').each(function () {
+        
+  })

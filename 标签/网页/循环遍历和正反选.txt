@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!--<p>fkaf</p>-->
+<!--<p>fafafsaf</p>-->
+<!--<p>gagaf</p>-->
+<!--<p>gasgf</p>-->
+<button onclick="selectall();">全选</button>
+<button onclick="cancel();">取消</button>
+<button onclick="reverse();">反选</button>
+
+<hr>//多了一个分割线
+    <table border="1">
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>1111</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>2222</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>33331</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>525351</td>
+        </tr>
+    </table>
+
+
+
+
+
+
+
+<script src="jquery-3.1.1.js"></script>
+<script>
+    <!--arr=[32,54,675,43]-->
+
+
+
+    <!--$.each(arr,function(x,y){-->
+    <!--console.log(x)-->
+    <!--console.log(y)-->
+
+    <!--})-->
+
+    <!--$('p').each(function(){-->
+        <!--$(this).html('hello')-->
+        <!--console.log($(this))-->
+        <!--})-->
+
+
+    function selectall(){
+        $(':checkbox').each(function(){
+            $(this).prop('checked',true)
+            })
+           }
+    <!--function cancel(){-->
+        <!--$('[type="checkbox"]').each(function(){-->
+            <!--$(this).prop('checked',false)//只有prop有true和false-->
+        <!--})-->
+        <!--}-->
+    <!--function cancel(){-->
+        <!--$('[type]').each(function(){-->
+            <!--$(this).prop('checked',false)-->
+            <!--})-->
+            <!--}-->
+    function cancel(){
+        $('input').each(function(){
+            $(this).prop('checked',false)//3种方法表示要遍历的标签
+        })
+        }
+    <!--function  reverse(){-->
+        <!--$('[type]').each(function(){-->
+            <!--if $(this).prop('checked'){-->
+                <!--$(this).prop('checked',false)}-->
+            <!--else{-->
+                <!--$(this).prop('checked',true)}-->
+            <!--})-->
+            <!--}-->
+
+
+    function reverse(){
+        $(':checkbox').each(function(){
+            if ($(this).prop('checked')){
+                $(this).prop('checked',false)
+                }
+            else{
+                $(this).prop('checked',true)
+                }
+            })
+            }
+
+</script>
+
+
+
+
+</body>
+</html>

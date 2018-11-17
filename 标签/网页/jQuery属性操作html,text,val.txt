@@ -1,0 +1,156 @@
+jQuery是轻量级的js库
+
+
+
+addClass 
+removeClasss
+
+
+
+固有属性：prop(）括号里面是属性不能是值，否则输出的是undefined
+
+如果是处理input标签外的其他标签的话，如果是固有属性（class,align等自带的）的话（不是自己定义的属性），就可以得到对应的值
+如果是自己定义的属性的话那么就会显示未定义undefined
+
+<input type="checkbox" checked="checked">
+<input type="checkbox">//是否可见
+但如果是input标签的话那么，除了console.log($('input').prop('type')可以得到对应的type值
+console.log($(':checkbox:first').prop('checked'))    //第一个input标签
+得到的是布尔值的True
+
+<div class="div1" alex="c2" align="t"></div>
+console.log($('div').attr('alex'))//这个可以得到div标签的alex属性的值（自己定义的alex属性）(hasClass)
+
+$('').porp()
+$('').removeporp()
+自己定义的属性：attr
+
+
+
+<div id="c1">
+    kfjaks
+    <p>hello</p>
+</div>
+
+
+
+
+
+html()打印的是文本内容加标签内容
+text（）打印的是纯文本内容
+   <!--console.log($('#c1').html())//这个打印的是id为c1的标签里面全部html的内容-->
+    <!--console.log($('#c1').text())//这个打印的是纯文本内容,没有标签内容-->
+    console.log($('#c1').html('<h1>nihao</h1>'))//这个把里面的内容全部替换掉，在打印的是纯文本内容,没有标签内容
+    <!--console.log($('#c1').text('<h2>niaho2</h2>'))-->
+
+
+
+
+
+
+
+val()
+打印的值也只能是固有属性(value)的值，不能是自己定义的value属性的值
+<input type="text" value="6344">
+<input type="text" value="u89234">
+<input type="text" value="afasf34">
+
+<div value="585"></div>//不能打印自己定义的value
+
+
+
+    <!--console.log($(':text').val())-->
+    <!--console.log($(':text').next().val())//这个打印的是第二个有value的input（text）里面的value值，-->
+    //不能打印自己定义的value属性
+    console.log($(':text').eq(2).val('434dfa6'))//设定第三个value值
+    <!--console.log($(':text').next().val('gsvbs'))//设定第二个包括之后的value值-->
+    <!--console.log($(':text').last().val('43456'))//设定最后那个value值
+    <!--console.log($(':text').val('43456'))//全部设定value值-->
+
+
+
+css操作
+
+
+  <!--$(':text').css({'color':'red','background-color':'green'})-->//注意是元组形式的，需要加大括号
+    <!--$(':text').css({'background-color':'green'})-->//元组里面有个值也可以
+    $(':text').css('background-color','green')
+
+
+
+
+
+
+
+
+
+
+全部内容
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="div1" alex="c2" align="t"></div>
+
+<input type="checkbox" checked="checked">
+<input type="checkbox">//是否可见
+<input type="text" value="6344">
+<input type="text" value="u89234">
+<input type="text" value="afasf34">
+
+<div value="585"></div>//不能打印自己定义的value
+
+<div value="456"></div>
+<div id="c1">
+    kfjaks
+    <p>hello</p>
+</div>
+<script src="jquery-3.1.1.js"></script>
+<script>
+    <!--console.log($('div').hasClass('div1'))-->
+    console.log($('div').prop('div1'))//没有div1这个属性
+    console.log($('div').attr('alex'))//这个得到是div标签的alex属性的值
+    console.log($('div').prop('alex'))//undefinded
+    console.log($('div').prop('class'))//prop是固有属性，不能改变的,class是固有属性，所以就可以得到class值
+    console.log($(':checkbox:first').attr('checked'))
+    console.log($('input').prop('type'))
+    console.log($(':checkbox:first').prop('checked'))//如果给的是属性的话就判断是否为true,input里面
+    console.log($('div').prop('align'))
+    console.log($('div').attr('align'))
+    console.log($('input:first').prop('checked'))//后面判断是true还是false
+    console.log($(':checkbox:first').attr('checked'))
+    console.log($(':checkbox:first').attr('type'))
+
+
+
+    <!--console.log($('#c1').html())//这个打印的是id为c1的标签里面全部html的内容-->
+    <!--console.log($('#c1').text())//这个打印的是纯文本内容,没有标签内容-->
+    <!--console.log($('#c1').html('<h1>nihao</h1>'))//这个把里面的内容全部替换掉，在打印的是纯文本内容,没有标签内容-->
+    <!--console.log($('#c1').text('<h2>niaho2</h2>'))-->
+
+
+    <!--console.log($(':text').val())-->
+    <!--console.log($(':text').next().val())//这个打印的是第二个有value的input（text）里面的value值，-->
+    //不能打印自己定义的value属性
+    <!--console.log($(':text').eq(2).val('434dfa6'))//设定第三个value值-->
+    <!--console.log($(':text').next().val('gsvbs'))//设定第二个包括之后的value值-->
+    <!--console.log($(':text').last().val('43456'))//设定最后那个value值
+    <!--console.log($(':text').val('43456'))//全部设定value值-->
+
+
+
+    $(':text').css({'color':'red','background-color':'green'})//注意是元组形式的，需要加大括号
+    <!--$(':text').css({'background-color':'green'})-->//元组里面有个值也可以
+    <!--$(':text').css('background-color','green')-->
+
+
+
+
+
+
+</script>
+</body>
+</html>

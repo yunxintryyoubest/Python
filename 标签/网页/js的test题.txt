@@ -1,0 +1,150 @@
+var v=123
+function foo(){
+	var v=456
+	function inner(){
+		console.log(v)
+}
+return inner
+}
+
+result=foo()
+console.log(result)
+这个结果是foo()，一个对象，不要看混了
+
+console,log(result())#这个就已经实例化了就是一个数值了
+输出结果：undefined（就是none）
+
+
+
+一个函数是一个作用域
+foo就是一个作用域，inner也有一个作用域，return一下，作用域是不拿到外面来的（首先在inner自己
+的作用域里面找，没有早到就到外面的foo的作用域里面找，没有拿出来，就是undefined结果）
+
+
+
+
+
+
+js面向对象：
+函数相当于的那个类
+
+
+this关键字：
+每个函数都有一个this
+当函数执行时，this=window
+window是整个的全局变量，最大的对象
+window.alert
+
+
+每个函数都有this
+函数调用时，this=window
+类new调用时，this=obj
+
+
+
+
+3 js中无字典，只有对象
+每一个对象都有this
+v={
+name:'root',
+age:18,
+Func:function(){
+
+
+}}
+相当于new了一个对象 obj
+
+
+obj=new Func()
+相当于obj等于v
+
+谁调用输出的值就是谁
+
+name='alex'
+v={
+name:'root',
+age:18,
+Func:function(){
+#####这个this相当于obj，那就是obj.name，即v.name=root
+	console.log(this.name)
+	function inner(){
+######这个this先打那个window（最大的一个对象），window.name就会在外面找，找到name='alex'
+		console.log(this.name)
+	}
+	inner()
+#########相当于window.inner()
+}}
+
+
+obj=Func()
+结果:
+第一个console.log的输出结果是root
+第二个输出结果是：alex
+
+
+
+
+
+
+
+name='alex'
+v={
+name:'root',
+age:18,
+Func:function(){
+#####这个this相当于obj，那就是obj.name，即v.name=root
+	console.log(this.name)
+	var that=this;
+	function inner(){
+######这个that首先会在自己的作用域里面找，没有找到的话就会在外面找（这inner里面有一个this，就是window）
+that在外面可以找到，就是obj，所以this就变成了obj，不是window了，所以结果是root
+		console.log(that.name)
+	}
+	inner()
+#########相当于window.inner()
+}}
+
+
+
+
+两次结果都是
+root
+
+自执行函数
+function (){
+console.log(this.name,this.age);}
+
+
+
+
+
+
+题目：
+name='root'
+age=18
+functon Foo(name,age))
+this.name=name
+this.age=age
+this.Func=funcion(){
+#这个this是obj，this=obj
+console.log(this.name,this.age)
+#######自执行函数
+(function(){
+#这个里面封装了一个自执行函数，this=window
+console.log(this.name,this.age);
+})();
+}}
+
+
+obj=new Foo('alex',666)
+obj.Func()
+结果：第一个：alex 666
+第二个：
+
+root 18
+
+
+
+
+
+

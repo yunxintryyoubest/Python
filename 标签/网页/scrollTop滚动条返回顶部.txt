@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin:0px;
+            padding:0px;//这个还是隐藏标签的边距
+        }
+        .div1,.div2{
+
+            width: 1200px;
+            height: 1000px;
+        }
+        .div1{
+            border: 5px solid rebeccapurple ;//边框大小和颜色
+            background-color: antiquewhite;
+            background-color:yellowgreen;
+            margin: 1px;//外边距
+            padding: 20px;//内边距
+
+
+
+        }
+        .div2{
+            background-color:rebeccapurple;
+        }
+        .return_top{
+            position:fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 90px;
+            height: 50px;
+            background-color: gray;
+            color: white;
+            text-align: center;
+            line-height: 50px;
+        }
+        .hide{
+            display: none;//隐藏标签的操作
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="div1"></div>
+<div class="div2"></div>
+<div class="return_top hide"  onclick="return_top()" >返回顶部</div>
+
+
+<script src="jquery-3.1.1.js"></script>
+<script>
+    
+    window.onscroll=function () {
+        console.log($(window).scrollTop())//scrolltop滚动条,右边的滚动条距离上面的顶部的距离
+        if ($(window).scrollTop()>100) {
+            $('.return_top').removeClass('hide')//当scrolltop大于100px的时候就移除hide，出现返回顶部标签
+        }
+        else {
+            $('.return_top').addClass('hide')//可以自己设置什么时候返回顶部
+        }
+    }
+
+    function return_top() {
+        $(window).scrollTop(0)
+
+    }
+</script>
+
+</body>
+</html>

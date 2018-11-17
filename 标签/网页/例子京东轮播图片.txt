@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+    <style>
+        .outer{
+            width: 790px;
+            height: 340px;
+            position: relative;
+            margin:70px auto;
+        }
+        .img li{
+            position: absolute;
+            list-style: none;
+            top:0;
+            left:0;
+
+        }
+        .num{
+            position: absolute;
+            bottom: 18px;
+            left: 270px;
+            list-style:none;
+        }
+
+        .num li{
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            text-align: center;
+            border-radius: 50%;
+            margin-left: 4px;
+
+        }
+        .btn{
+            top:40%;
+            position: absolute;
+            width: 30px;
+            height:60px;
+            background-color: lightgrey;
+            color: white;
+            text-align: center;
+            font-size: 30px;
+            line-height:60px;
+            opacity: 0.8;
+
+            /*display: none;*/
+
+        }
+        .right{
+            position: absolute;
+            right: 0px;
+        }
+        .left{
+            left: 0;
+        }
+        
+        .num .active{
+            background-color: red;
+            color: red;
+        }
+        .hide{
+            display: none;
+        }
+        .outer:hover .btn{
+            display:block;//当鼠标悬浮在outer这个盒子里面时就执行btn这个样式,class=btn是左右的按钮
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="outer">
+    <ul class="img">
+        <li><a href=""><img src="1.jpg"></a></li>
+        <li><a href=""><img src="2.jpg"></a></li>
+        <li><a href=""><img src="3.jpg"></a></li>
+        <li><a href=""><img src="4.jpg"></a></li>
+    </ul>
+    <ul class="num">
+        <!--<li>1</li>-->
+        <!--<li>2</li>-->
+        <!--<li>3</li>-->
+        <!--<li>4</li>-->
+    </ul>
+    <div class="right btn ">  ></div>
+    <div class="left btn">  <</div>
+</div>
+
+
+
+<script src="jquery-3.1.1.js"></script>
+
+<script>
+    var i=0
+    var image_num=$('.img li').length//找到图片的多少
+    for (j=0;j<image_num;j++){
+        $('.num').append('<li></li>')
+    }
+
+    $('.num li').eq(0).addClass('active')
+
+    //手动播放
+//    下面的小点播放
+    $('.num li').mouseover(function () {
+        i=$(this).index()//这个this可以判断你的鼠标悬浮到那个点
+        $(this).addClass('active').siblings().removeClass('active')//当鼠标悬浮到那个点时就显示红色
+        $('.img li').eq(i).stop().fadeIn(200).siblings().stop().fadeOut(200)
+
+    })
+//自动轮播
+    var c=setInterval(go_right,1000)//每过1秒就播放一次,设置一个定时器
+    function go_right() {
+
+        if(i==image_num-1){
+            i=-1
+        }
+        i++;
+        $('.num li').eq(i).addClass('active').siblings().removeClass('active')//当鼠标悬浮到那个点时就显示红色
+        $('.img li').eq(i).stop().fadeIn(200).siblings().stop().fadeOut(200)//当悬浮到那个点时就显示那个图片
+    }
+
+
+    function go_left() {
+        if (i==0){
+            i=image_num
+        }
+        i--;
+        $('.num li').eq(i).addClass('active').siblings().removeClass('active')
+        $('.img li').eq(i).stop().fadeIn(200).siblings().stop().fadeOut(200)
+    }
+    
+    $('.outer').hover(function () {
+        clearInterval(c)//当鼠标悬浮在outer这个盒子的任何位置时，这个图片和下面的点就禁止不动
+    },function () {
+        c=setInterval(go_right,1000)//当鼠标一开outer这个标签时，就继续向右走，自动轮播
+
+        }
+    )
+    $('.right').click(go_right)
+    $('.left').click(go_left)
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

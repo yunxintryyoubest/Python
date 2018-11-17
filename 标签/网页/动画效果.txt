@@ -1,0 +1,86 @@
+fadein 淡入从0到1 fadeout 从1到0  toggle切换可以淡入淡出 fadeto设定从1到0点几（透明度）
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!---->
+<div>hello</div>
+<!---->
+<button onclick="f1()" id="button1">显示</button>
+<button onclick="f2()" id="button2">隐藏</button>
+<button onclick="f3()" id="button3">切换</button>
+<button onclick="f3()" id="button4">fadeto</button>
+
+<script src="jquery-3.1.1.js"></script>
+<script>
+
+    //1000毫秒
+//    function f1() {
+//        $('div').show(1000,function () {
+//            alert('显示')
+//        })
+//    }
+//    function f2() {
+//        $('div').hide(1000,function () {
+//            alert('隐藏')
+//
+//        })
+//    }
+//    function f3() {
+//        $('div').toggle(1000)
+//
+//    }
+
+
+
+//有两种方法做动画效果
+
+    $('#button1').click(function () {
+        $('div').show(1000,function () {
+                alert('显示')
+        })
+
+    })
+
+
+    $('#button2').click(function () {
+        $('div').fadeOut(1000,function () {
+                alert('隐藏')
+        })
+
+    })
+
+    $('#button3').click(function () {
+        $('div').toggle(1000,function () {
+                alert('切换')
+        })
+
+    })
+    $('#button4').click(function () {
+        $('div').fadeTo(1000,0.4,function () {
+            alert('设定透明度到指定值0.4')
+    })
+
+    })
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

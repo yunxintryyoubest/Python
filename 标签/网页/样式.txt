@@ -1,0 +1,25 @@
+border；5px边框大小
+text-align:center;里面的文本居中
+border-radius:50% 圆滑度，原来是正方形，50%之后就是圆形了
+line-height:60px 里面的高度，距离外面的标签，父类标签顶部
+opacity:0.3 透明度
+font-size:30px 大小
+top:50% 距离顶部的高度是全部高度的一半
+
+
+relative是相对定位，相对于本身的位置，元素的位置通过 "left", "top", "right" ，"bottom" 属性进行定位。left是离原坐标x轴的距离，top是离原坐标y轴的距离，它本身的位置还在。
+
+absolute是绝对定位，相对于窗口左上角的位置，元素的位置通过 "left", "top", "right" 以，"bottom" 属性进行定位。left是离窗口左上角x轴的距离，top是离窗口左上角标y轴的距离，不占有空间。
+
+如果你有两个包含关系的div，父div的样式是position：relative，子div的样式是position：absolute，那么子div的位置是相对于父的div的来进行定位的
+
+
+.outer:hover .btn{
+  display:block;//当鼠标悬浮在outer这个盒子里面时就执行btn这个样式,class=btn是左右的按钮
+   }
+
+
+
+    .outer:hover .btn{
+        display: block;
+    }悬浮的时候让btn显示，默认左右的按钮是不显示，当鼠标悬浮到图片的时候在显示

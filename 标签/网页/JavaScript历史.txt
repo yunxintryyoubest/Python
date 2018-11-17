@@ -1,0 +1,7 @@
+JavaScript 
+有3部分组成；
+核心：ECMAScript
+文档对象模型（DOM）：Document object model（整合js，css，html）
+浏览器对象模型（BOM）：整合js和浏览器
+
+javascript在开发中绝大多数情况是基于对象的，也是面向对象的（可以不断的创建类和实例对象）

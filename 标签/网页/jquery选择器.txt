@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML3</title>
+</head>
+<body>
+<a href="">click</a>
+<p id="p1">p1p1pp1hello</p>
+<div class="outer">
+    <p id="p3">p3p3p3p3</p>
+    <div class="inner"><p>p4p4p4p4p</p></div>
+</div>
+<p>alex</p>
+
+<ul>
+    <li class="begin">11111</li>
+    <li>22222</li>
+    <li>33333</li>
+    <li>444444</li>
+    <li id="end">444444</li>
+    <li>444444</li>
+    <li>444444</li>
+    <li>444444</li>
+</ul>
+<!--<p>p555555</p>-->
+<input type="text">
+<input type="submit">
+
+
+
+
+<script src="jquery-3.1.1.js"></script>
+<script>
+    <!--$("li").eq(2).css('color','red')-->
+    <!--$("li").first().css('color','red')-->
+    <!--$("li").last().css('color','red')-->
+    <!--$('.outer').find('p').css('color','red')#outer下的所有p标签都被找到（子代，孙代）-->
+    <!--$('.outer').children('p').css('color','red')#找的是outer下的子代，不找孙代-->
+    <!--$('li').eq(2).next().css('color','red')#找的是li标签下的第三个元素的下一个元素-->
+    <!--$('li').eq(2).nextUntil('#end').css('color','red')#找的是li标签下的第三个元素的下一个元素-->
+    <!--$('li').eq(2).prev().css('color','red')//找的是li标签下的第三个元素上一个元素-->
+    <!--$('li').eq(2).prevAll().css('color','red')//找的是第三个元素之前的全部元素-->
+    <!--$('li').eq(2).prevUntil('li:eq(0)').css('color','red')//找的是第三个元素之前到第一个元素-->
+    <!--$('li').eq(2).prevUntil('.begin').css('color','red')#第三个元素到class为begin为止-->
+    <!--console.log($('.outer.inner p').parent().html())//找的是第三个元素之前的全部元素-->
+    <!--$('.outer.inner p').parents().css('color','red')//找的是第三个元素之前的全部元素-->
+    <!--$('.outer .inner p').parents().css('color','red')#outer 下的inner的p标签上的全部父类变色-->
+    <!--$('.outer .inner p').parentsUntil('body').css('color','red')//到body这一层，全部父类都会被找到（注意是父类）
+    <!--$('.outer .inner p').parentsUntil('.outer').css('color','red')//到outer这一层-->
+    $('.outer').siblings().css('color','red')//除了自己以外全部兄弟节点都变红
+
+
+
+
+
+//基本选择器
+  <!--$("*").css("color","red")-->
+  <!--$("#p1").css("color","red")-->
+  <!--$(".inner").css("color","red")-->
+  <!--$("p").css("color","red")-->
+  <!--$(".inner,li").css("color",'red')#class为inner和li标签的都被css操作-->
+  <!--$(".inner,p,div").css("color",'red')-->
+//层级选择器
+    <!--$('.outer').css('color','red')-->#所有的子代，孙代都选择
+    <!--$(".outer>p").css("color",'red')-->#子代选择器
+    <!--$(".outer+p").css("color",'red')#兄代选择器-->
+    <!--$(".outer~p").css("color",'red')#outer下面的所有p标签都可以被找到-->
+    <!--$("li:first").css("color","red")-->
+    <!--$("li:first").css("color","red")-->
+</script>
+</body>
+</html>

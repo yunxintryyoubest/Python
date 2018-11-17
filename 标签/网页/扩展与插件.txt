@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<P>111</P>
+<P>222</P>
+<P>333</P>
+<P>4444</P>
+
+<script src="jquery-3.1.1.js"></script>
+<script>
+
+//两种定制方法，定制插件
+    $.extend({
+        myprint:function () {
+            console.log('hello')
+        }
+    })
+
+
+
+    $.myprint()//执行myprint方法
+
+    $.fn.extend({
+        gettext:function () {
+            console.log($(this).html())
+        }
+    })
+
+
+    $('p').gettext()//执行gettext方法
+
+
+//循环打印p标签的所有内容
+    $.each($('p'),function () {
+        console.log($(this).html())
+    })
+//    $.each(obj,function () {
+//
+//    })
+//
+//    $('').each(function () {
+//
+//    })
+
+    
+</script>
+</body>
+</html>

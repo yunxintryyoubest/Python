@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="jquery-3.1.1.js"></script>
+<script>
+//    $(document).ready(function () {
+//        $('ul li').html(5665)//无论放在那里都可以价值啊上这段jquery
+//    })
+
+
+    //两种方法,等页面加载完后再执行这段代码
+    $(function () {
+        $('ul li').html(8434)
+    })
+</script>
+<body>
+<!--<script>-->
+      <!--$('ul li').html(5);//从上往下加载，没有成功-->
+<!--</script>-->
+<ul>
+    <li>1111</li>
+    <li>22222</li>
+    <li>333</li>
+    <li>4555551</li>
+</ul>
+<button>add</button>
+
+<!--<script src="jquery-3.1.1.js"></script>-->
+<script>
+
+//    $('ul li').bind('click',function () {
+//        alert(33434324)
+//    })
+//事件绑定,button绑定click
+    $('button').click(function () {
+//        alert(4545)
+
+        var $el=$('<li>')
+        var len=$('ul li').length
+        $el.html((len+1)*1111)
+        $('ul').append($el)
+    })
+
+    //事件委托
+    //$('').on(eve,[selector],[data],fn)
+    $('ul').on('click','li',function () {
+        alert(32332)
+    })//给ul绑定了事件，找ul，然后ul找下面的li，主语是ul,ul下的li都可以触发
+
+
+    $(document).ready(function () {
+          $('ul li').html(5)
+    })
+
+</script>
+
+
+
+</body>
+</html>
