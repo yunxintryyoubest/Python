@@ -1,0 +1,118 @@
+class BlackMedium:
+    feture='ugly'
+    def __init__(self,name,addr):
+        self.name=name
+        self.addr=addr
+
+    def sell_house(self):
+        print('%s正在卖房子'%self.name)
+
+    def rent_hourse(self):
+        print('%s 真在租房子'%self.name)
+#getattr在没有运行时触发，其他的均是只要涉及即触发
+
+b1=BlackMedium('完成之第','田连元')
+# print(b1.feture)
+# # print(b1.addr)
+# # b1.rent_hourse()
+# # b1.sell_house()
+#
+# # print(hasattr(b1,'name'))
+# # print(b1.name)
+# #
+# # print(hasattr(b1,'sell_house'))#判断有没有这个属性
+#
+# print(getattr(b1,'name'))
+# # BlackMedium.sell_house(b1)
+# func=getattr(b1,'rent_hourse')
+# func()
+#
+# print(hasattr(b1,'dada'))
+#
+#
+#
+# getattr(b1,'rent_hourse','没有这个属性')()
+# print(getattr(b1,'rent_hous2e','没有这个属性'))
+
+b1.sb=True
+setattr(b1,'sb',True)#往里面加属性
+setattr(b1,'adhj','dada')
+setattr(b1,'name','sb')#可以修改属性值
+print(b1.__dict__)
+del b1.sb
+print(b1.__dict__)
+delattr(b1,'adhj')
+print(b1.__dict__)
+
+
+
+
+
+
+
+
+
+setattr(b1,'func',lambda  x:x+1)
+setattr(b1,'func1',lambda  self:self.name+'sb')
+print(b1.__dict__)
+print(b1.func(90))
+# print(b1.func1(b1))
+print(b1.func1(b1))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+反射：
+class Ftp_Client:
+    # print('正在连接服务器')
+    def __init__(self,addr):
+        print('正在连接服务器{}'.format(addr))
+        self.addr=addr
+
+    def get(self):
+        print('已经连接到服务器{}'.format(self.addr))
+
+
+
+
+
+
+
+
+from 学校管理系统1.ftp_client import Ftp_Client
+from   ftp_client import Ftp_Client
+# import  ftp_client
+# Ftp_Client()
+
+
+f1=Ftp_Client('78991833')#当导入的时候就已经在运行了
+if hasattr(f1,'get'):
+    print('已经连接成功')
+    getattr(f1,'get')()
+else:
+    print('没有连接到')
+
+
+

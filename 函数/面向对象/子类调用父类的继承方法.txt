@@ -1,0 +1,42 @@
+class school:
+    def __init__(self,name,speed,load,power):
+        self.name=name
+        self.speed=speed
+        self.load=load
+        self.power=power
+        print('dsf')
+        print('fsfs')
+    def run(self):
+        print('开动了')
+        print('hahhha')
+        print('gavdaa')
+        print('dadga')
+    def deda():
+        print('fdfdfd')
+class Subway(school):
+    def __init__(self,name,speed,load,power,line):
+        school.__init__(self,name,speed,load,power)#这个可以省略下面的4行，直接调用父类的，就单独定义一个line就可以了，重点
+        # self.name=name
+        # self.speed=speed
+        # self.load=load
+        # self.power=power
+        self.line=line
+    def show_info(self):
+        # print(self.name,self.power,self.load,self.speed)
+        # print(self.name,self.power,self.load,self.speed,self.line)
+        # school.__init__(self.name,self.speed,self.load,,self.power)
+        school.deda()#调用父类的deda功能函数，重点
+    def de(self):
+        school.run(self)
+
+s1=Subway('dad','dff','ad','aff','dada')
+# # print((s1.__dict__))
+# # s1.run()
+# s1.run()
+# print('\n')
+s1.show_info()
+
+
+
+print('\n')
+s1.de()

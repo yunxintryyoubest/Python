@@ -1,0 +1,26 @@
+def shool(name,addr,type):
+	school1={
+		'name':name,
+		'addr':addr,
+		'type':type,
+		'kaoshi':type,
+		'zhaosheng':zhaoshneg,
+		}
+s1=school('oldboy','snahe','sili)]
+
+
+
+
+def fuctionname(args):
+
+
+
+
+
+class 类名：
+类包括数据属性和函数属性
+__name__类名
+__doc__
+__base__共同的object
+__module__显示类所在那个模块
+

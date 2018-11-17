@@ -1,0 +1,12 @@
+my_lambda=lambda  arg:arg+1
+result=my_lambda(123)
+print(result)
+
+
+
+第二种：实例化过程
+# def func(args):
+#     return args+1
+#
+# result=func(123)
+# print(result)

@@ -1,0 +1,26 @@
+
+class car:
+    def __init__(self,name,price):
+        self.name=name
+        self.price=price
+        print('fdfdfg')
+
+    def car1(self):
+        print('fxfdsdf')
+
+
+class subway(car):
+    def __init__(self,name,price,period):
+        # car.__init__(self,name,price)
+        super().__init__(name,price)
+        self.period=period
+
+    def run(self):
+        # car.car1(self)
+        super().car1()
+        print('fjkkf')
+s1=subway('subway','47389','34435')
+# s1.car1()
+# s1.run()
+s1.__init__('subway','47389','34435')
+s1.run()

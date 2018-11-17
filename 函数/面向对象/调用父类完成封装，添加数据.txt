@@ -1,0 +1,25 @@
+
+调用父类
+class List(list):
+    def append(self,p_object):
+        if type(p_object)is str:
+            # super().append(p_object)#append已经是添加操作了
+            list.append(self,p_object)
+        else:
+            print('必须是字符串')
+
+
+
+l1=List('hedlsd')
+print(l1)
+
+# print(List.__doc__)
+l1.append('dhajjd')
+# print(l1.append(l1))#不要这样执行，否则返回的是none，函数append已经是append操作了
+print(l1)
+# print(List.__dict__)
+
+l1.append('dsjk')
+print(l1)
+l1.append(7382)
+print(l1)

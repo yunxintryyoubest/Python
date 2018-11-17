@@ -1,0 +1,162 @@
+# class Chinese:
+#     def __init__(name,age,gender):
+#         dic={
+#             'name':name,
+#             'age':age,
+#             'gender':gender
+#         }
+#         return dic
+#     return __init__(name,age,gender)
+#
+#     # dang='党'#数据属性
+#     # def cha_dui():
+#     #     print('随地插队')
+#     # def chaoxaiolu():
+#     #     print('喜欢抄小路')
+#
+#
+#
+#
+# # print(Chinese.dang)#输出所对应的指
+# # print(Chinese.__dict__['dang'])#在这个类里面所有属性数组里找到并输出
+# # print(Chinese.__dict__)#输出所有属性，包括数据属性和函数属性
+# # print(Chinese.cha_dui('dadf'))#要对应相应的参数
+# # print(Chinese.__dict__['cha_dui']('sff'))
+# # print(Chinese.chaoxaiolu())
+# # print(Chinese.__dict__['chaoxaiolu']())
+# p1=Chinese('w','rs','32')
+# print(p1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+import requests
+import re
+url='http://www.my285.com/'
+html=requests.get(url)
+html=html.text.encode('utf-8')
+item='<td class="w5"><a title="(.*?)" href="(.*?)">.*?</a></td>'
+
+
+
+allitem=re.compile(item,re.S).findall(str(html))#把元祖里面的一个数据取出来
+import json
+
+
+
+
+
+# for i,j in allitem:
+#     print(i)
+# for i in range(0,len(allitem)):
+#     thisurl=allitem[i]
+#     all_item_data=requests.get(thisurl)
+#     all_item_data=all_item_data.text.encode('utf-8')
+#
+#     print(len(all_item_data))
+import os
+import urllib
+for item_name ,item_url in allitem:
+
+     f_read = open('new_hello', 'w')
+    # #可以新建一个new_hello的文件记事本
+     f_read.write(item_url)
+     chapter_url=requests.get('http://www.my285.com/%s'%item_url).text
+     chapter_url=chapter_url.encode('utf-8')
+     # pat='<a href="(.*?)">(.*?)</a></td>'
+     # all_url=re.compile(pat,re.S).findall(str(chapter_url))[0]
+     # print(all_url)
+     # f_read = open('new_new__hello', 'w')
+     # # #可以新建一个new_hello的文件记事本
+     # f_read.write(str(all_url))
+     # print('/n')
+     from bs4 import BeautifulSoup
+
+
+     soup = BeautifulSoup(chapter_url, 'lxml')
+     alldata=soup.find_all(soup.TD)
+     pat='<a href="(.*?)">'
+     all_url=re.compile(pat,re.S).findall(str(alldata))[1:]
+
+     # print(all_url)
+     # after_url=re.split('[[]]',str(all_url))
+     # print(after_url)
+
+
+     for z in all_url:
+          # re.subn('..','',z)
+          if not z!='/':
+               pass
+          else:
+               # after=re.sub('/index.htm|htm','',z)
+
+               # all_data_url = 'http://www.my285.com/%s/index.htm'%after
+               # print(all_data_url)
+               print(z)
+
+
+     # # all_data_url='http://www.my285.com/%s'%z
+     # print(all_data_url)
+
+     # url='http://www.my285.com/%s'%all_url
+     # print(url)
+
+
+
+
+
+
+     # for j in all_url:
+     #      print(j)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # #然后将数据写进这个记事本里面
+    # f.close（）
+    #os.makedirs('D:\study\shuchneg',exist_ok=True)
+
+
+
+                       #.split('/'[-1])
+
+
+#     #f = os.mkdir('%s.txt' % item_name, 'w', encoding='utf-8')
+#     item_url='http://www.my285.com/%s'%item_url
+#     response=requests.get(item_url).text
+#     response=response.encode('utf-8')#获取章节内容
+#     pat='<a href="acheng/index.htm">(.*?)</a></td>'
+#     all_item_data=re.compile(pat,re.S).findall(response)
+#     f.write(all_item_data)
+#     f.close()
+
+
+
+
+
+
+
+
+

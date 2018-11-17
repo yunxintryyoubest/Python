@@ -1,0 +1,77 @@
+
+import time
+
+class Open:
+    def __init__(self,filename,mode='r',encoding='utf-8'):
+        self.file=open(filename,mode,encoding=encoding)#返回的是file，一个功能
+        self.mode=mode
+        self.encoding=encoding#返回的是encoding
+
+    # def read(self):
+    #     pass
+    def write(self,item1):
+        print('write运行')
+        # t=time.strptime('%Y-%m-%d %X')
+        t=time.strftime('%Y-%m-%d-%H  %X\n')
+        self.file.write('%s %s'%(item1,t))
+    def __getattr__(self, item):
+        print('dfgfdg')
+        # print(item)
+        return  getattr(self.file,item)
+
+
+
+
+f1=Open('a.txt','w+')
+
+
+# print(f1.file)
+# print(f1.read)
+
+# # f1.read
+# print(f1.write)
+# print(f1.read)
+# print(f1.write)
+f1.write('32113')#首先在f1中找write方法，f1中没有就在类里面找，类里面没有就在self.file里面找，从而触发getattr的运行，f1传给self，write传给item
+f1.write('hgfdjhfhjd')
+f1.write('dfsfgdfg')
+f1.seek(0)
+# print(f1.read())
+print(f1.read())#如果类里面有read函数的话，会先运行类里面的read函数，从而不会触发getattr的运行
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class w_r:
+    def __init__(self,filename,mode='r',encoding='utf-8'):
+        self.file=open(filename,mode,encoding=encoding)
+        self.mode=mode
+        self.encoding=encoding
+    def write(self,item):
+        t = time.strftime('%Y-%m-%d  %X')
+        self.file.write('%s %s\n' % (t, item))
+
+    def __getattr__(self, item):
+        # print(item)
+        # t=time.strftime('%Y-%m-%d  %X')
+        # self.file.write('%s %s\n '%(t,item))
+        return getattr(self.file,item)
+
+
+b1=w_r('b.txt','w+')
+b1.write('dsdvdgsg')
+b1.write('vcfdt')
+b1.seek(0)
+print(b1.read())

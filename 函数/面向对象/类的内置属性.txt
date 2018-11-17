@@ -1,0 +1,31 @@
+
+from 学校管理系统1.ftp_client import Ftp_Client
+from   ftp_client import Ftp_Client
+# import  ftp_client
+# Ftp_Client()
+
+
+class Foo:
+    def __init__(self,y):
+        self.y=y
+
+
+    # def __getattr__(self, item):
+    #     print('执行getattr')
+    # def __delattr__(self, item):
+    #     print('执行')
+    def __setattr__(self, key, value):
+        print('hjh')
+        self.__dict__[key]=value#放在字典里面，这样就不会循环递归了，不能这样设置self.key=value，会循环递归
+
+
+f1=Foo(10)
+# print(f1.y)
+print(f1.__dict__)
+
+# print(getattr(f1,'y'))
+# f1.dssdsd
+# del f1.y
+
+f1.z=2#加一个属性进去
+print(f1.__dict__)

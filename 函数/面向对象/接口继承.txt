@@ -1,0 +1,70 @@
+import  abc
+class ALL_file():
+    def read(self):
+        pass
+    def write(self):
+        pass
+
+class men(ALL_file):
+    def read(self):
+        print('adadad')
+    def write(self):
+        print('dad')
+
+s1=men()
+# print(s1.write())
+s1.read()
+s1.write()
+
+class mom(ALL_file):
+    def read(self):
+        print('fdfd')
+s2=mom()
+# print(s2.read())
+s2.read()
+
+
+
+
+
+
+
+
+
+
+
+
+
+import  abc
+class ALL_file(metaclass=abc.ABCMeta):
+    @abc.abstractclassmethod
+    def read(self):
+        pass
+    @abc.abstractclassmethod
+    def write(self):
+        pass
+
+class men(ALL_file):
+    def read(self):
+        print('adadad')
+    def write(self):
+        print('dad')
+s1=men()
+# print(s1.write())
+s1.read()
+s1.write()
+
+class mom(ALL_file):
+    def read(self):
+        print('fdfd')
+    def write(self):
+        print('dsdada')#严格限制一定要有read和write两种功能函数，少了一个都不能运行出来
+s2=mom()
+# print(s2.read())
+s2.read()
+
+
+
+
+
+

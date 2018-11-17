@@ -1,0 +1,12 @@
+遍历序列，对序列的每个元素进行操作，最终取得新的序列
+
+li=[1,2,4,5,6,7]
+def fun(arg):
+    return  arg+1
+
+ret=map(fun,li)
+print(list(li))
+ret=map(fun,li)#将序列的全部元素进行操作
+print(list(ret))
+
+print(list(map(lambda  li :li+1,li)))

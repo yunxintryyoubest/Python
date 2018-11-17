@@ -1,0 +1,11 @@
+对于序列中的元素进行筛选，最终获取符合条件的序列
+li=[1,2,4,5,6,7]
+def fun(s):
+    if s>4:
+        return s
+
+ret=filter(fun,li)
+print(list(ret))
+print(list(filter(lambda s :s>3,li)))
+
+print(list(filter(lambda  s:s>4,li)))

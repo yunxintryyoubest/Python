@@ -1,0 +1,14 @@
+在对某序列进行累计操作
+
+li=[1,2,4,5,6,7]
+from functools import  reduce
+
+def fun(a,b):
+    return  a+b
+ret=reduce(fun,li)
+print(ret)
+
+print(reduce(fun,range(2,5)))#在范围大于2小于等于5之间进行操作
+
+
+print(reduce(lambda  a,b: a+b,li)

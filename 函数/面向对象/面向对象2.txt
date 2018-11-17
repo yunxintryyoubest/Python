@@ -1,0 +1,24 @@
+
+class clother:
+    comment='很好看'
+    def __init__(self,name,color,goods):
+        self.name=name
+        self.color=color
+        self.goods=goods
+        comment='不怎么样'
+        print('%s开始买东西了'%name)
+        print('%s来买了%s的%s'%(name,color,goods))
+        print('%s认为%s'%(name,comment))
+        print('之后觉得%s'%clother.comment)
+
+
+
+p1=clother('alex','blight','hhj')
+print(clother.comment)
+print(p1.comment)
+
+# print(p1.__dict__)
+
+# print(clother.__dict__['__main__'])
+print(clother.__dict__['__weakref__'])
+print(p1.__dict__['name'])

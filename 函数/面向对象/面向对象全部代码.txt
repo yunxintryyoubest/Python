@@ -1,0 +1,193 @@
+# class mydata:
+#     pass
+#
+# x=10#全局作用域
+# y=20
+# mydata.x=1#局部作用域
+# mydata.y=2
+#
+# print(x,y)
+# print(mydata.x,mydata.y)
+# print(mydata.x+mydata.y)
+
+
+
+
+
+#
+# class chinese:
+#     def __init__(self,name):
+#         print('shuruzhi%s'%name)
+#         self.name=name
+#     def paly_ball(self,ball):
+#         print('wozai d%s'%ball)
+# p1=chinese('adad')
+# # p1.paly_ball()
+#
+#
+#
+# # chinese.paly_ball('212')
+# # chinese.paly_ball('p1')
+# chinese.paly_ball('dsd','dad')#self算一个参数，ball也算一个参数
+#
+# p1.paly_ball('dad')#调用p1算调用了一个初始化函数，相当于写入了slef参数
+
+
+
+
+
+
+
+
+
+
+#
+#
+# country='中国'
+# class chinese:
+#     def __init__(self,name):#self是他本身，可以类，也可以实例
+#         self.name=name
+#
+#     def play_ball(self,ball):
+#         print('%s正在打%s'%(self,ball))#如果是self.name则会调用初始化函数
+#
+# def shi_li_hua():
+#     name=input('请输入:')
+#     p1=chinese(name)#直接调用初始化函数
+#     print(p1.name)
+#     # print(chinese(name))
+#     print(chinese(p1))
+#     # print(p1.play_ball('ada'))
+#     print(chinese.play_ball(p1,'ada'))
+#     p1.play_ball('da')
+#     # print(chinese.play_ball(p1,'addf'))
+#     # print(chinese.play_ball('dass','esrf'))#外部调用，引入值dass值进去，如果是self的话就是类里面调用
+#     # print(chinese.play_ball(name,'dss'))
+#     # print(p1.play_ball('dad'))
+#     # print(chinese('dad'))
+#     # print('dsd','adad')#外部调用值进去
+#     # print(country)
+#     # print(chinese('fs'))#调用slef.naem=name这个函数输出name
+#
+#
+# shi_li_hua()
+
+#
+#
+# class chinese:
+#     country='中国'
+#     def __init__(self,name):
+#         self.name=name
+#         country='日本'
+#         print(name)
+#         print(country)#打印的初始化的country
+#         print(chinese.country)#打印的是类的country，中国
+#
+#
+#
+# # p1=chinese('ales')#执行初始化函数,有初始化函数先执行初始化函数
+# p1=chinese('abc')
+# chinese.__init__(p1,'af')
+#
+# # print(chinese('da'))
+# # print(chinese.__init__(chinese,'dada'))#self是他自己本身，初始化函数不可以被赋值给其他人
+# # print(chinese('dad'))
+
+
+
+
+
+
+
+#
+#
+# class Fruit:
+#     # comment='很好吃'
+#     def __init__(self,name,color):
+#         self.name=name
+#         self.color=color
+#         comment='不好吃'
+#         print('%s的颜色是%s'%(name,color))
+#         print('小hai说%s'%comment)
+#         print(comment)
+#     def eat(self,num):
+#         print('小明吃了%s%s'%(num,slef))
+#
+#
+#
+#
+# p1=Fruit('apple','red')
+# p2=Fruit('banana','yellow')
+# # print(p1.comment)
+# print(Fruit.__init__.__dict__)
+# # print()
+
+
+
+
+
+
+#
+# class chinese:
+#     def __init__(self,name,sex):
+#         self.name=name
+#         self.sex=sex
+#         sex='nan'#在内部调用
+#
+#
+# p1=chinese('daf','da')
+# # print(p1.name)
+# # print(chinese(p1))
+# # print(chinese('na'))
+# # print(p1.sex)
+
+
+
+
+
+
+# class chinese:
+#     country='china'
+#     l=['a','b']
+#     def __init__(self,name):
+#         self.name=name
+#
+#
+# p1=chinese('alex')
+# p1.l=['da','da']
+# print(chinese.l)
+# print(p1.l)
+#
+#
+# p1.l.append('fd')
+#
+# print(p1.l)
+# print(chinese.l)#数字属性
+#
+
+
+
+
+class clother:
+    comment='很好看'
+    def __init__(self,name,color,goods):
+        self.name=name
+        self.color=color
+        self.goods=goods
+        comment='不怎么样'
+        print('%s开始买东西了'%name)
+        print('%s来买了%s的%s'%(name,color,goods))
+        print('%s认为%s'%(name,comment))
+        print('之后觉得%s'%clother.comment)
+
+
+
+p1=clother('alex','blight','hhj')
+print(clother.comment)
+print(p1.comment)
+
+# print(p1.__dict__)
+
+# print(clother.__dict__['__main__'])
+print(clother.__dict__['__weakref__'])
+print(p1.__dict__['name'])

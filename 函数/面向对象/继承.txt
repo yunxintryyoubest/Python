@@ -1,0 +1,35 @@
+
+class Dad:
+    print('83928')
+    def money():
+        print('199')
+    # def __init__(self):
+    #     print('dadas')
+    #     # self.name=name
+    #     # self.price=price
+    def __init__(self,name,price):
+        print('dada22s')
+        self.name=name
+        self.price=price
+
+
+
+
+class son(Dad):
+    pass
+
+
+#
+# son.money()
+# s1=son('daad','dsd')
+# print(Dad.__dict__)
+print(son.__dict__)
+
+# s3=son()
+
+
+
+
+
+s1=son('alex','dad')
+# s2=son('dad')

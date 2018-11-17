@@ -1,0 +1,47 @@
+[i for i in range(10)]
+g_1=[i for i in range(10)]
+def test():
+	yield 1
+	yield 2
+
+语法和函数想次
+自动实现迭代器协议
+状态挂起
+生成器每次next都基于上一次
+生成器的好处：
+延迟计算，一次返回一个结果，也就是说，它不会一次生成所有的结果，这对于大数据处理，
+将会非常有用
+生成器还能有效提高代码可读性
+
+列表表达式：内存大
+生成器表达式：几乎不占内存
+
+
+
+求总数：
+g=get_population
+all_pop=sum(eval(i)['population']for i in g)
+print(all_pop)
+
+
+
+
+
+def father(ne):
+	result=[]
+	try:
+		try:ne+''
+		except TypeError :pass
+		else:raise TypeError
+		for sublist in ne:
+			for element in flatt(sublist):
+				result.append(element)
+	except TypeError:
+		result.append(ne)
+	return result
+
+
+
+结果：
+father(['wwrww',['rdf','rsfs']])
+['wwrww', 'rdf', 'rsfs']
