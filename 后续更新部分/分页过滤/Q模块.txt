@@ -1,0 +1,85 @@
+Q最大的好处是，可以多个条件一起查询，可以是字符串
+基于query里面的查询前面一定是字段，不能是字符串，拼接的也不可以，必须是字段
+查询的字段不能是外键，否则会报错，发送的是get的请求，form表单
+
+
+
+from  django.db.models   import   Q
+
+
+obj=Book.objects.all().filter(Q(pk=4)|Q(pk=6))##多个查询
+print(obj)
+结果：
+<QuerySet [<Book: 客户号为[2]的客户[alex]预定腾讯的会议地点>, <Book: 客户号为[5]的客户[yuan]预定雨欣教育的会议地点>]>
+
+
+or方法：
+
+obj=Book.objects.all().filter(Q(pk=4) or Q(pk=6))##多个查询
+print(obj)
+
+结果：
+<QuerySet [<Book: 客户号为[2]的客户[alex]预定腾讯的会议地点>]>
+
+
+
+
+Q查询的好处：
+Q模块可以直接搜索字符串，前面不一定是字段，可以做拼接传条件进去
+可以加or，and进行搜索，多个条件条件进行搜索
+
+
+
+
+
+
+
+
+
+
+讲解：
+首先拿到这个Q模块，生成一个对象，在这个对象里面append一下
+条件进去，什么字段的什么条件,q就是这个条件对象，然后把这个条件对象放在filter里面进行筛选出来，筛选出相对应的数据出来
+
+q=Q()
+q.connector='OR'
+q.children.append(('pk',4))##可以把上面左边的字段当成是字符串去查询
+q.children.append(('room_name__caption','腾讯'))
+
+
+
+res=Book.objects.all().filter(q)
+print(res)
+
+下面是可以是字符串，上面的查询一定是字段
+
+讲解：
+当你输入查询的内容的时候，不一定是字段名称，也可能是其他的
+值，用Q可以生成字符串的形式，进行检索
+
+
+
+
+obj=Book.objects.all().filter(pk=a  or   pk=6)
+不可以这样
+
+
+
+
+拼接查询：最大好处是里面查询的条件字段可以是字符串
+q=Q()
+q.connector='OR'
+a='pk'
+# q.children.append(('pk__contains',6))##可以把上面左边的字段当成是字符串去查询
+q.children.append((a+'__contains',6))##可以把上面左边的字段当成是字符串去查询
+# q.children.append(('room_name__caption','腾讯'))
+
+
+
+res=Book.objects.all().filter(q)
+print(res)
+
+
+
+
+
