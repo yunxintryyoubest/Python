@@ -1,0 +1,17 @@
+
+拿到当前的用户所有的权限
+
+for  permission  in permission_list
+
+permission='^$s$'%permission
+re.match(permission,current_path)
+
+from  django.utils.deprecation  import  Middlewareminxin
+'admin/.*'后面的*是匹配多个的意思
+
+
+for  k,v  in dic.items()
+取键值对
+
+for  v  in dic.values()
+直接取值

@@ -1,0 +1,15 @@
+可以有四个表
+
+
+用户表
+角色表
+权限表
+权限组表
+
+
+归属于user权限组表，可以名称改为用户权限管理组
+user/add
+user/(\d+)/delete
+user/(\d+)/modify
+user/(\d+)/list
+

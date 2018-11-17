@@ -1,0 +1,203 @@
+中间件部分：
+from   django.utils.deprecation import  MiddlewareMixin
+import re
+from  django.shortcuts import   render,HttpResponse
+class  middle_handle(MiddlewareMixin):
+
+
+
+    print('进入中间件部分')
+
+
+
+    def process_request(self,request):
+
+        print('进入requets')
+        print('当前登录的用户是:',request.session.get('user'))
+        ######users/1/add
+
+        ######下一个白名单的url部分
+        vaild_url = ['/admin/.*', '/login/', '/index/','/register/']
+        # request.session.get("permisson_list").append('/login')
+        print('当前访问的路劲是：',request.path_info)
+        ##/user_delete
+        print('这个用户具有的访问权限是:', request.session.get("permisson_list",[]))
+        flag = False
+        #####当你没有登陆的时候，这个requets里面是没有这个permissin_list的值的
+        for  i  in   vaild_url:
+            res=re.match(i,request.path_info)
+
+
+            # res=re.search(i,request.path_info)
+            print(res)
+            if  res:
+                flag=True
+                print('可以通过')
+                return   None
+        else:
+            return HttpResponse("您没有访问权限")
+
+
+        #
+
+
+
+        # for i in request.session.get("permisson_list"):
+        #     # i='^%s$'%i
+        #     # i='^%s$'%i
+        #     res = re.match(i, request.path_info)
+        #     print('对应的每一个url是', i)
+        #     print(request.path_info)
+        #     if res:
+        #         flag = True
+        #         break
+        # if not flag:
+        #     return HttpResponse("您没有权限访问添加用户的页面")
+
+
+
+        # return  None
+        # return  HttpResponse('中间件')
+
+
+
+
+
+
+
+
+
+views部分：
+from django.shortcuts import render
+# Create your views here.
+from   django.shortcuts import   render,redirect,HttpResponse
+from   rbac import models
+from  django.contrib  import auth
+from   rbac.server  import permission_url
+
+def login(request):
+    print('进入登录的页面')
+    print('当前登录的用户是',request.session.get('user'))
+    # print(request.session['permisson_list'])
+    print(request.session.get('permisson_list'))
+
+    if request.method=='POST':
+
+        print('提交post的请求')
+        user=request.POST.get('username')
+        print(user)
+
+        password=request.POST.get('password')
+        user=models.User.objects.filter(name=user).first()
+        if  user:
+            print('用户是:',user)
+            request=permission_url(user,request)
+
+            ########下面做了一步调用处理，直接进行调用
+            # permisson_list=[]
+            # permisson=user.roles.all().values('permission__url').distinct()
+            # for  i in permisson:
+            #     permisson_list.append(i['permission__url'])
+            #     username=user.name
+            # request.session['permisson_list']=permisson_list
+            # request.session['user']=username
+            # ##写入的这个用户是一个对象
+            #
+
+            print('当前登录的用户是:',request.session.get('user'))
+            print('这个用户具有的访问权限是:',request.session.get("permisson_list"))
+
+            return  HttpResponse('ok')
+            # return render(request,'user.html',locals())
+
+    return render(request,'login.html',locals())
+
+
+def user(request):
+    print('user的页面')
+
+
+    return  render(request,'user.html',locals())
+import re
+
+
+def  add_user(request):
+    print('进入到add_user的页面')
+    print('当前登录的用户是:', request.session.get('user'))
+    print('这个用户具有的访问权限是:', request.session.get("permisson_list"))
+    print('当前访问的路劲是:',request.path_info)
+
+
+
+
+    return  render(request,'user.html',locals())
+
+
+
+
+
+'''
+原理讲解：
+当你是add的时候，可以会有其他的id
+
+
+
+'''
+    ###判断当前登录的用户是否有这个权限
+    # if  request.path_info  in request.session.get('permisson_list'):
+    #     print('当前用户有和这个权限')
+    #     return HttpResponse('add_user')
+    #
+    #
+    # return   HttpResponse('您没有添加用户权限')
+
+def roles(requets):
+    print('进入rosles')
+
+    return  HttpResponse('roles')
+def  user_delete(request):
+    print('进入到删除的页面')
+
+
+
+
+    print('进入中间件部分')
+
+
+
+
+    print('进入requets')
+    # print('当前登录的用户是:',request.session.get('user'))
+    ######users/1/add
+
+    # ######下一个白名单的url部分
+    # vaild_url = [ '/admin/.*','/login/', '/index/','/user_delete']
+    # # request.session.get("permisson_list").append('/login')
+    # print('当前访问的路劲是：',request.path_info)
+    # # print('这个用户具有的访问权限是:', request.session.get("permisson_list",[]))
+    # flag = False
+    # #####当你没有登陆的时候，这个requets里面是没有这个permissin_list的值的
+    # for  i  in   vaild_url:
+    #     print('url是',i)
+    #
+    #
+    #     res=re.match(i,request.path_info)
+    #     # res=re.search(i,request.path_info)
+    #     print(res)
+    #     if  res:
+    #         flag=True
+    #         print('可以通过')
+    #         return   HttpResponse('ok')
+    # else:
+    #     dic=[]
+    #     dic.append('/login')
+    #     return HttpResponse(dic)
+    #
+
+
+    return   HttpResponse('delete')
+
+
+
+
+

@@ -1,0 +1,2 @@
+>>> models.Permission.objects.filter(pk=1).values('role__user__name')
+可以反向在反向查询，相关的数据
