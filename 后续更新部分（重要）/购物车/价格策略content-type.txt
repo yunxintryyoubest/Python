@@ -1,0 +1,94 @@
+
+xid表中行的id
+最后是那个表，1代表一个表，2代表一个表
+
+
+
+
+
+content-type的作用：
+自动创建第三张表
+可以通过两个字段让表和n张表创建fk的关系
+表名称和行id
+
+具体作用：
+在这里面可以是不同的部分，原来的表可以是相同的部分
+相同的部分+价格策略（不同得版本）就是唯一性了，不用每一个表创建多个外键的关系，直接在这里可以是多个不同版本
+
+
+
+
+foreign
+related
+
+
+from  django.contrib.contenttypes.models  import   ContentType
+#创建数据1：
+    ##在价格策略表里面添加一个数据  ContentType去这里面拿数据
+    # models.PricePolicy.objects.create(price=2233,
+    #                                   content_type=ContentType.objects.get(model='course'),
+    #                                   object_id=1,
+    #                                   )
+	
+	 
+    # 创建数据2：
+    ##ContentType去这里面拿数据
+    # models.PricePolicy.objects.create(price=22332,
+    #                                   content_object=models.UserDetail.objects.get(id=1)
+    #                                   )
+	
+	
+	 content_type=ContentType.objects.get(model='course'),
+    #                                   object_id=1,两个合在一起就是model.course.objects.filter（id=1).first()的一个对象
+	
+	
+	
+	
+	    ##查找
+    ##根据某个价格策略对象，找到他对应的表和数据，自动关联找到
+    # price = models.PricePolicy.objects.get(id=2)
+    # print(price)
+    # print(price.content_object.username.username)
+	'''
+	讲解：
+	当拿到这个id值的时候，在往下面走，拿到这个字段关联的全部价格策略
+	取到关联的数据出来
+	
+	'''
+	
+	
+
+
+    ##查找，根据课程表来查找,可以拿到所哟所关联的所有价格策略，只要是相同的id
+    objs = models.Course.objects.get(id=1)
+    print(objs.price_policy)
+    print(type(objs.price_policy))
+    print(objs.price_policy.content_type)
+    ##拿到一个一个的对象（表）
+	
+	
+	
+	
+	
+	
+	models：
+	from   django.contrib.contenttypes.fields import   GenericForeignKey,GenericRelation
+	from   django.contrib.contenttypes.models import  ContentType
+
+class  PricePolicy(models.Model):
+    ##所关联的那个表
+    content_type=models.ForeignKey(ContentType,on_delete=models.CASCADE)##关联的那个表，第二个是那个字段（行）
+    object_id=models.PositiveIntegerField()
+##绑定自带的content_type，字段名字最好不要更改
+    price=models.FloatField()
+    ##不会在数据库生成列，只会帮助你添加和查询
+    content_object=GenericForeignKey('content_type','object_id')##找到id，并复制给上面的object_id
+
+	
+	
+	
+	
+	
+	
+另一个表：
+price_policy=GenericRelation('PricePolicy')##注意，名字是固定的

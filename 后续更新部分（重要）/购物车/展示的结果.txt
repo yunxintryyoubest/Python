@@ -1,0 +1,57 @@
+{
+    "code": 200,
+    "msg": "已经拿到yunxin用户购物车内容",
+    "error": null,
+    "all_data": {
+        "name": "linu精通",
+        "img": "julia.png",
+        "default": "1",
+        "global_coupon": {
+            "11": {
+                "全局优惠卷编号": 11,
+                "type": "折扣卷",
+                "coupon_name": "linux共用优惠卷",
+                "default_coupon": 0,
+                "off_percent": 67
+            }
+        },
+        "coupon": {
+            "linu精通": {
+                "1": {
+                    "优惠卷编号": 1,
+                    "type": "满减卷",
+                    "coupon_name": "linux国庆优惠卷",
+                    "default_coupon": 0,
+                    "minimum_consume": 100,
+                    "money_equal_value": "43"
+                },
+                "6": {
+                    "优惠卷编号": 6,
+                    "type": "全品卷",
+                    "coupon_name": "linux中秋优惠卷",
+                    "default_coupon": 0,
+                    "money_equal_value": "200"
+                },
+                "7": {
+                    "优惠卷编号": 7,
+                    "type": "全品卷",
+                    "coupon_name": "linux周年庆",
+                    "default_coupon": 0,
+                    "money_equal_value": "100"
+                }
+            },
+            "Julia入门": {
+                "5": {
+                    "优惠卷编号": 5,
+                    "type": "折扣卷",
+                    "coupon_name": "julia折扣卷",
+                    "default_coupon": 0,
+                    "off_percent": 87
+                }
+            }
+        },
+        "price": 21214,
+        "expire_time": "4个月时间",
+        "course_perid": "2个月时间"
+    }
+}

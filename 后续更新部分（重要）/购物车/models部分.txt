@@ -1,0 +1,266 @@
+from django.db import models
+from   django.contrib.contenttypes.fields import   GenericForeignKey,GenericRelation
+
+
+###某个人的购物车的信息
+# class   Goods(models.Model):
+#     username = models.ForeignKey(to='Userinfo', on_delete=models.CASCADE)
+#     course_name=models.ManyToManyField(to='Course',verbose_name='购物车课程名字')
+#     # good_price=models.IntegerField(verbose_name='商品价格')
+#     # good_name=models.OneToOneField(to='Course',verbose_name='商品标题',on_delete=models.CASCADE)
+#     # expire_time_choice=((1,'一个月时间'),(2,'两个月时间'),(3,'3个月时间'),(4,'4个月时间'),(5,'5个月时间'),(6,'6个月时间'))
+#     # expire_time=models.IntegerField(choices=expire_time_choice,verbose_name='超时时间')
+#     price_policy=GenericRelation('PricePolicy')
+#
+#
+#     class  Meta:
+#         verbose_name_plural='商品信息'
+
+
+##在这里只需要公共的部分就好了，在价格策略主要是不同的东西显示出来,版本不同
+class  Course(models.Model):
+    course_name=models.CharField(max_length=32,verbose_name='课程名字')
+    goods_img=models.CharField(max_length=100,verbose_name='图片信息')##相同部分
+##价格策略，帮助查询
+    price_policy=GenericRelation('PricePolicy')
+
+
+
+    def  __str__(self):
+        return '[id]%s%s课程详情'%(self.pk,self.course_name)
+
+    class  Meta:
+        verbose_name_plural='课程详情'
+
+class  Teacher(models.Model):
+    tea_name=models.CharField(max_length=32,verbose_name='老师名字')
+    tea_phone=models.CharField(max_length=32,verbose_name='电话')
+
+    def   __str__(self):
+        return  self.tea_name
+
+    class Meta:
+        verbose_name_plural ='老师'
+
+
+'''正常将吗，也会不用绑定价格策略，只需要多对多的绑定课程就好了'''
+class  Userinfo(models.Model):
+    username=models.CharField(max_length=32,verbose_name='用户姓名')
+    password=models.CharField(max_length=32,verbose_name='用户密码')
+    course_name = models.ManyToManyField(to='Course', verbose_name='购物车课程名字',blank=True)
+    uid=models.CharField(max_length=128,blank=True,null=True,help_text='微信用户绑定')
+    openid=models.CharField(max_length=128,blank=True,null=True)
+    accout_balance=models.PositiveSmallIntegerField(default=0,verbose_name='金币余额')
+
+    # price_policy = GenericRelation('PricePolicy')
+
+    def __str__(self):
+        return  '%s的购物车'%self.username
+    class  Meta:
+        verbose_name_plural='购物车'
+        unique_together=['username','password']
+
+
+class UserToken(models.Model):
+    username=models.OneToOneField(to=Userinfo,on_delete=models.CASCADE)
+    usertoken=models.CharField(max_length=32)
+
+    class  Meta:
+        verbose_name_plural='用户密码'
+
+
+# class UserDetail(models.Model):
+#     username=models.ForeignKey(to=Userinfo,on_delete=models.CASCADE)
+#     user_shoppings_car_goods=models.ManyToManyField(to='Goods',verbose_name='购物车东西')
+#     expire_time_choice=((1,'一个月时间'),(2,'两个月时间'),(3,'3个月时间'),(4,'4个月时间'),(5,'5个月时间'),(6,'6个月时间'))
+#     expire_time=models.IntegerField(choices=expire_time_choice,verbose_name='超时时间')
+    # user_save_goods=models.ManyToManyField
+
+    # def  user(self):
+    #     self.user=self.username.username
+    #     return   self.user
+    #
+    # def  shopping_car(self):
+    #     dic=[]
+    #     self.shopping_car=self.user_shoppings_car_goods.all()
+    #     for  i in self.shopping_car:
+    #         dic.append(i.good_name)
+    #         print(dic)
+    #         return   dic
+
+    #
+    # def __str__(self):
+    #     return   '%s  购物车详情'%self.username.username
+    # class  Meta:
+    #     verbose_name_plural='用户购物车详情'
+        # unique_together=['user','shopping_car','expire_time']
+
+
+
+from   django.contrib.contenttypes.models import  ContentType
+
+class  PricePolicy(models.Model):
+    ##所关联的那个表
+    content_type=models.ForeignKey(ContentType,on_delete=models.CASCADE)##关联的那个表，第二个是那个字段（行）
+    object_id=models.PositiveIntegerField()
+##绑定自带的content_type，字段名字最好不要更改
+    # good_name=models.OneToOneField(to='Course',verbose_name='商品标题',on_delete=models.CASCADE)
+    price=models.FloatField(verbose_name='课程价格')
+    course_tea=models.ForeignKey(to='Teacher',verbose_name='课程老师',on_delete=models.CASCADE)
+    course_start_data=models.DateTimeField(verbose_name='课程开班时间')
+    course_tea_level_choice=((1,'免费课程'),(2,'vip课程'),(3,'svip课程'))
+    course_level=models.IntegerField(choices=course_tea_level_choice,verbose_name='课程级别')
+    course_level_choice=((1,'容易'),(2,'一般'),(3,'中等'),(4,'难'),(5,'极难'))
+    course_diff_level=models.SmallIntegerField(choices=course_level_choice,verbose_name='课程难度等级')
+    ##不会在数据库生成列，只会帮助你添加和查询
+    course_perid_choice=((1,'一个星期时间'),(2,'1个月时间'),(3,'2个月时间'),(4,'3个月时间'),(5,'6个月时间'),(6,'一年'))
+    course_perid=models.IntegerField(choices=course_perid_choice,verbose_name='上课周期')
+    expire_time_choice=((1,'一个月时间'),(2,'两个月时间'),(3,'3个月时间'),(4,'4个月时间'),(5,'5个月时间'),(6,'6个月时间'))
+    expire_time=models.IntegerField(choices=expire_time_choice,verbose_name='超时时间')
+    content_object=GenericForeignKey('content_type','object_id')##找到id，并复制给上面的object_id
+
+    #
+
+    def __str__(self):
+        return  '%s课程价格策略'%self.pk
+
+
+
+
+'''
+注明一下啊，这个价格策略有3个字段
+object_id（课程的那个id），content_type（绑定自带的），content_object（关联自带的和加上自己选择的课程id）
+'''
+
+
+##优惠卷
+import   datetime
+class  Coupon(models.Model):
+    coupon_name=models.CharField(max_length=32,verbose_name='优惠卷名称')
+    coupon_choice=((1,'全品卷'),(2,'满减卷'),(3,'折扣卷'))
+    coupon_type=models.SmallIntegerField(choices=coupon_choice,verbose_name='优惠卷类型',default=0)
+    money_equal_value=models.CharField(max_length=1000,verbose_name='等值货币',help_text='全品的时候使用',blank=True,null=True)
+    off_percent=models.PositiveIntegerField('折扣优惠卷',blank=True,null=True,help_text='只针对折扣卷，例如79，是7.9折扣')
+    minimum_consume=models.PositiveIntegerField('最低消费',blank=True,null=True,default=0,help_text='仅在满减的时候填写这字段')
+    open_date = models.DateField("优惠券领取开始时间")
+    close_date = models.DateField("优惠券领取结束时间")
+    valid_begin_date = models.DateField(verbose_name="有效期开始时间", blank=True, null=True)
+    valid_end_date = models.DateField(verbose_name="有效结束时间", blank=True, null=True)
+    coupon_valid_days = models.PositiveIntegerField(verbose_name="优惠券有效期（天）", blank=True, null=True,
+                                                    help_text="自券被领时开始算起")
+    date = models.DateTimeField(auto_now_add=True)
+
+
+    #下面是价格策略部分
+    object_id=models.PositiveIntegerField('绑定课程',blank=True,null=True,help_text='可以把优惠卷和课程绑定')##后面是解释说明的部分
+    content_type=models.ForeignKey(ContentType,blank=True,null=True,on_delete=models.CASCADE)##关联的那个表，第二个是那个字段（行）
+    ##绑定的课程，第一个是哪个表，第二个是哪个字段，content_type是拿到所有的表
+    content_object=GenericForeignKey('content_type','object_id')
+
+    def   __str__(self):
+        if  self.object_id:
+            return   '%s_%s[已经绑定课程，课程专用]'%(self.get_coupon_type_display(),self.coupon_name)
+        else:
+            return   '%s_%s[没有绑定课程,全局使用]'%(self.get_coupon_type_display(),self.coupon_name)
+
+'''
+全品卷：
+最低消费：0
+等值货币：（就是说任意金额都可以使用）
+折扣：0
+
+满减卷：
+当到达某一个最低消费才可以使用
+最低消费：某个数值
+折扣：0
+等值货币：0
+
+折扣卷：
+最低消费：某个数值
+折扣：多少折扣
+等值货币：0
+
+
+'''
+
+
+
+
+class  CouponRecord(models.Model):
+    coupon=models.ForeignKey('Coupon',on_delete=models.CASCADE)
+    number=models.CharField(max_length=32,unique=True)
+    account=models.ForeignKey('Userinfo',on_delete=models.CASCADE)
+    status_choices=((0,'未使用'),(1,'已使用'),(2,'已过期'))
+    status=models.SmallIntegerField(choices=status_choices,default=0)
+    get_time=models.DateTimeField(verbose_name='领取时间',help_text='用户领取时间')
+    user_time=models.DateTimeField(verbose_name='使用时间',null=True,blank=True,help_text='用户使用时间')
+    # order=models.ForeignKey('')
+
+    def  __str__(self):
+        return   '用户%s的优惠卷%s记录'%(self.account.username,self.coupon.coupon_name)
+
+
+
+
+##订单,订单详情和订单是一对多的关系
+
+class   Order(models.Model):
+    payment_type_choices=((0,'微信'),(1,'支付宝'),(2,'优惠码'),(3,'贝利'))
+    pyment_tyep=models.SmallIntegerField(choices=payment_type_choices,verbose_name='支付类型')
+
+    payment_account_number=models.CharField(max_length=128,verbose_name='支付金额')
+    account=models.ForeignKey('Userinfo',on_delete=models.CASCADE,verbose_name='用户')
+    actual_amount=models.FloatField(verbose_name='实际支付金额')
+
+    status_choice=((0,'支付成功'),(1,'待支付'),(2,'退费申请'),(3,'已经退费'),(4,'主动取消'),(5,'超时取消'))
+    status=models.SmallIntegerField(choices=status_choice,verbose_name='支付的状态')
+    date=models.DateTimeField(blank=True,null=True,verbose_name='订单生成时间')
+    pay_time=models.DateTimeField(blank=True,null=True,verbose_name='支付时间')
+    cancel_time=models.DateTimeField(blank=True,null=True,verbose_name='取消订单时间')
+
+
+    def __str__(self):
+        return   '%s支付方式Order'%self.account.username
+
+class   OrderDetail(models.Model):
+    order=models.ForeignKey('Order',on_delete=models.CASCADE)
+    content_type=models.ForeignKey(ContentType,on_delete=models.CASCADE)
+    object_id=models.PositiveIntegerField()
+    content_object=GenericForeignKey('content_type','object_id')
+
+    origin_price=models.FloatField(verbose_name='课程原价')
+    price=models.FloatField('折后价格')
+    valid_period=models.CharField(max_length=128,verbose_name='课程有效期')
+
+
+    def  __str__(self):
+        return  '%s订单详情'%self.order.account.username
+
+
+
+
+##使用金币
+class   TranscationRecord(models.Model):
+    account=models.ForeignKey('Userinfo',on_delete=models.CASCADE)
+    transction_type_choice=((0,'收入'),(1,'支出'),(2,'退款'),(3,'提现'))
+    transction_type=models.SmallIntegerField(choices=transction_type_choice,verbose_name='状态')
+
+    object_id=models.PositiveSmallIntegerField()
+    content_type=models.ForeignKey(ContentType,on_delete=models.CASCADE)
+    content_object=GenericForeignKey('content_type','object_id')
+
+    transction_number=models.CharField(unique=True,verbose_name='贝利号')
+    date=models.DateTimeField(auto_now_add=True)##从今天开始默认自动加1
+    memo=models.CharField(max_length=32,blank=True,null=True)
+
+    def __str__(self):
+        return  self.transction_number
+
+
+
+
+
+
+
+
+

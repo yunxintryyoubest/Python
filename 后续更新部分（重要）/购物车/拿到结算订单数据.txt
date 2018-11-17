@@ -1,0 +1,44 @@
+    def  get(self,requets,*args,**kwargs):
+        print(requets.data)
+        ##拿到所有的结算数据
+        all_course_data=all_pay_courses_coupon%(requets.auth.username.pk,'*')
+        all_course_keys=conn.keys(all_course_data)##最好不要直接这样取数据
+
+        course_coupons=[]
+        for  val  in   conn.scan_iter(all_course_data):
+            course_dic={}
+            data=conn.hgetall(val)
+            print(data)
+            for   k,v   in   data.items():
+                if   k.decode('utf-8')=='course_coupon':
+                    course_dic['default_course_coupon']=conn.hget(val,'course_coupon').decode('utf-8')
+                else:
+                    course_dic[k.decode('utf-8')]=v.decode('utf-8')
+            course_coupons.append(course_dic)
+      ##注明一下，这个键就是转化为字符串，值就是序列化一下，如果是字典的话，就序列化一下，如果是字节的话，就得转化为字符串
+        # print(course_coupons)
+
+            ##对全局的优惠卷进行处理##,不用管字典里面的的是什么，字典外码是字节就用字节的方，是序列化的，就进行反序列化
+
+        global_course_coupon=golbal_pay_course_coupon%requets.auth.username.id
+        val=conn.hgetall(global_course_coupon)
+        global_course_coupon_dic={}
+        # print(val)
+        for   k,v   in  val.items():
+            # print(k.decode('utf-8'))
+            # print(json.loads(v.decode('utf-8')))
+            if  k.decode("utf-8")=='default_golbal_coupon':
+                global_course_coupon_dic['default_golbal_coupon']=v.decode('utf-8')
+            else:
+                global_course_coupon_dic[k.decode('utf-8')]=json.loads(v.decode('utf-8'))
+        # print(global_course_coupon_dic)
+        all_data={
+            'global_course_coupon_dic':global_course_coupon_dic,
+            'course_coupons_dict':course_coupons
+        }
+
+        res=Self_Response()
+        res.code=200
+        res.msg='查看用户【%s】全部的结算信息'%requets.user
+        res.all_data=all_data##这个返回的是可以为字典的
+        return   Response(res.get_response)
