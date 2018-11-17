@@ -1,0 +1,65 @@
+python类
+
+
+model数据库模型，django自带的数据库
+ORM————object relation mapping对象关系映射表
+
+splite 小而简单
+是django默认的数据库，默认自带splite的数据库驱动，引擎名称：django.db.backends.splite3
+
+mysql 
+引擎名称：django.db.backends.mysql
+
+mysql驱动程序:
+mysqldb（mysql python）python2
+mysqlclient
+mysql
+pymysql（纯python的mysql驱动程序）python3
+
+
+
+migrations数据库，存放东西的
+models：创建表的
+
+
+终端执行：
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+shiyongdjango默认的数据库spite步骤：
+model里面创建的数据库：
+from django.db import models
+
+# Create your models here.
+
+
+class book1(models.Model):
+    name=models.CharField(max_length=20)
+    price=models.IntegerField()
+    pub_date=models.DateField()
+
+
+把mysql当成数据库，调用pymysql驱动引擎步骤：
+
+
+DATABASES={
+    'default':{
+        'ENGINE':'django.db.backends.mysql',#这个是要使用的数据库mysql
+        'NAME':'django_orm',#你的数据库名称(首先这个数据库要在你的mysql里面创建，才可以新建表操作，数据库名称可以自己取）
+        'USER':'root',#你的数据库用户名
+        "PASSWORD":'1928551998',#你的数据库密码
+        'HOST':'',#默认不写就是localhost（你的数据库主机），连接本地计算机，也可以写上去连接其他计算机
+        'PORT':'3306',#默认端口号
+    }
+}
+
+--init--：
+import  pymysql
+
+pymysql.install_as_MySQLdb()
+#调用pymsql库，这样才可以连接mysql
+# 意思是驱动引擎不要用mysqldb，替换成pymysql
+
+

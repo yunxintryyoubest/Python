@@ -1,0 +1,71 @@
+普通上传
+自定义页面上传
+forms上传
+ajxa上传
+
+
+
+文件上传：
+files
+views：
+
+
+def upload(request):
+    if request.method=='GET':
+        return  render(request,'upload.html')
+
+
+    else:
+        # print(request.POST)
+        # print(request.FILES)
+        user=request.POST.get('user')
+        img=request.FILES.get('img')
+        print(img)
+        print(img.name)
+        print(img.size)
+        #img是一个对象，对象里面封装了一个文件（文件大小，文件内容。。。。
+        f=open(img.name,'wb')
+        # 相当于去img里面一块一块的拿内容
+        for line in img.chunks():
+            f.write(line)
+        # f.write('img中的文件')
+        f.close()
+
+        return  HttpResponse('ok')
+
+
+
+
+
+
+upload.html：
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<body>
+<form action="/upload.html" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="user">
+    <div style="position: relative">
+{#        //里面的可以做绝对定位了#}
+        <a>上传</a>
+        <input type="file" name="img" style="opacity: 0.5;position:absolute;top: 0;left: 0;">
+    </div>
+{#    <input type="file" name="img">#}
+    <input type="submit" value="提交">
+
+</form>
+</body>
+
+
+
+
+
+
+</body>
+</html>

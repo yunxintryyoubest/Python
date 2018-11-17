@@ -1,0 +1,43 @@
+自定义用户认证:
+权限管理
+
+
+
+class Meta:
+abstract=True;这个只把字段传递下去
+request.user.userprofile
+
+
+一套账户登录10个系统
+
+
+md5不可以反解
+
+怎么确认密码正确，数据库的密码是密文
+已经加密的数字，按照定义好的加密方式，拿着这个密文和数据库的密文对比
+
+md5加密方式
+
+正向的暴力破解
+
+
+django的加密方式：
+md5+盐 abc123=a12bc3
+
+循环多少万次：
+
+mybackend 返回用户对象
+自定义的类,返回true或者false
+
+django允许自定制系统的
+single  sign  on
+单点登录
+
+
+
+
+
+
+专门的要账户系统：LDAP  轻量级的目录账户管理协议
+集中账户管理 account支持ldap的协议
+OA  CRM  email  通过网络到ldap的服务器进行验证

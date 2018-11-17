@@ -1,0 +1,4 @@
+mv  复制移动
+
+sudo apt-cache search openssl    搜索可以寻找的包,搜索所有可以用的包
+

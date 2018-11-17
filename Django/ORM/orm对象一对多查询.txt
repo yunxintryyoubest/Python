@@ -1,0 +1,37 @@
+book_obj.publish(外键）     这个拿到的是一个对象，也就是一整条记录
+book_obj=Book.objects.get('name=python')这个得到的也是一个对象，一条记录
+publish是一个外键
+
+拿到这个对象就可以取里面的名字，价格等
+book_obj.publish.name
+book_obj.publish.price
+
+
+
+# publish是外键，book可以取下面的值，取到publish时，取出来的是它说关联的对象（实例对象），对象就是一条记录，比如那本书所关联的出版社的所有信息，也就是Publish的一条记录（一个对象）Book的外键id对应Publish的id
+
+
+#如果不加下面的这句的话就像是不出任意信息，就是一个obj地址，打印的时候，但如果加了的话就会显示出具体的对象，为了方便显示用的
+
+
+
+
+
+
+    #查询人民出版社出版的所有书籍和价钱
+
+    # 方式一,
+    #在Publish的表中找到人民出版社的对象
+    pub_obj=Publish.objects.filter(name="人民出版社")[0]
+
+    #在书的表中查找，publis的id对应book的id,publish的pub_obj的对象对应book中publish的对象
+
+    res=Book.objects.filter(publish=pub_obj).values('name','price')#book的publish是一个外键，这个就是外键的id号对应pub_obj的id号（对象=对象）    
+    print(res)
+
+    pub_obj=Publish.objects.filter(name="人民出版社")[0]
+    print(pub_obj.book_set.all())#找到对应publish的外键id号，的所有书出来，这个是对象集合all（）
+    print(pub_obj.book_set.all().values('name','price'))#拿到queryset集合对象，就是人民出版社说关联的所有书籍对象,在进行筛选出名字和和价钱
+
+
+    return render(req,'index.html',{'booklist':book_list})

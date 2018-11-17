@@ -1,0 +1,6 @@
+1.error_messages={'invalid':'......'},
+validators=[RegexValidator(r'^[0-9]+$','请输入数字') RegexValidator(r'^[0-9]+$','数字必须以159开头')]
+自定义错误信息：
+
+user=fileds.RegexFiled(r'^[0-9]+$',error_message={'invalid':'....'})
+只能匹配一个，上面的可以多个

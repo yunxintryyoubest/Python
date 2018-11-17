@@ -1,0 +1,101 @@
+views:
+def index3(request):
+
+    return render(request,'putfile1.html')
+
+
+import os
+import uuid
+def putfile1(request):
+    nid=str(uuid.uuid4())
+    #按照时间主板和mac地址生成的id
+    print('执行了putfile上传')
+    ret={'status':True,'message':None,'data':None}
+    obj = request.FILES.get('put')
+    # 得到input标签的文件
+    file_path=os.path.join('static',nid+obj.name)#路径唯一性，加了uuid后
+    #写一个路径保存在static里面,将obj文件放在static里面
+    f=open(file_path,'wb')
+    #
+    for line in obj.chunks():
+        f.write(line)
+    f.close()
+    ret['data']=file_path
+    print('上传成功')
+    return  HttpResponse(json.dumps(ret))
+
+
+
+putfile1.html:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>iframe+form实现上传功能</h1>
+<div>
+{#    #target对应的是name#}
+    <iframe id="ifram" name="iframe"></iframe>
+    <form method="post" target="iframe" id="fo"  enctype="multipart/form-data" action="/putfile1.html">
+        <input type="file" name="put" id="put" onchange="uploadsubmit();">
+        <input type="submit" value="提交">
+
+    </form>
+{#    #只能使用服务器端的路径，不能是本地的路径#}
+</div>
+<h1>预览</h1>
+<div id="preview">
+
+</div>
+
+<script src="/static/jquery-3.1.1.js"></script>
+
+
+<script>
+{#    #当点击上传的按钮时就绑定iframe#}
+    function  uploadsubmit() {
+        document.getElementById('ifram').onload=reload;
+        document.getElementById('fo').submit;
+    }
+{#    #执行reload#}
+    function reload() {
+        console.log('执行reload')
+        console.log(this.contentWindow.document.body.innerHTML)
+        {#        #这个this就是window#}
+        data = $(this).contents().find('body').html()
+        var data1 = JSON.parse(data)
+        console.log(data1)
+        console.log('data是', data1.data)
+        var tag = document.createElement('img')
+        {#        #创建img标签，element是元素，也就是标签#}
+        tag.src = data1.data
+        {#        #tag的src里面加东西进去#}
+        $('#preview').append(tag)
+        {#    #这个标签里面加另一个标签进来，就是tag标签}#}
+{#        $('#preview').empty().append(tag)#}
+{#        #上传把之前上传的给清空，否则会同时在那个页面显示#}
+
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+

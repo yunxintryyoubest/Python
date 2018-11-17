@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <h3>文件上传</h3>
+    <input type="file" id="img">
+    <a  class="btn" onclick="jquerysubmit();">上传</a>
+    <a  class="btn" onclick="jquerysubmit1();" style="color: red;">上传</a>
+</div>
+
+
+
+<h6>基于ifarme+form表单</h6>
+<div>
+    <iframe id="'ifarme" name="ifarm"onload="reload(this);"></iframe>
+{#    onload是数据返回是的时候自动执行,回调函数#}
+    <form id="fm" action="/ajax1.html" method="post"  target="ifarm">
+        <input name="root"  type="file" id="img1">
+{#        <input type="file" id="img">#}
+        <input type="submit" value="提交">
+
+    </form>
+
+
+
+<script src="/static/jquery-3.1.1.js"></script>
+
+<script>
+{##加个请求头的就不做特殊处理，就把formdata发过去#}
+{##formdata可以封装数据（不仅仅是字符串，文件也可以）#}
+    function jquerysubmit() {
+    var data=new FormData();
+{#    #这个是创建一个formdata#}
+    data.append('k1','v1');
+    data.append('k2','v2');
+    $.ajax({
+        url:'/putfile',
+        data:data,
+        type:'POST',
+        success:function (arg) {
+            console.log(arg)
+        },
+        processData:false,
+        contentType:false
+    })
+
+    }
+
+
+{#    #xmlhttprequest#}
+    
+    
+    function jquerysubmit1() {
+    var data=new FormData();
+    data.append('k1','v1');
+    data.append('k2','v2');
+    
+    var xhr=new XMLHttpRequest();
+        //和它创建一个连接
+    xhr.onreadystatechange=function () {
+        if(xhr.readyState==4){
+{#                #接收完服务端发来的数据#}
+        console.log(xhr.responseText)
+    }
+}
+    xhr.open('POST','/putfile?p=123');
+{#        #当某个状态进行更改，它会执行#}
+    xhr.send(data)}
+    
+    
+    
+        function jquerysubmit1() {
+    var data=new FormData();
+    data.append('k1','v1');
+    data.append('k2','v2');
+{#    #这个是一个特殊的选择器，里面是id#}
+    fileobj=document.getElementById('img').files[0]
+{#            #拿文件的内容,选择器对象，看的是一个标签，其实是一个标签对象，加files[0]之后就是一个文件（文件对象）了#}
+
+
+
+
+
+{#document.getElementById('img').files[0]#}
+        /*
+document.getElementById('img').files[0]
+File(170588) {name: "捕获.JPG", lastModified: 1523436272071, lastModifiedDate: Wed Apr 11 2018 16:44:32 GMT+0800 (中国标准时间), webkitRelativePath: "", size: 170588, …
+ */
+
+
+     data.append('k3',fileobj)
+{#            #把文件对象也上传一下#}
+    var xhr=new XMLHttpRequest();
+        //和它创建一个连接
+    xhr.onreadystatechange=function () {
+        if(xhr.readyState==4){
+{#                #接收完服务端发来的数据#}
+        console.log(xhr.responseText)
+    }
+}
+    xhr.open('POST','/putfile?p=123');
+{#        #当某个状态进行更改，它会执行#}
+    xhr.send(data)}
+
+/*
+document.getElementById('img').files[0]
+File(170588) {name: "捕获.JPG", lastModified: 1523436272071, lastModifiedDate: Wed Apr 11 2018 16:44:32 GMT+0800 (中国标准时间), webkitRelativePath: "", size: 170588, …
+ */
+
+        
+    
+
+{##这个this是window#}
+
+
+    function reload(th) {
+        console.log('执行iframe上传')
+
+
+{#        #这个是从iframe里面找数据#}
+        console.log(th.contentWindow.document.body.innerHTML)
+        console.log($(th).contents().find('body').html())
+
+
+
+{#        var data=new FormData();#}
+
+        fileobj=document.getElementById('img1').files[0]
+{#        data.append('k1',fileobj)#}
+{#        console.log(data['k1'])#}
+        console.log(fileobj)
+{#        console.log('data是',data['k1'])#}
+        console.log('已经找到')
+        
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

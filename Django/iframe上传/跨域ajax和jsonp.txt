@@ -1,0 +1,142 @@
+浏览器同源策略：
+xmlhttprequest
+只能往本地发请求
+
+
+
+跨域ajax
+
+
+巧妙的机制：jsonp跨域请求
+
+iframe
+src
+img
+script
+不遵循同源策略的机制，这几个跨域跨域
+
+jsonp:利用创建script块，在期中执行src属性为：远程url
+函数（返回值）
+function 函数（arg）{}
+
+
+实现跨域请求，只能get请求
+
+
+
+
+
+jsonp是一种方式，当你随机生成一个script块的时候，添加到document的head里面的时候
+然后再给你移除掉
+
+
+就是script里面包裹着一个不可以跨域的标签，往外发出去，script是可以爱出去的额、
+
+包裹一个函数名。执行一个函数的样子，函数名包裹上数据就可以了
+<script src='http://....'></script>
+
+
+
+
+
+CORS：
+这个可以post和get
+跨站资源共享
+
+加一个响应头，认识这个人就不会阻止了，不做同源策略的限制了
+
+
+
+
+
+
+jsonp.html
+
+代码：
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="content"></div>
+<input type="button" value="发送" onclick="jsonpsubmit();">
+<script src="/static/jquery-3.1.1.js"></script>
+
+<script>
+
+
+
+    function jsonpsubmit() {
+
+        var tag=document.createElement('script')
+{#        $#创建script标签#}
+        tag.src='http://127.0.0.1:9000/json2.html'
+{##src里面放着内容#}
+{#        $(document.title).append(tag);#}
+        $(document.head).append(tag)
+{#        #往html文档的head里面提交数据#}
+
+        document.head.appendChild(tag)
+        document.head.removeChild(tag)
+{#        #往document里面的head加一条在删除一条,子类#}
+        function  func(arg) {
+            console.log(arg)
+            $('#content').html(arg)
+
+        }
+
+{##不会xmlhttprequest发送，会自动创建script代码，head里面增加一条在删除一个，内部会创建script标签#}
+{#       #换了一个模式，jsonp #}
+        function submitjsonp() {
+            $.ajax({
+                url:'',
+                type:'GET',
+                datatype:'jsonp'
+
+            })
+        }
+
+        function list(arg) {
+            console.log(arg)
+
+    }
+
+
+
+
+        {#        $.ajax({#}
+{#            #}
+{#            url:'/ajax3.html',#}
+{#            type:'GET',#}
+{#            success:function (arg) {#}
+{##}
+{#                $('#content').html(arg)#}
+{#                #在content下加内容#}
+{#            }#}
+{#        })#}
+
+    }
+
+
+
+</script>
+
+</body>
+</html>
+
+
+views:
+
+
+def jsonp(request):
+    return render(request,'jsonp.html')
+
+
+
+def ajax3(request):
+    return  HttpResponse('本地服务器发送的请求')

@@ -1,0 +1,248 @@
+def addbook(request):
+    #
+    # b=Book(name='python',price=99,pub_date="1998-1-11")
+    # b.save()
+    Book.objects.create(name='nlp', price=99, pub_date='1918-1-11',publish_id=2)
+    return HttpResponse('添加成功')
+
+
+
+def select(requset):
+    # 查询
+    # re11=Book.objects.filter(name="linux").values("price",'name')
+    # print(re1)
+
+#得到北京出版社的出版的书，反向查询
+    # ret2=Publish.objects.filter(id=1)[0]
+    # res=Book.objects.filter(publish=ret2).values('name','price')
+    # print(res)
+#正向查询
+    # ret3=Book.objects.filter(name="linux")[0].publish_id
+    # res=Publish.objects.filter(id=ret3).values('name')
+    # print(res)
+
+
+
+
+#查询出版社id为6的所出版的书籍
+
+    # ret5=Publish.objects.filter(id=6)[0]
+    #
+    # res=ret5.book_set.all().values('name','price')
+    # print(res)
+
+    # ret6=Book.objects.filter(pub_date__lt="2018-12-12").values('name','price')
+    # print(ret6)
+
+
+
+
+    #双下划线(filter  __)一步到位
+
+    # ret7=Book.objects.filter(publish__name="人民出版社").values('name','price')
+    # print(ret7)
+    #publish__name 根据外键名字去找，publish是外键，正向查询
+
+    # python出版社的信息
+
+    # ret8=Publish.objects.filter(book__name="python").values('name')
+    # print(ret8)
+
+    #根据类的名字去找，book不是外键
+
+
+
+    # ret9=Book.objects.filter(name="python").values("publish__name")
+    # print(ret9)
+
+
+
+#查询出上海交大出版的所有书籍
+    # ret10=Book.objects.filter(publish__name="上海交大").values('name','price')
+    # print(ret10)
+
+
+
+
+
+    return HttpResponse('success!')
+
+
+
+
+
+全部小结（重要）：
+
+from django.shortcuts import render,HttpResponse
+
+# Create your views here.
+from app.models import  *
+
+
+
+
+def index(request):
+    return  render(request,'index.html')
+
+
+
+
+def addbook(request):
+    #
+    # b=Book(name='python',price=99,pub_date="1998-1-11")
+    # b.save()
+    Book.objects.create(name='nlp', price=99, pub_date='1918-1-11',publish_id=2)
+    return HttpResponse('添加成功')
+
+
+
+def select(requset):
+    # 查询
+    # re11=Book.objects.filter(name="linux").values("price",'name')
+    # print(re1)
+
+#得到北京出版社的出版的书，反向查询
+    # ret2=Publish.objects.filter(id=1)[0]
+    # res=Book.objects.filter(publish=ret2).values('name','price')
+    # print(res)
+#正向查询
+    # ret3=Book.objects.filter(name="linux")[0].publish_id
+    # res=Publish.objects.filter(id=ret3).values('name')
+    # print(res)
+
+
+
+
+#查询出版社id为6的所出版的书籍
+
+    # ret5=Publish.objects.filter(id=6)[0]
+    #
+    # res=ret5.book_set.all().values('name','price')
+    # print(res)
+
+    # ret6=Book.objects.filter(pub_date__lt="2018-12-12").values('name','price')
+    # print(ret6)
+
+
+
+
+    #双下划线(filter  __)一步到位
+
+    # ret7=Book.objects.filter(publish__name="人民出版社").values('name','price')
+    # print(ret7)
+    #publish__name 根据外键名字去找，publish是外键，正向查询
+
+    # python出版社的信息
+
+    # ret8=Publish.objects.filter(book__name="python").values('name')
+    # print(ret8)
+
+    #根据类的名字去找，book不是外键
+
+
+
+    # ret9=Book.objects.filter(name="python").values("publish__name")
+    # print(ret9)
+
+
+
+#查询出上海交大出版的所有书籍
+    # ret10=Book.objects.filter(publish__name="上海交大").values('name','price')
+    # print(ret10)
+
+
+    #通过对象的方式绑定关系
+
+
+#第三张表，设置manytomanyfile的方法来建立第三张表（第一种方法）
+#反向查找alex作者出过多少本书
+    # ret11=author.objects.get(author='alex')
+    # res=ret11.book_set.all().values('name')
+    # print(res)
+
+    # ret12=Book.objects.filter(name="python").values('authors')
+    # res=author.objects.filter(author=ret12).values(author)
+    # print(res)
+
+# 给id为2的书绑定id为4的作者,没有测试成功
+#     ret13=Book.objects.get(id=2)
+#     author_obj=author.objects.all()#所有的作者信息对象
+#     author_obj=author.objects.get(id=4)
+#     # ret13.authors.add(*author_obj)#放一个集合加一个*号
+#
+#移除住着id为3所绑定的书
+#     ret13.authors.remove(3)
+
+
+#创建第三张表（自己定义class，就是book和author两张表都设置外键，多对多的关系）（第二种方法）
+    # book_author.objects.create(book_id=1,author_id=2)#这个是绑定那个作者和那个书本
+
+
+    # obj=Book.objects.get(id=1)
+    # res=obj.book_author_set.all()[0].author
+    # print(res)
+
+
+    # 和之前的一对多一样
+
+    #alex出过的所有书籍和价钱
+
+#manytomanyfiled更直观一点第一走过方法更直观一点
+
+#聚合查询，分组查询
+
+    # ret=Book.objects.all().aggregate(Avg("price"))
+    # print(ret)
+
+    # ret=Book.objects.filter(authors__book__name="alex").aggregate(sum('price'))
+    # ret=Book.objects.filter(authors__book__name="alex").aggregate(Count('price'))
+    # print(ret)
+
+
+    res=Book.objects.values("authors__name").annotate(Sum('price'))#分组
+    print(res)
+#按作者来分组看各个作者出过的书的价钱
+
+    ret=Publish.objects.values("name").annotate(min("book_price"))
+    print(ret)
+#每个出版社书的最低价格（分组）
+
+
+
+    Book.objects.all().update(price=F('price')+10)
+#修改book表中所有价钱加10
+    ret=Book.objects.filter(Q(name_contaions='G'))
+#筛选出名字中包含G字母的
+
+    ret=Book.objects.filter(Q(name='linux',price=99))
+    print(ret)
+#找出名字为linux，并且价钱为99的书的记录
+
+#queryset的缓存机制
+    ret=Book.objects.filter(price=99)
+    print(ret)#打印的是queryset的对象集合
+#这个结果已经放在缓存机制了，当再次取的时候，不用从数据库里面拿，直接从缓存机制里面拿 ,这样做的目的是再次查询时更快，注意：上面的filter是不执行的，当有print的时候才执行这个语句，筛选出所需要的出来
+
+    for i  in  ret:
+        print(i.price)#结果是99
+
+
+    Book.objects.update(price=200)
+    print(i.price)#还是100，从缓存机制里面取，数据库是变了价格为200，当缓存里没有变，除非加上变量ret，重新写入缓存里面
+# 惰性机制
+# 可切片
+
+    if ret.exists():
+        print('ok')
+#加入ret存在的话就执行ok，这个会执行sql语句，但是不会放到缓存机制里面，有数据就回
+
+#使用迭代器，数量多的话就用迭代器，数量不多且反复再用的话就用缓存
+    ret=ret.iterator()
+    print(ret)#拿一条取一条，不会造成内存空间浪费，节省空间
+
+    for i in ret:
+        print(i.name)
+#迭代器，取到头的时候再取就取不了了
+
+    for i in ret:
+        print(i.name)#已经取不了了，以为上面使用了迭代器，取完了

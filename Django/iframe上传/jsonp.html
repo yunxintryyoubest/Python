@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="content"></div>
+{#<input type="button" value="发送" onclick="jsonpsubmit();">#}
+{#<input type="button" value="发送1" onclick="submitjsonp();">#}
+<input type="button" value="发送4" onclick="submitjsonp4();">
+
+<script src="/static/jquery-3.1.1.js"></script>
+
+<script>
+
+
+
+    function submitjsonp4() {
+
+        var tag=document.createElement('script')
+        //$#创建script标签
+        tag.src='http://127.0.0.1:9000/fun'
+//#src里面放着内容
+        //#往html文档的head里面提交数据
+
+        document.head.appendChild(tag)
+{#        document.head.removeChild(tag)#}
+        //#往document里面的head加一条在删除一条,子类
+{#        function  func(arg) {#}
+{#            console.log(arg)#}
+{#            $('#content').html(arg)#}
+{##}
+            $.ajax({
+                url:'http://127.0.0.1:9000/fun',
+                type:'GET',
+                datatype:'jsonp'
+
+            })
+        }
+
+
+                function  func(arg) {
+            console.log(arg)
+            $('#content').html(arg)}
+
+{##}
+{#        function func(arg) {#}
+{#            console.log(arg)}#}
+
+
+
+{#        }}#}
+
+{#                        $.ajax({#}
+{##}
+{#            url:'',#}
+{#            type:'GET',#}
+{#            success:function (arg) {#}
+{##}
+{#                $('#content').html(arg)#}
+{#              //  #在content下加内容#}
+{#            }#}
+{#        })#}
+{#        #}
+
+
+
+//#不会xmlhttprequest发送，会自动创建script代码，head里面增加一条在删除一个，内部会创建script标签
+ //      #换了一个模式，jsonp
+{#        function submitjsonp4() {#}
+{#            $.ajax({#}
+{#                url:'http://www.127.0.0.1:9000/fun',#}
+{#                type:'GET',#}
+{#                datatype:'jsonp'#}
+{##}
+{#            })#}
+{#        }#}
+{##}
+{#        function func(arg) {#}
+{#            console.log(arg)#}
+{##}
+{#    }#}
+{##这个是可以自己封装一个script的跨域方法，jsop只能get，不能post#}
+{#        function submitjsonp4() {#}
+{#            $.ajax({#}
+{#                url:'http://127.0.0.1:9000/fun',#}
+{#                type:'GET',#}
+{#                dataType:'jsonp',#}
+{#                jsonp:'callback',#}
+{#                     url:'http://www.127.0.0.1:9000/fun?callback=f',#}
+{#                jsonpCallback:'list'#}
+{#                     url:'http://www.127.0.0.1:9000/fun?callback=list',#}
+{#            #不能加success的#}
+{##}
+{#            })}#}
+{##自己定义这个包装的函数，跨域list或者func等等#}
+{#        function list(arg) {#}
+{#            console.log(arg)#}
+{#        }#}
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

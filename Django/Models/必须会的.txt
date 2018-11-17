@@ -1,0 +1,43 @@
+索引
+一对多：级联删除
+一对一和一对多：
+unique=True
+
+多对多：
+自动创建 手动创建 手动+自动
+自关联：互粉
+manytomany自己
+不管manytomany和foreignkey
+推荐加上relative_name
+
+
+
+
+
+
+
+
+
+m.set
+m.clear
+m.set
+m.remove
+.only
+.defer
+.extra
+.raw
+
+原生sql语句：
+slect_related
+prefetch related
+
+
+
+
+
+创建表：
+related_name
+related_query_name
+自相联：
+评论（互粉）
+评论楼 related_name

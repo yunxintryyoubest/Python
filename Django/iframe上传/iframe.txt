@@ -1,0 +1,47 @@
+<h6>基于ifarme+form表单</h6>
+<div>
+    <iframe id="'ifarme" name="ifarm"onload="reload(this);"></iframe>
+{#    onload是数据返回是的时候自动执行,回调函数#}
+    <form id="fm" action="/ajax1.html" method="post"  target="ifarm">
+        <input name="root" >
+        <input type="submit" value="提交">
+{#        <a id="sub">提交</a>#}
+    </form>
+
+</div>
+
+
+
+直写在标签上，onclick=什么这个this是window
+，target等于name
+#这个th是等于window的
+一个document就是一个htm文档
+
+
+<script>
+{##this=window#}
+{#th=当前标签#}
+    function reload(th){
+        console.log('执行reload')
+        console.log('suce',th)
+{#        #垮过document到下面的额文档信息来了#}
+        console.log(th.contentWindow)
+{##表示进入另外一个html文档了,一个html文档嵌套了一个html文档#}
+{#        #回调#}
+        console.log(th.contentWindow.document.body)
+        console.log(th.contentWindow.document.body.innerHTML)
+{#        #通过innerhtml或者innertext可以拿到里面的内容#}
+{#        #这个是通过jquery来找的，标签下面得contents的body的messagestatus文本信息#}
+        console.log($(th).contents().find('body').text())
+
+
+{##拿到了回调函数#}
+        var  content=th.contentWindow.document.body.innerHTML;
+{#        #拿到里面的东西#}
+        var obj=JSON.parse(content)
+        console.log('对象obj',obj)
+{#        #拿到了一个对象#}
+    }
+
+
+

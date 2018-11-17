@@ -1,0 +1,83 @@
+filter可以过滤信息，进行筛选
+
+views里面的查询函数：
+
+def select(req):
+    # book_list=Book.objects.all()[::-1] #查询所有结果,倒着查询
+    # book_list=Book.objects.all()[::2] #查询所有结果,两个两个的查询
+    # book_list=Book.objects.all().get(id=2) #就取出来一个，id为2的值,
+
+    # print(book_list)
+
+    resulst=Book.objects.filter(author='ale').values('name','price')
+    #取出作者名字为ale的所有书的名字,values 是拿整个字段的，不是某个对象的，可以拿出该作者所有书的集合，以字典的形式表达
+    print('ale的所有书的名字为',resulst)
+
+    rel=Book.objects.filter(author='ale').values_list('name')#以列表的形式，没有那个键值对了
+
+    # boo=Book.objects.exclude(author='ale').values_list('name','price')
+    #exclude拿到的是一个对象集合,value出来的是一个字典，values_list取出来的是一个个的小元组，只有字典和实例才可以通过点来取里面的值
+
+    # book_list=Book.objects.all().values('name').distinct()#去除重复的，按name重复的来去除，不能直接是all后面加，以为你拿到的只是全部的对象，并不是字段信息，做不了筛选，只有对重复的字段信息进行筛选
+    # book_result=Book.objects.all().values('name').distinct().count()#查看不重复的书的数量
+    # print(book_result)
+    # book_list=Book.objects.all().values('name').distinct().reverse()
+    #resverse是倒序查询
+
+
+
+    # book_list=Book.objects.filter(price__gt=100)
+    book_list=Book.objects.filter(name__icontains='p').values('name')
+    #取出name（书的名字里面包含p的，模糊匹配，取出对应的name
+    # book_list=Book.objects.filter(name__in=()).values('name')
+#取出name在什么名字和上面之间的，取出名字来（value后面的字段）
+
+
+
+    return render(req,'index.html',{'booklist':book_list})
+
+
+
+
+
+
+index.html里面函数的：
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<style>
+
+    .head{
+        line-height: 40px;
+        background-color: green;
+        color: white;
+    }
+</style>
+<body>
+
+<div class="outer">
+    <div class="head">标题</div>
+    <div class="context">
+        <a href="/addbook/">添加书籍</a>
+        <a href="/update/">修改书籍</a>
+        <a href="/delete/">删除书籍</a>
+        <a href="/select/">查询图书</a>
+           </div>
+               <hr>
+        <div class="queryresult">
+            {%  for book in booklist %}
+            <div>
+            <a>{{ book.name }}{{ book.price }}{{ book.author }}</a>
+            </div>
+            {%  endfor %}
+        </div>
+
+</div>
+
+</body>
+</html>

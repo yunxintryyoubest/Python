@@ -1,0 +1,67 @@
+一张表对应一个类
+所有的upadate修改和values，delete都是对字段的操作，而实例对象是可以取值进行修改，创建
+只有get，last，first取得是实例对象，filter其余的都是queryset对象
+
+
+
+get只能找一条记录，多出一条就报错
+增加：
+先在urls里面找到添加书籍的index.html网页
+views里面写一个addbook函数，index.html里面调用,进入url路由里面，在执行addbook函数，把数据添加到数据库里面
+第一种方法：
+ b=Book(name='python',price=69,author='ale',pub_dae='1998-1-11')#实例一个book对象
+    b.save()
+
+
+
+第二种方法：
+
+Book.objects.create(name='python',price=69,author='ale',pub_dae=1998-1-11)
+
+
+index.html：
+<a href="/addbook/">添加书籍</a>
+这个是添加一条相对路径，可以跳转到urls（url路由）里面执行对应的函数（127.0.0.1:8080/addbook/）
+
+def addbook(request):
+#实例一个book对象，一条记录就是一个实例对象
+    # b=Book(name='python',price=69,pub_dae='1998-1-11',author='ale')#实例一个book对象
+    # b.save()
+
+#调用一个book方法
+    Book.objects.create(name='python',price=69,author='ale',pub_dae='1998-1-11')
+
+    # Book.objects.create(**dict)
+    return HttpResponse('添加成功')
+
+
+
+
+
+
+修改：
+
+save方法会某个方法修改一次，就是没变也会这样，推荐第一种方法
+
+
+def update(request):
+    #第一种
+    # Book.objects.filter(author='ale').update(price=999)
+
+
+#第二种
+    b=Book.objects.get(author='ale')#get得到的是model对象，可以修改，filter得到的是queryset对象，不能用filter修改
+    print(b)#这个是quryset的数据类型，对象集合，queryset集合，可以切片取值，和列表类似,filter拿到的是queryset集合对象
+    b.price=160#只要是进行这种类的对象的操作一定要save
+    b.save()#这个save方法会某个字段都进行赋值，推荐第一种，就算这个字段不修改也会重新赋值
+
+    return HttpResponse('修改成功')
+
+
+
+删除：
+
+def delete(request):
+    Book.objects.filter(author='ale').delete()
+
+    return HttpResponse('删除成功')

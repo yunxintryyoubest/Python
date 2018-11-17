@@ -1,0 +1,119 @@
+操作人员：系统账号
+老村长： root df 2016.....
+
+运维：服务器
+
+网速要稳定，电源不能断
+备用电源：要可以坚持一天
+
+idc机房
+白色的：一层层的服务器
+2u：cpu配置更大
+
+塔式服务器
+竖式服务器
+
+机房：为企业提供托管服务
+
+
+IT审计系统+主机管理
+
+
+
+
+mysql
+私钥生成命令：
+ssh-keygen
+Your identification has been saved in /home/yunxin/.ssh/id_rsa.私钥
+Your public key has been saved in /home/yunxin/.ssh/id_rsa.pub.公钥
+
+把公钥copy到要登录的目标机器上
+scp -rp alex@192.168.10.35:/home/alex/把本地文件copy到远程
+scp -rp alex@192.168.10.35:/home/alex/id_rsa/tmp/把远程文件copy到本地
+
+
+
+查看当前用户id,whoami
+id
+uid=1000(yunxin) gid=1000(yunxin) groups=1000(yunxin),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),109(netdev),110(lxd)
+ whoami
+yunxin
+
+切换用户：su -alex
+当前用户就是alex
+
+
+$ ssh yunxin@localhost
+登录别人
+exit
+退出
+yunxin@DESKTOP-5PRR7J2:/mnt/c/Users/王健$ exit
+logout
+
+
+mv ../id_rsa.pub.
+
+在目标机器上，把id_rsa.pub里的key取出写入.ssh/auth
+
+$ ssh @yunxin@192.168.14.35
+登录别人的账号
+
+更改权限：.ssh$ chmod 600 authorized_keys
+
+ll查看全部的修改日期包括文件
+
+cat id_rsa.pub>auuthorized_keys把这个放进这目录里面
+
+
+
+读出id_rsa.pub的内容，写入到>后面的文件
+
+
+
+配置ip;
+ /etc/init.d/network restart
+
+ping 192.168.15.1
+连接这个ip地址
+
+-rp  连目录也拷贝
+scp -rp id_rsa.PUB ALEX@192.168.14.35:/home/
+copy到这个目录下的那个文件里面
+
+
+查看当前目录
+id whoami
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <iframe id="iframe" name="ifra"> </iframe>
+    <form id="fm" method="post"   action="/ajax2.html" target="ifra">
+        <input name="root" >
+{#        <input type="submit" value="提交">#}
+        <a onclick="submi();">提交</a>
+    </form>
+</div>
+
+
+
+{##如果iframe写了oncick=()的话，那么这个this就是window，不用传参数进来，如果里面加了oncick（this）的话，那么下面的参数就是当前标签了，this就是window，也可以不加，默认就是当前标签了obj#}
+
+
+
+<script>
+{#当点击的时候就绑定iframe，然后执行下面的reload,下面的reload不用传参数进来了，那个this就是当前标签了#}
+
+    function submi() {
+        document.getElementById('iframe').onload=reload;
+        document.getElementById('fm').submit();
+
+    }
+    function  reload() {
+        console.log('正在执行reload')
+        console.log(this.contentWindow.document.body.innerHTML)
+        console.log('succ')
+
+
+    }
+{##内部的this就是当前标签#}
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

@@ -1,0 +1,167 @@
+多对多：
+自动创建（manytomany）
+手动创建（新建一个class ）
+联合创建（手动加自动）
+
+
+from django.db import models
+
+# Create your models here.
+
+
+
+
+class userinfo(models.Model):
+    username=models.CharField(
+        null=True,
+        db_column='user',
+        #自定义列名
+        max_length=32,
+        db_index=True,
+        #创建一个索引,只能加速查找
+        unique=True,#限制列值唯一
+        primary_key=True,#在唯一的基础上表示不能为空
+        editable=False,
+        #不可编辑了
+        verbose_name='用户名',
+        help_text='......'
+        # 帮助信息
+    )
+
+
+# 索引
+# unique_for)month 局部建立一个索引
+# 加速查找
+# 约束
+
+
+    user_type_choices=[
+        (0,'普通用户',
+         1,'超级用户',
+         2,'vip')
+    ]
+    #用户类型选择
+    #以下拉框显示出来,admin
+    user_type=models.IntegerField(
+        choices=user_type_choices
+    )
+
+
+class user(models.Model):
+    usernmae=models.CharField(max_length=32,db_index=True)
+    pat=models.ForeignKey(
+        to='part',
+        to_field='id',
+        #吧did作为连接的外键
+        limit_choices_to={'id_gt':1},
+        # 这个只对admin生效
+        db_constraint=True
+        #数据库少了一个约束，还是可以用foreignkey
+
+    )
+
+class part(models.Model):
+
+    cpation=models.CharField(max_length=32)
+    def __str__(self):
+        return  self.cpation
+
+
+
+
+class Tag(models.Model):
+
+    title=models.CharField(max_length=32)
+    m=models.ManyToManyField(
+        to='user',
+        #和那个表相关联,默认和user表的主键进行关联
+        db_constraint=True,
+        through=None,
+        through=user,
+        # 自定义第三张表时，使用字段用于字典关系表
+        through_fields=None,
+        through_fields={'user','tag'}
+        # 自定义第三张表时,使用字段指定关系表中的那些字段做多对多关系表
+        db_table='ttou',
+#默认创建第三章表时，如果后面是None的话就会默认表名，但可以自己定义
+        m=models.ManyToManyField(to='user')
+
+#manytomany默认是三列，加了联合唯一这一约束条件
+    )
+    def __str__(self):
+        return  self.title
+
+
+#在第三张表增加一列（默认的有3列）
+#第三张
+class usertag(models.Model):
+    nid=models.AutoField(primary_key=True)
+    #自增
+    u=models.ForeignKey(to='user')
+    #与那个表先关联
+    t=models.ForeignKey(to='Tag')
+    ctime=models.DateField()
+    #自己增加的一列(时间）
+#联合唯一约束条件，可以让那个字段联合唯一，如果是在t或者u加unique的话就是一对一 或者一对多了，这样就不是manytomany
+    class Meta:
+
+        unique_togther=[
+
+            ('u','t'),
+        ]
+
+
+class Date(models.Model):
+
+    u1=models.IntegerField()
+    u2=models.IntegerField()
+
+
+
+
+    d=models.ManyToManyField('user',related_name='b')
+    #后面加relate_name上去,many和foreignkey的时候
+
+
+
+
+
+
+
+
+
+admin：python manage.py createsuperuser创建admin
+
+
+from django.contrib import admin
+
+# Register your models here.
+
+from  app01 import models
+admin.site.register(
+models.UserInfo
+)
+
+
+
+from  app01 import models
+admin.site.register(models.user)
+admin.site.register(models.Tag)
+#在admint注册表进去
+admin.site.register(models.utotag)
+#把第三张表放进去
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

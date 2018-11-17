@@ -1,0 +1,24 @@
+u=models.customerinfo.objects.last()
+u.user.has_perm
+u.user.has_perm('crm.add_customerinfo')
+false判断是否有这个权限，增删改查
+
+判断有没有权限，一判断有这个权限的话，就从左边放到右边
+
+模块
+is_staff 炮弹是不是员工
+
+
+登录的时候：
+python manage.py  createsuperuser
+这个是在userprofilemanage里面定义的，创建用户和创建超级用户
+
+
+
+
+实例必须交0bjects，django就会找这个属性的实例
+self.db就是你输入的用户名和密码临时存放到了这个里面
+
+u.set_password('23dfd')
+u.save()
+######明文会转变成密文

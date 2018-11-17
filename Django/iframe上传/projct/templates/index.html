@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .btn{
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: red;
+
+    }
+
+</style>
+<body>
+
+<h1>ajax</h1>
+<h3>基于jquery的ajax</h3>
+<div>
+    <a class="btn" onclick="ajaxclick();">click</a>
+    <a class="btn" onclick="ajaxclick1();">click1</a>
+</div>
+<h3>post请求</h3>
+<div>
+    <a class="btn" onclick="ajaxclick3();">click3</a>
+    <a class="btn" onclick="ajaxclick4();">学习ifarme</a>
+</div>
+
+{#<h6>基于ifarme+form表单</h6>#}
+{#<div>#}
+{#    <iframe id="'ifarme" name="ifarm"onload="reload(this);"></iframe>#}
+{#    onload是数据返回是的时候自动执行,回调函数#}
+{#    <form id="fm" action="/ajax1.html" method="post"  target="ifarm">#}
+{#        <input name="root" >#}
+{#        <input type="submit" value="提交">#}
+{#        <a id="sub">提交</a>#}
+{#    </form>#}
+{##}
+{#</div>#}
+##target等于name
+
+<h6>基于ifarme+form表单</h6>
+<div>
+    <iframe id="iframe" name="ifarm"></iframe>
+{#    onload是数据返回是的时候自动执行,回调函数#}
+    <form id="fm" action="/ajax1.html" method="post"  target="ifarm">
+        <input type="text">
+{#        <input type="submit" value="提交">#}
+        <a onclick="loadsubmit();">提交</a>
+    </form>
+
+</div>
+
+
+
+
+
+
+
+
+
+{##在标签上的iframe绑定this的时候这个this等于window#}
+{#<div>#}
+{#    #换一个绑定 方式，通过绑定form表单，当点击提交的时候就绑定iframe，这样就不会出现加载的错误#}
+{#    #这个ifarm要绑定reload，this才有效，才可以看到iframe里面的内容，通过this.document.contents().innerhtml()来找到里面的内容，这个this就是iframe的东西了#}
+{#    <iframe id="'ifarme" name="ifarm" onclick="reload(this);"></iframe>#}
+{#    onload是数据返回是的时候自动执行,回调函数#}
+{#    <form id="fm" action="/ajax1.html" method="post"  target="ifarm">#}
+{#        <input name="root" >#}
+{#        <input type="submit" value="提交">#}
+{#        <a onclick="reloadsubmit()">提交</a>#}
+{#        #这个提交的按钮绑定一个点击事件#}
+{#    </form>#}
+{##}
+{#</div>#}
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/static/jquery-3.1.1.js"></script>
+
+
+
+
+
+
+<script>
+{##this=window#}
+{#th=当前标签#}
+{#    function reload(th){#}
+{#        console.log('执行reload')#}
+{#        console.log('suce',th)#}
+{#        #垮过document到下面的额文档信息来了#}
+{#        console.log(th.contentWindow)#}
+{##表示进入另外一个html文档了,一个html文档嵌套了一个html文档#}
+{#        #回调#}
+{#        console.log(th.contentWindow.document.body)#}
+{#        console.log(th.contentWindow.document.body.innerHTML)#}
+{#        #通过innerhtml或者innertext可以拿到里面的内容#}
+{#        #这个是通过jquery来找的，标签下面得contents的body的messagestatus文本信息#}
+{#        console.log($(th).contents().find('body').text())#}
+{##}
+{##}
+{##拿到了回调函数#}
+{#        var  content=th.contentWindow.document.body.innerHTML;#}
+{#        #拿到里面的东西#}
+{#        var obj=JSON.parse(content)#}
+{#        console.log('对象obj',obj)#}
+{#        #拿到了一个对象#}
+{#    }#}
+
+
+
+
+
+{##this=window#}
+{#th=当前标签#}
+
+
+
+{#        var  content=th.contentWindow.document.body.innerHTML;#}
+{#        var obj=JSON.parse(content)#}
+{#        console.log('对象obj',obj)#}
+{##}
+{##}
+{##}
+{#    #绑定iframe#}
+    function  loadsubmit() {
+        console.log('绑定iframe')
+        document.getElementById('iframe').onload=reload;
+        document.getElementById('fm').submit();
+    }
+
+
+    function reload(){
+{#        这个this就是当前标签#}
+        console.log('执行reload')
+        console.log('suce',this)
+
+        console.log(th.contentWindow)
+        console.log(th.contentWindow.document.body)
+        console.log(this.contentWindow.document.body.innerHTML)}
+        console.log($(this).contents().find('body').text()
+{##}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{##this.contentWindow.document.body.innerHTML#}
+{##这是通过document的来找的#}
+{#还有通过jquery的方法来找#}
+{#$(this).contents().find('body').html()#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{##############################}
+
+    function ajaxclick() {
+        $.ajax({
+            url:'/ajax1.html',
+            type:'GET',
+            data:{'p':123},
+            success:function (arg) {
+                console.log(arg)
+
+            }
+
+        })
+
+    }
+
+
+
+
+
+    function ajaxclick1() {
+        var xhr=new XMLHttpRequest();
+        //和它创建一个连接
+    xhr.onreadystatechange=function () {
+        if(xhr.readyState==4){
+{#                #接收完服务端发来的数据#}
+        console.log(xhr.responseText)
+    }
+}
+    xhr.open('GET','/ajax1.html?p=123');
+{#        #当某个状态进行更改，它会执行#}
+    xhr.send(null)
+    }
+
+
+
+{##post请求方式#}
+    function ajaxclick3() {
+        var xhr=new XMLHttpRequest();
+        //和它创建一个连接
+    xhr.onreadystatechange=function () {
+        if(xhr.readyState==4){
+{#                #接收完服务端发来的数据#}
+        console.log(xhr.responseText)
+    }
+}
+    xhr.open('POST','/ajax1.html?p=123');
+{#        #当某个状态进行更改，它会执行#}
+
+{#        #设置 请求头#}
+        xhr.setRequestHeader('Content-Type','application/r-www-form-urlencoded;charset-UTF-8')
+{#        #带了请求头的话，django就把它转化打request里面了#}
+    xhr.send('p:45435')
+    }
+
+
+{##伪'ajax'#}
+
+    function ajaxclick4() {
+        var xhr = new XMLHttpRequest();
+        //和它创建一个连接
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                {#                #接收完服务端发来的数据#}
+                console.log(xhr.responseText)
+            }
+        }
+        xhr.open('GET', '/ajax1.html?p=123');
+        {#        #当某个状态进行更改，它会执行#}
+        xhr.send(null)
+    }
+
+
+</script>
+</body>
+</html>
