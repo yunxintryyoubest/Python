@@ -1,0 +1,8 @@
+3个角度去加的：
+请求头
+cookies
+csrf的键值
+
+
+
+token一个字符串，当你访问的时候，session会把这个cookies值赋值给你，再次访问的时候，可以带着这个cookies过来，进行校验

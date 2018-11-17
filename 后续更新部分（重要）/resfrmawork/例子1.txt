@@ -1,0 +1,252 @@
+api接口
+
+
+1.
+查询所有的数据的接口
+http://127.0.0.1:9000/api/course/
+
+**kwargs
+字典的形式
+keargs.get('pk')
+
+
+
+为什么会有as_view，默认会取这个里面有as_view里面去找，这个方法
+Aipview,View,ViewSetMinxin里面都有这个as_views
+所以cbv（基于视图的类处理方法）
+类是可以继承这三个的
+
+viewsrtminin是支持as_view里面传参数进去的
+
+
+
+
+
+方法一：
+根据传入的参数判断是单条数据进行查询还是全部的数据进行的查询
+url部分：
+urlpatterns=[
+    url(r'^course/$',views.course.as_view()),
+    url(r'^course/(?P<pk>\d+)$', views.course.as_view()),##命名分组
+
+]
+
+
+views部分：
+
+class  course(Apiview):
+def  get(self,requets,*args,**kwargs):
+##判断是否是单条数据查询还是多条数据查询，如果是全部的额数据查询的haul，那么就会匹配相对应的全部的数据出来
+
+#kwargs是字典的形式，后面可以存放你传入的参数,args的话，字典，列表，元祖的形式都可以，但是kwargs的话就只能是字典的形式，并且还要加上**字典的形式才可以
+pk=kwargs.get('pk')##在url已经是命名分组了，参数是已经不管固定好的，所以按照这个url里面固定好的参数来传
+
+if pk:
+##单条数据
+
+
+else:
+##全部的数据进行的查询
+
+方法一例子：
+url：
+urlpatterns=[
+    url(r'^course/$',views.course.as_view()),
+    url(r'^course/(?P<pk>\d+)$', views.course.as_view()),
+
+]
+
+
+from   rest_framework.serializers import   ModelSerializer
+from   rest_framework.views import    APIView
+
+
+##第一种方式，判断后面传入的是否是有参数，如果有的haul，就是单条数据查询，没有的话，就是多条数据查询,根据后面的**kwargs来进行判断
+class   course(APIView):
+    def  get(self,request,*args,**kwargs):
+        res = {'code': None, 'msg': None}
+        try:
+            pk = kwargs.get('pk')
+            if  pk:
+                ##单条数据进行查询,自动将参数放在**kwargs里面
+                one_data_obj=Course.objects.get(pk=pk)
+                hander=courseserializer(instance=one_data_obj,many=False)
+            else:
+                all_data = Course.objects.all()
+                hander = courseserializer(instance=all_data, many=True)
+            res['code'] = 200
+            res['msg'] = hander.data#这个是已经处理好的对象
+
+        except Exception as e:
+            res['code']=400
+            res['msg']=None
+
+        return Response(res)
+
+
+
+
+
+
+
+
+
+		
+		
+	
+		
+第二种方式
+from    rest_framework.viewsets import   ViewSetMixin,GenericViewSet
+
+
+retrieve详细页面
+get，put，delete，patch，post等方法
+list，destory，retrieve，等方法（默认的）
+
+
+讲解：
+就是根据get，post等请求来进行的自定制操作
+只要是as_views后面有参数的话，都可以进行自定制的操作，对应相对应的方法就可以了
+方法：get，post，put，delete，patch等
+
+
+url('^course/$,views.course.as_view({'get':'listall'})'),
+ul('^coursedetail/$',view.course.as_view({'get','retrieve'})
+同一个类下面的不同方法（访问全部数据和访问单条数据）
+
+class  course():
+def  listall(self,request,*args,**kwargs):
+
+
+
+def  retrieve(self,request,*args,**kwargs):
+##单条数据 
+
+
+return   Response(res)
+
+
+
+
+例子：
+
+url部分：
+
+    url(r'^course/$', views.course.as_view({'get':'listall'})),
+    url(r'^course/(?P<pk>\d+)$', views.course.as_view({'get':'retrieve'})),
+
+
+	
+views部分：
+
+##第二种方法，上面是get，post，put，patch方法，这种是list，retrieve，destory等方法
+from   rest_framework.generics import    GenericAPIView
+from    rest_framework.viewsets import   ViewSetMixin,GenericViewSet
+
+class  course(ViewSetMixin,APIView):
+    ##注明一下，这个名字不是固定的，就是说在哪里url可以知道个地址访问那个路径
+    def   listall(self,requets,*args,**kwargs):
+        ##全部的数据
+        res = {'code': None, 'msg': None}
+        try:
+            all_data = Course.objects.all()
+            hander = courseserializer(instance=all_data, many=True)
+            res['code'] = 200
+            res['msg'] = hander.data  # 这个是已经处理好的对象
+
+        except Exception as e:
+            res['code'] = 400
+            res['msg'] = None
+        return Response(res)
+
+
+
+    def retrieve(self,request,*args,**kwargs):
+        res = {'code': None, 'msg': None}
+        try:
+            pk = kwargs.get('pk')
+            ##单条数据进行查询,自动将参数放在**kwargs里面
+            one_data_obj = Course.objects.get(pk=pk)
+            hander = courseserializer(instance=one_data_obj, many=False)
+            res['code']=200
+            res['msg']=hander.data
+
+        except Exception as e:
+            res['code'] = 400
+            res['msg'] = None
+            return Response(res)
+
+        return   Response(res)
+
+
+
+
+
+
+
+拿到这个选择choice
+get_字段名字__display()		
+		
+depth是0到10之间深度
+source
+可以解决普通字段，fk，many2many，onetoone
+
+如果是manytomany的话，那么就要自定义函数
+authors==serializers.SerializerMethodField()##manytomany的关系
+def  get_authors(self,obj):
+for   i in obj:
+##拿到所有相关联的对象	
+return  [{}  for row in  queryset]
+		
+	 
+	 
+serializers.SerializerMethodField()
+定制前端的对象
+		
+		
+
+		
+
+序列化
+
+depth
+source
+自定义method
+
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

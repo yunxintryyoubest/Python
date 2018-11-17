@@ -1,0 +1,186 @@
+from django.shortcuts import render,redirect,HttpResponse
+
+from  django.views import View
+# Create your views here.
+from  app01.models import   *
+import json
+from  django.forms.models import  model_to_dict##这个是将对象转化为字典的形式
+from   django.core  import serializers##序列化,这个是django序列化的一个组件
+class  publish(View):
+    def  get(self,request):
+
+        print('接受到requets里面的数据',request.GET)
+        publish_query=Publish.objects.all()###queryset对象，不能序列化，不能进行json.dumps操作
+        publish_list=list(Book.objects.all().values('book_name','publish__publish_addr'))##转化为可以序列化的列表形式
+        ##方式1.all的是squeryset对象
+        # return    HttpResponse(json.dumps(publish_list))##将对象转化为字符串的形式
+        return  HttpResponse(json.dumps(publish_list))####注意返回的是字符串的形式
+#序列化是将对象转化为字符串
+
+
+    def post(self,request):
+        print(request.POST)
+        print(type(request))
+        '''<class 'django.core.handlers.wsgi.WSGIRequest'>'''
+        from  django.core.handlers.wsgi import   WSGIHandler##django原生的qeryts，这个urlencode是双向的，当你去数据或者是发送数据的时候都可以转换成相对应的格式
+        return   HttpResponse('ok')
+
+####下面是apiview部分
+##构建序列化的类#############################################################
+from  rest_framework  import  serializers
+class  Bookserializer(serializers.Serializer):
+    book_name=serializers.CharField()
+
+##下面是多对多的字段关系
+    '''
+      ###讲解：下面按这个序列化来取这个数据的时候，如果是外键foreign的关系的时候，相当于是objj.author.author_name这个是可以取出来的，一对一的关系
+    如果是mantomanyto的关系的时候不可以这样直接取出关联的字段的信息出来，只能是.all的方式取出所有的数据对象
+    对于多对多还有一个方法通过get_字段名的函数来拿到这个想要拿到的值
+    book_price=serializers.SerializerMethodField()
+    
+    def  get_publish(self,obj):  这个是在在序列化的时候实例化了一下，publish(obj）,self就是调用的publish，obj就是for循环的每一个数据对象
+        return  .....
+        
+        
+     '''
+
+
+
+
+
+    author=serializers.CharField(source="author.author_name")##注明一下，这个拿到的值是所关联的表的__str__所返回的值
+    # publish=serializers.CharField(source="publish.publish_name")##这个manytomany的字段关系是拿不出来数据的，他是.all()才能拿到这个所关联的表下面的所有queryset数据
+    # publish=serializers.CharField(source="publish.all")##这个manytomany的字段关系是拿不出来数据的，他是.all()才能拿到这个所关联的表下面的所有queryset数据
+    publish=serializers.CharField(source="publish.all")##这个manytomany的字段关系是拿不出来数据的，他是.all()才能拿到这个所关联的表下面的所有queryset数据
+    ##source是取这个所关联的表里面的某一个字段的值出来"publish": "app01.Publish.None"
+##后面的source相当于是obj.publish.publish_name，按后面的来取数据,mantimany两种方式：<QuerySet [<Publish: 上海出版社>]>
+
+
+
+
+    book_price=serializers.SerializerMethodField()##多对多的字段的时候，可以这样处理
+    #
+    #
+    def  get_book_price(self,obj):####相当于是上面的拿到什么值出来,这个后面的obj是循环的这个表对象，拿到所有的数据对象  book_price":[3232.0]}
+        ##上面的obj想到于是for  obj  in book_list:
+        tmp=[]
+        for  obj in  obj.book_price.all():##拿到这个manytomany所关联的表的所有的数据对象
+            price=obj.price
+            tmp.append(price)
+
+        return tmp
+
+    # book_price=serializers.CharField(source='book_price.price')#这个相当于是下面执行操作的的时候是obj.book_price.price取到这个字段，在取到下面所关联的表的数据
+
+
+class  BookModelSerizter(serializers.ModelSerializer):
+    class Meta:
+        model=Book
+        fields='__all__'
+####如果是外键的话，取的是主键的名字
+
+
+
+
+
+
+
+# ####下面是基于modelserizter的自定制，对那个字段进行自定制
+#     book_name=serializers.CharField()
+#     author=serializers.CharField(source='author.pk')
+#     # publish=serializers.SerializerMethodField()
+#
+#     def   create(self, validated_data):
+#         print('全部的数据',validated_data)
+#         ##全部的数据 {'book_name': 'julia', 'author': {'author_name': 'alex'}, 'publish': [<Publish: 上海出版社>], 'book_price': [<Price: 1231.21>]}
+#         Book.objects.create(book_name=validated_data['book_name'],author_id=validated_data['author']['pk'])##当不是manytomany的时候，就可以直接创建，外键有的时候，可以是author_id=validated_data['author_id']来创建
+#         Book.publish.add(*validated_data['publish'])##因为是manytomany的关系，是列表的形式，要加*
+#         Book.book_price.add(*validated_data['book_price'])####manytomany的关系是这样写的，是add 把数据添加进去
+#         # return  Book
+#         return  Response(validated_data)
+
+
+
+
+
+
+from  rest_framework.views import   APIView
+from  django.utils.safestring import  mark_safe
+from   rest_framework.response import   Response###导入这个response的模块
+class  publishview_api(APIView):
+    def get(self, request):##这个是get的请求方式的时候
+        book_list=Book.objects.all()#拿到这个queryset的对象集合，queryset对象
+
+        Book_ser=BookModelSerizter(book_list,many=True)
+        print(Book_ser.data)
+        # return  HttpResponse(Book_ser.data)##作为字符串返回了，这个response是django自己的
+        return   Response(Book_ser.data)##这个是resframework里面的response,这个是resfrmework的response，使用这个的时候，会有一个页面出来
+
+
+    def  post(self,request):
+        data=BookModelSerizter(data=request.data)####前面要加data，这样才可以提交数据进行校验
+        ###后面是post请求的数据
+        if  data.is_valid():###进行校验判断
+            print('suc')
+            data.save()#保存数据进数据库,看父类源码，里面有creare的方法
+            return  Response(data.data)
+        else:
+            return  Response(data.errors)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+这里是查看单条数据（get请求），编辑单条数据（put请求），删除条数据（delete请求）
+
+class  bookdetail(APIView):
+    def  get(self,request,id):
+        ##查看单条数据
+        book_obj=Book.objects.filter(id=id).first()#####拿到的是queryset对象，下面进过序列化得到的是一个有序的字典，就可以渲染出来，更好的处理
+        after_data=BookModelSerizter(book_obj)
+        return  Response(after_data.data)
+
+    def put(self,request,id):
+        book_obj=Book.objects.filter(id=id).first()#####拿到的是queryset对象，下面进过序列化得到的是一个有序的字典，就可以渲染出来，更好的处理
+        after_hander=BookModelSerizter(book_obj,data=request.data)###对前面的哪一个表的数据进行编辑操作，如果不加前面的话就会是创建数据的操作
+#########后面的data是有requets表单里面的数据的时候，要加参数data，就知道哦啊是form_data里面的数据
+        if  after_hander.is_valid():
+            after_hander.save()
+            return  Response(after_hander.data)###返回这个已经修改好的数据回来，返回传这个已经序列化好的数据出来
+        else:
+
+            return  Response(after_hander.errors)
+
+
+    def   delete(self,request,id):
+        Book.objects.filter(pk=id).delete()
+
+        return  Response('删除成功')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

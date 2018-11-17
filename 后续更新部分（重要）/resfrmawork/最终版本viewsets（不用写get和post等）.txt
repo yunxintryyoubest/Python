@@ -1,0 +1,57 @@
+url配置：
+url(r'^books/$',views.loginview.as_view({"get":'list','post':'create'})),
+
+url(r'^bookdetail/(\d+)$',views.loginview.as_view({"get":'retrieve','delete':'destroy','put':'update'}),name='bookdetail'),
+
+
+
+'(?P<pk>\d+)'
+命名分组
+
+
+
+
+
+
+在url里面配置这个method就好了
+
+上面实现的原理是：
+self.method=action
+后面调用的是实例方法：self.method.action（self是generics最终调用）
+self.get=list()
+self.post=create()
+create方法在ListCreateAPIView模块里面做了封装
+RetrieveUpdateDestroyAPIView
+里面有retrieve
+destory
+update方法
+
+
+
+
+
+
+views部分：
+#####生成序列化对象
+class  BookModelSerizter(serializers.ModelSerializer):
+    class Meta:
+        model=Book
+        fields='__all__'
+
+
+
+from   rest_framework import viewsets
+导入这个viewset模块
+
+class  bookdetail(viewsets.ModelViewSet):
+    # class bookdetail(generics.RetrieveUpdateDestroyAPIView):
+
+    queryset = Book.objects.all()
+    serializer_class = Bookserializer
+
+
+
+
+
+##讲解：这里不用配置这个get，post的方法，ModelViewset里面做了相对应的封装，会找自己的父类，self.get,self.post=post  self.method=action写进去了
+

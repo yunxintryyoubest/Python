@@ -1,0 +1,16 @@
+apiview
+视图函数
+
+
+
+
+
+
+
+'''
+apiview
+序列组件serivialize
+视图（可以进行校验和保存操作）序列化类
+组件（认证权限频率）
+分页和响应器（Response）不是httpresponse
+'''

@@ -1,0 +1,128 @@
+声明一下：这个构建序列化的类，里面的字段分为普通字段，外键，manytomany字段
+
+
+
+
+
+当是普通字段的时候
+book_name=serializers.CharField()
+
+当是外键字段的时候：
+book_publish=serializers.CharField(source="book_publish.name")
+这种方式相当于是:
+for  obj in  Book.objects.all():
+obj.book_publish.name取到的值,按后面的字段信息来检索
+
+
+当是manytomany的关系的时候：
+不能直接点来取数据，所关联多个数据信息
+book_name=serializers.CharField
+author=serializers.SerializerMethodField()
+def  get_author(self,obj):
+tmp=[]
+for  i in  obj.author.all():
+price=i.price
+tmp.append(price)
+
+return tmp
+
+
+里面的这个函数是当执行序列化的时候，执行的
+for  obj in  obj.author.all():
+{....
+author:author(obj)}self是调用的这个函数,obj是数据对象
+
+
+
+
+
+
+
+
+
+
+
+
+
+url部分：
+
+url(r'^apiview/$',views.publishview_api.as_view()),
+
+
+####下面是apiview部分
+##构建序列化的类#############################################################
+from  rest_framework  import  serializers
+class  Bookserializer(serializers.Serializer):
+    book_name=serializers.CharField()
+
+##下面是多对多的字段关系
+    '''
+      ###讲解：下面按这个序列化来取这个数据的时候，如果是外键foreign的关系的时候，相当于是objj.author.author_name这个是可以取出来的，一对一的关系
+    如果是mantomanyto的关系的时候不可以这样直接取出关联的字段的信息出来，只能是.all的方式取出所有的数据对象
+    对于多对多还有一个方法通过get_字段名的函数来拿到这个想要拿到的值
+    book_price=serializers.SerializerMethodField()
+    
+    def  get_publish(self,obj):  这个是在在序列化的时候实例化了一下，publish(obj）,self就是调用的publish，obj就是for循环的每一个数据对象
+        return  .....
+        
+        
+     '''
+
+
+
+
+
+    author=serializers.CharField(source="author.author_name")##注明一下，这个拿到的值是所关联的表的__str__所返回的值
+    # publish=serializers.CharField(source="publish.publish_name")##这个manytomany的字段关系是拿不出来数据的，他是.all()才能拿到这个所关联的表下面的所有queryset数据
+    # publish=serializers.CharField(source="publish.all")##这个manytomany的字段关系是拿不出来数据的，他是.all()才能拿到这个所关联的表下面的所有queryset数据
+    publish=serializers.CharField(source="publish.all")##这个manytomany的字段关系是拿不出来数据的，他是.all()才能拿到这个所关联的表下面的所有queryset数据
+    ##source是取这个所关联的表里面的某一个字段的值出来"publish": "app01.Publish.None"
+##后面的source相当于是obj.publish.publish_name，按后面的来取数据,mantimany两种方式：<QuerySet [<Publish: 上海出版社>]>
+
+
+
+
+    book_price=serializers.SerializerMethodField()##多对多的字段的时候，可以这样处理
+    #
+    #
+    def  get_book_price(self,obj):####相当于是上面的拿到什么值出来,这个后面的obj是循环的这个表对象，拿到所有的数据对象  book_price":[3232.0]}
+        ##上面的obj想到于是for  obj  in book_list:
+        tmp=[]
+        for  obj in  obj.book_price.all():##拿到这个manytomany所关联的表的所有的数据对象
+            price=obj.price
+            tmp.append(price)
+
+        return tmp
+
+
+
+
+
+
+
+APIview部分：
+from  rest_framework.views import   APIView
+from  django.utils.safestring import  mark_safe
+from   rest_framework.response import   Response###导入这个response的模块
+class  publishview_api(APIView):
+    def get(self, request):##这个是get的请求方式的时候
+        book_list=Book.objects.all()#拿到这个queryset的对象集合，queryset对象
+
+        Book_ser=Bookserializer(book_list,many=True)
+        print(Book_ser.data)
+        # return  HttpResponse(Book_ser.data)##作为字符串返回了，这个response是django自己的
+        return   Response(Book_ser.data)##这个是resframework里面的response,这个是resfrmework的response，使用这个的时候，会有一个页面出来
+
+
+    def  post(self,request):
+        pass
+
+
+
+
+
+
+结果：
+
+
+[{"book_name":"python","author":"alex","publish":"<QuerySet [<Publish: 上海出版社>]>","book_price":[3232.0]},{"book_name":"go","author":"yunxin","publish":"<QuerySet [<Publish: 北京邮电出版社>]>","book_price":[1231.21,3232.0]}]

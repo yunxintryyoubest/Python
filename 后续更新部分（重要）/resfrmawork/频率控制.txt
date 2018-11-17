@@ -1,0 +1,25 @@
+from django.shortcuts import render
+
+# Create your views here.
+from  rest_framework.views import   APIView
+from  rest_framework.response import  Response
+class VistetrateThorlt(APIView):
+    print('执行频率')
+    def   allow_request(self,request,view):
+        ##要求访问网站的频率每分钟不能超过20次
+        print(view)
+        print(request)
+        if  1:
+            print(request.META.get('REMOTE_ADDR'))##拿到这个访问的地址
+            return  True
+        else:
+            return  'fail'
+
+#
+class  viste_times(APIView):
+    print('进入频率控制')
+    throttle_classes = [VistetrateThorlt,]
+    def  get(self,requets):
+        print('get的请求方式')
+        print('数据是',requets.data)
+        return  Response('get')

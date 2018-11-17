@@ -1,0 +1,3 @@
+  url(r'^books/(?P<pk>\d+)/$', views.bookdetail.as_view(), name="book_detail"),
+
+固定了名字，后面传的参数也必须是这个固定的名字

@@ -1,0 +1,10 @@
+   # 取数据
+        # 原生request支持的操作
+        # print("POST",request.POST)
+        # print("body",request.body)
+        # # print(request)
+        # print(type(request))
+        # from django.core.handlers.wsgi import  WSGIRequest
+        #  新的request支持的操作
+        # print("request.data",request.data)
+        # print("request.data type",type(request.data))

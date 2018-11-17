@@ -1,0 +1,12 @@
+要显示出相对应的页面在resframework里面的话，要在settings里面配置这个rest_frmework就可以在浏览器显示出页面出来
+'rest_framework'
+
+
+
+from  rest_framework.views import   APIView
+
+
+
+
+
+http://127.0.0.1:8000/apiview/?format=json

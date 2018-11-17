@@ -1,0 +1,11 @@
+##配置router固定的用法
+from   rest_framework import  routers
+router=routers.DefaultRouter()
+router.register('Userinfo',views.viste_times)##后面是跟着你要访问的那个view来进行看的，访问得地址是通过表明+.json或者其他的
+router.register('Author',views.viste_times)
+
+
+
+
+
+url(r'^login/$',include(router.urls)),##把这个加进来就可以实现这个效果，地址栏写入地址.,.josn的形式来访问的

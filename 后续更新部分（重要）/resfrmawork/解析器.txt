@@ -1,0 +1,71 @@
+from django.shortcuts import render
+
+# Create your views here.
+from  rest_framework.views import   APIView
+from  rest_framework.response import  Response
+from   rest_framework.parsers import  JSONParser,FormParser,MultiPartParser
+class VistetrateThorlt(APIView):
+    print('执行频率')
+    def   allow_request(self,request,view):
+        ##要求访问网站的频率每分钟不能超过20次
+        print(view)
+        print(request)
+        if  1:
+            print(request.META.get('REMOTE_ADDR'))##拿到这个访问的地址
+            return  True
+        else:
+            return  'fail'
+
+
+
+'''
+    def check_permissions(self, request):
+        """
+        Check if the request should be permitted.
+        Raises an appropriate exception if the request is not permitted.
+        """
+        for permission in self.get_permissions():
+            if not permission.has_permission(request, self):
+                self.permission_denied(
+                    request, message=getattr(permission, 'message', None)
+                )
+
+
+'''
+
+#
+# class  Has_Permisssion(APIView):
+#     message='svip'
+#     def  has_permission(self,request):
+#         print(request.data)
+
+class  viste_times(APIView):
+    # print('进入频率控制')
+    # throttle_classes = [VistetrateThorlt,]
+    # permission_classes = [Has_Permisssion,]
+    parser_classes = [JSONParser,]##解析器，默认是有3个，但是如果指定的haul，就用指定的,默认会有3种类型
+    def  post(self,requets):
+        print('get的请求方式')
+        '''如果是josn的数据格式的话，requets.data来取值'''
+        print(requets.body)
+        recv=str(requets.body,encoding='utf-8')
+        import  json
+        # data=json.loads(recv)
+        # print(data)
+
+        # print('数据是',requets.body)
+        # print('数据是',type(requets.body))
+        # print('数据是',requets.body)
+        # print(requets.post)
+        return  Response('post')
+
+'''
+如果是content-type是json的数据格式的话，那么接受到就要进行》》字符串》》序列化》》字典
+
+FormParser：request.post里面可以拿到
+<QueryDict: {'user': ['alex ']}>
+json:
+只能去body里面拿数据
+
+
+'''

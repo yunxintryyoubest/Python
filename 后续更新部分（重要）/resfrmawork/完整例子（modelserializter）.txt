@@ -1,0 +1,200 @@
+  URL部分：
+
+'''
+讲解：
+当下面的url被访问的时候，执行的是下面的view方法
+
+被访问ul的时候，是就得requets方法，当执行这个下面的get，post等请求的时候，是新的requets
+注明一下：这个执行下面的方法的时候，是Apiview（执行dispath（）)
+dispatch()
+构建新的requtest对象
+'''
+
+
+
+'''cbv模式'''
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    url(r'^publish/$',views.publish.as_view()),##view还是当前的view，dispath不是这个当前的dispath，可能是父类的，resfrmaework构建新requets
+    url(r'^book/$',views.book.as_view()),
+    # url(r'^books/(\d+)/$', views.bookdetail.as_view(),name='book_detail'),
+    # url(r'^books/(?P<pk>\d+)/$', views.bookdetail.as_view(), name='book_detail'),##有名分组后面的名字传的就是固定的名字pk
+    url(r'^books/(?P<pk>\d+)/$', views.bookdetail.as_view(), name="book_detail"),
+    # View:view(request)=====APIView:dispatch()
+]
+
+
+
+
+
+
+
+
+view部分：
+##下面部分
+#####生成序列化对象
+class  BookModelSerizter(serializers.ModelSerializer):
+    class Meta:
+        model=Book
+        fields='__all__'
+####如果是外键的话，取的是主键的名字
+    ##下面相当于是加个连接url，当你访问那个url的时候，就进行反向解析这个url
+        # author = serializers.HyperlinkedIdentityField(
+        #     view_name='book_detail',  ##反向解析
+        #     lookup_field='author_id',  ##这里是取这个id值，当你循环到那个外键的那个id值的值的时候，作为参数传进去
+        #     lookup_url_kwarg='pk'  ##把还是那个面的id作为参数传进去，就是在url路由里面的有名分组
+        # )
+        author=serializers.HyperlinkedIdentityField(
+            view_name="book_detail",
+            lookup_field="author_id",
+            lookup_url_kwarg="pk"
+    )
+
+
+
+'''
+操作：
+查看所有的数据queryset类型，all（）
+具体操作：
+all_list=Book.objects.all()
+handler=Bookserizter(all_list,many=True）##这个是序列化操作#序列化操作：将queryset和model对象》》json格式的数据
+return  Response(handler.data)
+创建数据
+是post的请求，不需要传参数id进来
+requtes.data是接受到的创建的数据
+handler=Bookserizter(data=request.data)#反序列操作：将接受到的requets.data的json数据格式转化为queryset对象类型和model对象
+if handler.is_valid():
+handler.save()##保存的是queryset对象类型，已经进行反序列化的操作了
+保存的是queryset类型的数据
+
+return Response(handler.data)
+else;
+return  Response(handler.errors)
+
+
+'''
+
+
+
+##这是可以查看所有的数据
+from  rest_framework.views import   APIView
+from  django.utils.safestring import  mark_safe
+from   rest_framework.response import   Response###导入这个response的模块
+class  book(APIView):
+    def get(self, request):##这个是get的请求方式的时候
+        book_list=Book.objects.all()#拿到这个queryset的对象集合，queryset对象
+
+        Book_ser=BookModelSerizter(book_list,many=True,context={'request':request})
+        print(Book_ser.data)
+        # return  HttpResponse(Book_ser.data)##作为字符串返回了，这个response是django自己的
+        return   Response(Book_ser.data)##这个是resframework里面的response,这个是resfrmework的response，使用这个的时候，会有一个页面出来
+
+
+    def  post(self,request):
+        data=BookModelSerizter(data=request.data)####前面要加data，这样才可以提交数据进行校验
+        ###后面是post请求的数据
+        if  data.is_valid():###进行校验判断
+            print('suc')
+            data.save()#保存数据进数据库,看父类源码，里面有creare的方法
+            return  Response(data.data)
+        else:
+            return  Response(data.errors)
+
+
+
+
+##下面是传了参数进来id
+'''
+操作：
+查看单条数据   
+model_obj=Book.objects.filter(pk=id).first()##是一个model对象
+handler=BookModelSerizter(model_obj)##对model对象进行序列化出租（有序的字典orderdic)
+return   Response(handler.data)##责怪Response是resframe特有的方法，响应器orderdic转化成正常的字典的格式
+修改某一条数据(到那时post，put的请求的时候，都可以进行反序列的操作（修改和创建数据都是queryset对象类型)
+model_obj=Book.objects.filtr(pk=id).first()
+handler=BookModelSerizter(model_obj,data=request.data)###后面是接受到的数据，前面是对哪一个数据进行编辑操作，如果没有加前面的话，就是create的操作了
+if handler.is_valid():
+handler.save()
+retutn  Response(handler.data)
+else;
+return  Response(handler.errors)
+删除某一条数据
+delete_obj=book.objects.filter(pk=id).delete()
+return Response()##不返回值
+'''
+
+class  bookdetail(APIView):
+
+    # def get(self,request):
+    #     ##查看所有的书籍
+    #     book_list=Book.objects.all()
+    #     all_list=BookModelSerizter(book_list,many=True)
+    #
+    #     return Response(all_list.data)
+
+    def  get(self,request,pk):
+        ##查看单条数据
+        print('执行get的请求')
+        book_obj=Book.objects.filter(pk=pk).first()#####拿到的是queryset对象，下面进过序列化得到的是一个有序的字典，就可以渲染出来，更好的处理
+        # after_data=BookModelSerizter(book_obj)
+        after_data=BookModelSerizter(book_obj,context={'request':request})##文本类型，这个是和上面的连接有关，后面的参数context,HyperlinkedIdentityField,这个是设置了连接的时候，进行的操作
+        return  Response(after_data.data)
+    ######将queryset或者是modle对象序列化成josn数据
+    #### after_data=BookModelSerizter(book_obj)
+
+
+
+
+    '''
+    requets.data是进行post和put请求与的时候可以拿到
+    body：requets.data
+    
+    构建request对象：
+    self.requets=Request(request)
+    self.reqeuts._reqeust
+    
+    get请求：requets.GET.get
+    post,put请求：requets.data,这个是接受数据request.data
+    分发get 请求
+    dispatch()
+    
+    当进行get请求的时候，把这个queryset对象或者是model对象序列化成json数据
+    当进行post，put的请求的时候，把这个requets.dtaa接受到的数据反序列化成queryset或者是model对象，然后才可以进行校验，保存等操作
+    save的时候，是保存的queryset对象，，已经反序列化了（json》》queryset对象或者是model对象》》数据库里面的一个记录）
+    
+    
+    '''
+
+
+
+
+    def put(self,request,pk):
+        book_obj=Book.objects.filter(pk=pk).first()#####拿到的是queryset对象，下面进过序列化得到的是一个有序的字典，就可以渲染出来，更好的处理
+        after_hander=BookModelSerizter(book_obj,data=request.data)###对前面的哪一个表的数据进行编辑操作，如果不加前面的话就会是创建数据的操作
+#########后面的data是有requets表单里面的数据的时候，要加参数data，就知道哦啊是form_data里面的数据
+        if  after_hander.is_valid():
+            after_hander.save()
+            return  Response(after_hander.data)###返回这个已经修改好的数据回来，返回传这个已经序列化好的数据出来
+        else:
+
+            return  Response(after_hander.errors)
+
+
+    def   delete(self,request,id):
+        Book.objects.filter(pk=id).delete()
+
+        return  Response('删除成功')
+
+
+
+
+
+
+'''
+apiview
+序列组件serivialize
+视图（可以进行校验和保存操作）序列化类
+组件（认证权限频率）
+分页和响应器（Response）不是httpresponse
+'''
+
