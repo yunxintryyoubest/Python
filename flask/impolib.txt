@@ -1,0 +1,32 @@
+
+settings下面的foo的类  
+这个是可以取这个setting里面的foo的类下面的的静态的方法
+class Foo:
+DEBUG=True
+Test=True
+
+
+
+
+这个类下面是静态的方法
+
+
+import importlib
+
+path='settings.Foo'
+
+p,c=path.rsplit('.',maxsplit=1)
+############这个已经分割了，以点进行分割，第一个是settings，第二个是foo
+m=importlib.import_module(p)
+
+cls=getattr(m,c)
+
+
+print(cls)
+
+for  key in dir(cls):
+    if key.isupper():
+        print('这个是大写的')
+        print(key)
+        print(key,getattr(cls,key))
+        #####这个是打印出这个setings里面的key（就是foo的类）

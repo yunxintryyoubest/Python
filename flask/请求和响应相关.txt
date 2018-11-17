@@ -1,0 +1,4 @@
+可以设置这个响应头和响应体
+
+make_response('index')
+header['xxx']='123'

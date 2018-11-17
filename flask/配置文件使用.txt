@@ -1,0 +1,35 @@
+给你一个路径：
+app.config.from_config("python的类或者类的路劲')
+
+
+
+
+app.config.from_object('settings.Pro')
+这个是可以修改这个配置文件里面的信息 
+
+
+settings里面的配置的信息：
+class  Pro(object):
+    DEBUG=True
+
+
+
+
+
+
+from  flask   import Flask
+
+
+
+app=Flask(__name__,template_folder='templates')
+
+
+print(app.config)
+app.config['DEBUG']=True
+#####这个是修改这个config  里面的配置文件,这个是已经修改了这个config的配置的文件
+
+
+
+app.config.from_object('settings.Pro')
+###这个也是可以修改这个settings里面的配置文件，这个是通过引入这个settings里面的Pro的类，这个是通过哦修改这个配置的信息来实现的
+print(app.config)
