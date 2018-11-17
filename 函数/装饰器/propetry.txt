@@ -1,0 +1,43 @@
+class Layproper:
+    def __init__(self,func):
+        self.func=func
+
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self#返回类原来的Layproper
+            return instance#如果是类来调用area之后执行get描述符的时候回直接返回本是本身类,None
+
+        res=self.func(instance)
+        print(instance)#实例本省，如果是类的话就是name
+        print(owner)
+        print(self.func)#这个是area对象
+        return res
+    # def __set__(self, instance, value):
+    #     setattr(self.func,)
+
+class Room:
+    def __init__(self,name,width,length):
+        self.name=name
+        self.width=width
+        self.length=length
+
+    @Layproper
+    def area(self):
+        return self.width*self.length
+
+    @property
+    def test(self):
+        return '调用test'
+
+f1=Room('矩形',12,32)
+print(f1.area)
+print(f1.test)
+#实例调用
+print(Room.area)
+
+print(Room.test)
+#类调用
+
+
+
+

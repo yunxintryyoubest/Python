@@ -1,0 +1,98 @@
+
+def dec(**kwargs):
+    def func(obj):
+        print('开始实现修饰功能了')
+        for key,value in kwargs.items():
+            # obj.key=value
+            setattr(obj,key,value)
+        # print(func.__dict__)
+        # print(obj)
+        return obj
+    # print(kwargs)
+    return func
+
+# func('dsfgsd')#func函数传入参数值
+@dec(x=2,y=4) #lei=dec(lei)
+class lei:
+    pass
+# print(lei.__dict__)
+print(lei.__dict__)
+
+
+@dec(name='alex')
+class new2:
+    pass
+
+print(new2.__dict__)
+print(new2.name)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#下面的这个是将参数值类型转换并且判断实例化的各个值是否满足所要求的类型，在输出
+def deco(**kwargs):
+    def fun(obj):
+        print('开始进行装饰了')
+        for key,value in kwargs.items():
+            setattr(obj,key,Typed(key,value))#Typed是描述符，可以把value的值转换为响应的value类型
+        return fun
+    return deco
+
+@deco(name=str,age=int,addr=str)
+class People:
+    pass
+
+p1=People('alex','34','shanghai')
+print(People.__dict__)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def deco(**kwargs):
+    def fun(obj):
+        print('开始装饰了')
+        for key ,value in kwargs.items():
+            setattr(obj,key,value)
+        return obj
+
+    print(kwargs)
+    return  fun#要返回原来的对象，要返回装饰函数
+
+
+    # return deco
+
+@deco(name='alex',age='33',addr='sds')
+class People:
+    pass
+
+print(People.name)
+print(People.__dict__)
