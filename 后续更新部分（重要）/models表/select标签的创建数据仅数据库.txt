@@ -1,0 +1,122 @@
+html部分：
+
+     <label>作者
+                <select   name="author_pk_list"  multiple>
+                    {% for author   in   author_list %}
+                        <option value="{{ author.pk }}">{{ author }}</option>
+                    {% endfor %}
+
+                </select>
+
+
+
+
+  <label>出版社
+                <select name="publish_pk">
+                    {% for  publish  in publish_list %}
+                        <option  value="{{ publish.pk }}">{{ publish }}</option>
+{#                        //注明一下如果不去是select的话，取到的值是里面的values#}
+                    {% endfor %}
+                </select>
+            </label>
+
+
+
+
+views部分：
+
+
+def add_book(request):
+    print('add_book')
+    publish_list=Publish.objects.all()
+    author_list=Author.objects.all()
+
+    if request.method=='POST':
+        print('post')
+
+
+        print('全部提价的数据是',request.POST)
+        name=request.POST.get('book')
+        price=request.POST.get('price')
+        date=request.POST.get('date')
+        publish=request.POST.get('publish_pk')
+        # publish_id=request.POST.get('publish_id')
+    ###有外键的时候，应该是对应的id去创建
+        # author=request.POST.get('author')
+        author_list=request.POST.getlist('author_pk_list')
+        ##注明一下，这个取到的是values。，一直都是values
+
+        print('这个添加书籍的字段外键是:',publish)
+        print('这个全部的作者的id是:',author_list)
+
+        book_obj=Book.objects.create(title=name,price=price,date=date,publish_id=publish)
+        # book_obj=Book.objects.values('publish_id')
+        ##这个创建数据的字段，如果是外键的，应该是_id,来创建的
+
+        book_obj.author.add(*author_list)
+        ###这个manytomany的字段添加是这种方式添加数据进去,是通过对象.mantomany字段.add来创建mantomany的数据仅数据库里面
+        return redirect('/index/')
+
+    return  render(request,'add_book.html',locals())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+讲解：
+当你通过requets.POST的方式去取值的时候，取到的都是value，当是select标签的时候，可以设置这个value，为某个值，因为requtes取到的都是values
+当是多选的时候，取到这个id_list，在models里面这个字段是manytomany的关系，所以要创建改字段要通过对象.+manytomany字段+add（*pk_list）来创建改字段的数据存入数据库里面
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

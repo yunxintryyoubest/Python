@@ -1,0 +1,107 @@
+
+
+from   django.shortcuts import HttpResponse
+def  test(request):
+    return  HttpResponse('test')
+
+
+
+
+from  django.conf.urls  import url,include
+from   myblog2  import config_views
+from  django.contrib  import admin
+
+
+
+def test1(requets):
+    return  HttpResponse('test1')
+
+
+def test2(requets):
+    return HttpResponse('test2')
+
+def add(requets,id):
+    return HttpResponse('add/%s'%id)
+def list(requets):
+    return HttpResponse('list')
+def delete(requets,id):
+    return HttpResponse('delete/%s'%id)
+def change(requets,id):
+    return HttpResponse('change/%s'%id)
+
+
+def get_url_action():
+
+    action_dic=[]
+    action_dic.append(url('^$',list))###这个里面什么都不放，就但访问上一个页面的时候，就是查看内容
+    action_dic.append(url('^(\d+)/add/$',add))##加了$就表示后面不能在往下面url分发执行
+    action_dic.append(url('^(\d+)change$',change))
+    action_dic.append(url('^(\d+)/delete/$',change))
+    # action_dic.append(url('^\d+/delete/$',change))
+    #####注明一下，（）是当做一个参数传到views里面
+
+    return   action_dic
+
+
+
+
+
+def get_url():
+    print('执行这个get_url的部分')
+    print(admin.site._registry)
+    tem=[]
+    for   app_obj,admin_app_obj  in  admin.site._registry.items():
+        print(app_obj)
+        app_name=app_obj._meta.app_label
+        ############这个是拿这个app的名字
+        model_name=app_obj._meta.model_name
+        ###这个是可以拿到里面这个app01里面全部的表的名字 ，全部给取出来
+
+        print('打印出app名字是',app_name)
+        print('拿到全部的表的名字：',model_name)
+        # tem.append(url(r'^{0}/{1}/$'.format(app_name,model_name),test2))
+
+        tem.append(url(r'^{0}/{1}/'.format(app_name,model_name),(get_url_action(),None,None)))
+###########首先执行这个一级分发，然后在执行这个二级分发，之前这个不能加$，否则就不能往下面分发url下去了
+
+    print(tem)
+    '''
+    [<URLPattern '^auth/group'>, <URLPattern '^auth/user'>, <URLPattern '^app01/userinfo'>, <URLPattern '^app01/article'>, <URLPattern '^app01/blog'>, <URLPattern '^app01/tag'>, <URLPattern '^app01/category'>, <URLPattern '^app01/comment'>, <URLPattern '^app01/articleupdown'>, <URLPattern '^app01/articledetail'>, <URLPattern '^app01/article2tag'>]
+    '''
+    return  tem
+
+
+urlpatterns=[
+    url('^index',config_views.index),
+    url('^test',test),
+    url('^yuan/',(get_url(),None,None)),
+]
+
+
+'''
+    url('^yuan/',(
+        [
+            url(r'^test3/',([
+                url(r'^test4',test2),
+                url(r'^test5',test2),
+               ] ,None,None)),
+
+            url(r'^test1',test1),
+            url(r'^test2', test2),
+        ],None,None
+
+    ))
+
+
+'''
+
+None，None
+###第一个是app的名字，第二个是命名空间的名字，后面两个可以自己取值，总之要传参数进去，什么值都可以传进去，不能缺少
+
+
+'''
+上面的尖叫号的作用，下面的url必须紧贴着上一个url，前面不能加其他值进来，否则是找不到这个url的
+也就是说必须以什么开头，后面必须紧贴着下一个url
+re.findall('^index/','/yuan/index/tets1')
+这个是匹配不了的，因为后面没有以index开头
+'''

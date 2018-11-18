@@ -1,0 +1,10 @@
+wb这个是二进制的形式写入的
+
+
+
+chunk的形式写入这个文件里面：
+for   chunk  in value.chunks:
+                ##循环遍历这个value，把他写入文件进去  
+
+   f.write(chunk)
+这个是为了避免这个发送文件的时候，保证这个传输文件的完整性  

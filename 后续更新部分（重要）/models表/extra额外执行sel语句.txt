@@ -1,0 +1,51 @@
+ret=models.Person.objects.all().extra(
+select={'gt':'salary>2000'}
+)这个是取这个工资大于2000的
+extra这个是额外加的一个条件
+
+这个ret是一个对象的集合，里面有很多的数据对象
+
+
+翻译成sql语句是：
+
+这个ret是一个字典的形式的值，可以for循环取里面的值
+for  i in ret:
+
+i.name  i.id  这个i里面有一个一个的数据，每一个数据是一个对象，
+可以取里面的值，就是说着数据里面有什么字段的话，既可以取什么字段
+
+
+
+
+
+这个是可以在这个django的里面执行这个语句，（sql）,类似这个pysql的语句
+
+
+原理：
+连接这个sql，执行这个sql的语句:
+from  django.db   import connection
+cursor=connection.curson()获取这个光标，等待执行这个sql的语句
+curson.execute("这个里面是sql的语句")
+row=cursor.fetchone()
+这个row就是最终的执行的结果
+
+
+
+
+连接这个sql：
+mysql  -uroot  -p
+这个是可以连接这个sql的，在终端
+
+
+
+
+
+
+
+
+
+
+
+
+
+

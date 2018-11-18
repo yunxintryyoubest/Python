@@ -1,0 +1,37 @@
+注意1：
+当在创建数据的时候，后面创建的数据可以是字典，queryset对象，obj对象，单个逐个创建
+
+
+
+创建数据方法1：（通过字典的形式来创建数据）
+from  api.models import   *
+
+
+dic={'user':'alex2','pwd':'123'}
+print(dic)
+UserInfo.objects.create(**dic)
+data=UserInfo.objects.all()
+print(data)
+
+
+结果：
+{'user': 'alex2', 'pwd': '123'}
+<QuerySet [<UserInfo: alex>, <UserInfo: alex1>, <UserInfo: alex2>]>
+
+
+
+创建数据方法2：
+
+username=input('输入用户名:')
+pwd=input('输入密码:')
+
+obj=UserInfo.objects.filter(user=username,pwd=pwd).first()##拿到obj对象
+##创建数据
+print(obj)
+import uuid
+tok=uuid.uuid4()
+usertoken.objects.update_or_create(user=obj,defaults={'token':tok})
+
+value=usertoken.objects.all()
+for   i in  value:
+    print(i)

@@ -1,0 +1,74 @@
+
+
+
+原生sql语句：
+执行sql取获取数据
+获取的时候还是对象
+获取的数据
+orm
+字段
+查询到的数据
+
+row方法：
+row:（掺杂着原生sql和orm来执行的操作）
+在select里面查询到的数据orm里面的要一一对应
+UserInfo.objects.raw('select  id  as  nid  from  '其他表')
+后面的select的不一定是UserInfo表，有可能是是其他表，只要字段名字一样就可以
+如果select的是其他表的时候，必须将名字设置为当前UserInfo的主键列名
+UserInfo.objects.raw('select  id  as  nid  from  '其他表'   where  nid>%s',params=[1,])
+后面可以加参数进来
+name={}
+translations=name
+将或取到的列名转化为指定的列名，才可以查询
+
+
+例子：
+# res=UserInfo.objects.raw('select id as nid  from  api_userinfo  where  id>%s',params=[1,])
+# print(res.columns)
+# print(type(res))
+
+
+
+
+
+cursor方法：
+cursor.excute('sql语句')
+row=cursor.fetchone()##还有fetchmany()，fetchall() 
+
+例子：
+
+##原生sql语句
+from   api.models import  *
+from   django.db  import   connection,connections
+cursor=connection.cursor()##cursor=connection['default'].cursor()配置了sql数据库的情况
+##不传参数的情况
+# cursor.execute("""select  * from  api_userinfo """)
+
+##为原生sql语句设置参数的情况
+# cursor.execute("""select  * from  api_userinfo   where   id=%s""",[2,])
+# cursor.execute("""select  * from  api_userinfo   where   id=%s"""%1)
+cursor.execute("select  * from  api_userinfo   where   id=%s",params=[1,])
+# row=cursor.fetchone()
+# row=cursor.fetchmany()
+row=cursor.fetchall()##拿到全部的数据
+# print(row)
+
+'''
+[(1, 'yunxin', '123')]
+'''
+
+
+
+
+extra方法：
+book.objects.extra{
+where={'headline=%s'},params={'linux'})
+,是and
+order_by  根据条件来获取自定义的操作
+
+
+数据转化成了对象
+
+
+数据库：
+orm类和对象转化

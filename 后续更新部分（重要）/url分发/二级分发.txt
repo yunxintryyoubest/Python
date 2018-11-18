@@ -1,0 +1,17 @@
+第一层分发是根据这个模型表进行分发的
+
+for  model,admin_class_obj  in admin.site._registry.items():
+    ##这个可以拿到这个全部的键值对
+app_name=model._meta.app._label
+这个是可以拿到这个对应的app的名字
+model_name=model._meta._name
+这个是可以拿到这个对应的admin的名字
+
+
+
+第二层分发是根据这个增删改查进行分发的
+
+
+二级是根据这个增删改查来添加的
+
+

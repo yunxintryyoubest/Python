@@ -1,0 +1,6 @@
+a=1
+if  isinstance(a,int):
+    print('suc')
+
+½á¹û£º
+suc

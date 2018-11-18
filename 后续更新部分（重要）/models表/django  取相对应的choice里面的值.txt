@@ -1,0 +1,25 @@
+首先声明一下，这个必须是对象，才可以去这个choice里面对应的值
+
+要是对象的话，得通过get的取值方式，不能是filter的方式，filter取得是queryset的类型，
+首先通过get的方式取到相对应的某个具体的值
+
+a=Vip_course.objects.get(id=1)
+这个已经是对象了，class的具体某个对象
+
+a.get_vipcoursessourcelabel_display()
+这个就可以拿到相对应的某个choice里面相对应的值
+
+
+
+
+
+
+>>> c=Vip_course.objects.get(id=1)
+>>> c
+<Vip_course: linux高级指令>
+>>> type(c)
+<class 'app01.models.Vip_course'>
+>>> c.get_vipcoursessourcelabel_display
+functools.partial(<bound method Model._get_FIELD_display of <Vip_course: linux高级指令>>, field=<django.db.models.fields.PositiveSmallIntegerField: vipcoursessourcelabel>)
+>>> c.get_vipcoursessourcelabel_display()
+'linux'

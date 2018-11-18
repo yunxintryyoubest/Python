@@ -1,0 +1,42 @@
+select  *  from  person  left join  dept  on  person.dept_id = dept.id
+后面是根据什么来进行关联操作
+
+
+models.Article.objects.values('up_count').annotate(a=Avg('comment_count')).values('up_count','a')
+
+之前的values是根据什么来进行分组的，之后是取这个分组得平均值，最后是拿到这个按照某一个字段分组的数据
+
+
+
+extra
+这个里面是可以写这个sql语句的
+
+
+# '''
+# 讲解：
+# 这个下面的步骤就是相当于后面的up_count>10，是一个筛选的条件，也就是up_coubnt  as  choice,extra里面
+# 完整的sql语句是：
+# select  up_count>10  as  choice  ,article.title,article.up_count FROM   Article
+# '''
+    ret=models.Article.objects.all().extra(
+        select={'choice':'up_count>11'}
+    )
+    print(type(ret))#class的类型
+####这个choice当成一个筛选的条件，当条件为真的时候，就是1，为假就是0
+    #
+    print(ret)
+    for  i in ret:
+        print(i.up_count,i.title,i.choice)
+
+
+
+
+结果：
+
+
+<class 'django.db.models.query.QuerySet'>
+<QuerySet [<Article: python基础>, <Article: go的操作>, <Article: go的天然并发>, <Article: linux高级指令>]>
+1 python基础 0
+100 go的操作 1
+0 go的天然并发 0
+1 linux高级指令 0

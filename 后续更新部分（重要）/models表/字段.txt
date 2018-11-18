@@ -1,0 +1,59 @@
+create_time = models.DateTimeField()  # 创建时间
+这个是可以进准到什么时间什么时候的
+
+
+
+实例二：
+class Meta:
+        verbose_name = "文章"
+        verbose_name_plural = verbose_name
+
+这个是可以显示这个表的名字
+
+实例三：
+nid = models.AutoField(primary_key=True)
+这个是可以自动加1的
+
+
+
+实例四：
+    blog = models.ForeignKey(to="Blog", to_field="nid",on_delete=models.CASCADE)  # 所属博客
+解读：
+这个是所关联的的表，在本models里面，不是导入的，关联的字段
+
+
+实例五：
+avatar = models.FileField(upload_to="avatars/", default="avatars/default.png", verbose_name="头像")
+解读：
+头像文件上传的位置，默认是什么头像
+
+
+
+
+
+实例六：
+content = models.TextField()
+解读：
+文章的详情
+
+
+
+实例七：
+is_up = models.BooleanField(default=True)
+解读：
+布尔值，为真或者假
+
+
+
+实例八：
+    class Meta:
+        unique_together = (("article", "user"),)
+        verbose_name = "文章点赞"
+        verbose_name_plural = verbose_name
+
+解读：
+里面有这个表的名字好，和联合唯一的字段（这个字段不能是外键或者是mantomany的字段）
+
+
+
+

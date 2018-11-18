@@ -1,0 +1,154 @@
+
+对象：first，last，get,[0]之类的
+.,_set
+
+
+
+query：
+all，value,filter都是queryset的类型
+values,__,filter
+
+
+
+
+反向查询：
+基于对象的:
+###########原理讲解：一个用户有一个博客，一个博客下面有很多分类，分类下面有很多文章
+    # user = models.UserInfo.objects.filter(username='yunxin').first()
+    # blog = user.blog
+#     # print('用户的博客',blog)
+# # ##博客下面的所有的分类
+#     all_ca=models.Category.objects.filter(blog=blog).all()
+    # print(all_ca)
+#
+#     for  i in  all_ca:
+#         print('每一个分类下面有多少文章')
+#         print(i.title,i.article_set.all().count())
+query是不可以_set的，反向查询，
+只能是values(__什么__的）跨表查询
+
+
+
+
+基于queryset类型的反向查询：
+
+
+
+
+
+
+
+讲解：
+当这个是get，first，last的时候，就是对象，是可以getattr，hasattr，还有基于对象的反向查询，这个反向查询条件是当这个反向查找的表里面有自己
+表的外键（有关联）的时候，才可以反向查找，表的名称+_set.all()
+
+正向查询直接是.的方式来查询的
+
+
+
+正向查询：
+res3=models.Category.objects.first().blog.theme
+print(res3)
+反向查询：
+
+res2=models.Category.objects.filter(blog=user_blog).last().article_set.all().values('nid')
+    print(res2)
+res4=models.Category.objects.last().article_set.first().user.username
+    print(res4)
+
+
+res4=models.Category.objects.last().article_set.all().values('user__username')这个后面是all（）基于queryset来正向查询的
+
+这个可以一直查找，前面的这个article_set是反向拿到这个article的数据，first一下，又是基于对象来查询的，可以在article这个表里面取这个数据出来，后面就是正向查询了，就是可以一直的往下面去找
+   
+
+
+res2=models.Category.objects.filter(blog=user_blog)
+
+res2=res2[1].article_set.all()
+print(res2)
+这个也是一个基于对象的反向查询
+
+
+
+
+
+
+基于queryset类型的：当是filter，values ，all的时候，就是queryset的类型，基于queryset的类型来反向查找的时候，是不用加_set，直接是另外一个表的名称就可以了，前提条件另一个表是有关联外键在自己的这个表的
+values('另外的表的名称  +  __另外一个表的字段')就可以了
+
+
+
+
+反向：自己表没有这个字段article
+    res=models.Category.objects.filter(blog=user_blog).values('article__user__avatar')
+
+
+正向：自己表有字段blog（是一个外键），可以正向查询
+    res2=models.Category.objects.filter(blog=user_blog).values('blog__category')
+    ##这个是正向查找，这个分类的表下面有这个外键字段，所以可以直接去这个外键对象的值
+
+
+
+
+讲解：
+
+反向：
+这个基于queryset类型的，正向和反向都是一样的，都是values(另一个表的名称+__另外一个表的字段）
+
+正向：
+values（自己表的名称+__自己表的外键字段+另外一个表的字段）
+
+
+
+
+
+
+
+
+
+
+
+
+反向查询的条件：
+当另一个表有关联自己这个表的字段的时候（另一个表有设置外键或者其他的来关联你这个表的时候，是可以反向查询的，并且有to_field=nid）
+通过_set的方式来方向查询
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

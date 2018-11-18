@@ -1,0 +1,16 @@
+
+class  CourseDetail(models.Model):
+    course_name=models.ForeignKey(to='Course',on_delete=models.CASCADE)
+    coursedetail_content=models.TextField(verbose_name='课程详细内容')
+    coursedetail_time=models.DateTimeField(verbose_name='时间')
+    course_tes=models.CharField(max_length=32,verbose_name='课程老师')
+    slogon=models.CharField(max_length=100,verbose_name='口号')
+    why=models.CharField(max_length=300,verbose_name='原因')
+    remmod_course=models.ManyToManyField('Course',verbose_name='推荐课程',related_name='ip')
+    ##指定关联字段,只有那个就不会有冲突了,这样反向解析的时候，就不会关联同一个字段了
+
+
+
+当一个表关联另一个表的时候，另一个字段也是many的关系的时候
+就会出现冲突，因为反向解析的时候，是同一个字段pk（另一个表）
+所以需要指定关联另一个表的哪一个字段，就不会出现冲突了

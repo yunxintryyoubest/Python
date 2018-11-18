@@ -1,0 +1,71 @@
+1：
+'''decode可以将字节转化为字符串，json.loads可以内部将序列化''':
+b'{name:'alex'}'
+
+
+之后加了decode('utf-8')：字节到字符串
+pricepolicy_list= conn.hget('User_Shop_Car_1_2', 'pricepolicy_list').decode('utf-8')
+结果：
+{name:'alex'}字符串
+
+
+在加了json.loads(),序列化操作
+josn.loads(dic.decode('utf-8'))
+
+里面的值序列化成对象
+
+
+
+
+例子：
+pricepolicy_list= conn.hget('User_Shop_Car_1_2', 'pricepolicy_list')
+print(pricepolicy_list)
+pricepolicy_list= conn.hget('User_Shop_Car_1_2', 'pricepolicy_list').decode('utf-8')
+print((pricepolicy_list))
+pricepolicy_list=json.loads(pricepolicy_list)
+print(pricepolicy_list)
+
+
+结果：
+'''
+b'{"4": {"price": 212.0, "expire_time": "\\u4e00\\u4e2a\\u6708\\u65f6\\u95f4", "course_perid": "1\\u4e2a\\u6708\\u65f6\\u95f4", "diff_level": "\\u5bb9\\u6613", "course_level": "\\u514d\\u8d39\\u8bfe\\u7a0b"}}'
+{"4": {"price": 212.0, "expire_time": "\u4e00\u4e2a\u6708\u65f6\u95f4", "course_perid": "1\u4e2a\u6708\u65f6\u95f4", "diff_level": "\u5bb9\u6613", "course_level": "\u514d\u8d39\u8bfe\u7a0b"}}
+{'4': {'price': 212.0, 'expire_time': '一个月时间', 'course_perid': '1个月时间', 'diff_level': '容易', 'course_level': '免费课程'}}
+'''
+
+
+
+
+
+
+类型：
+'''
+<class 'bytes'>
+<class 'str'>
+<class 'dict'>
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

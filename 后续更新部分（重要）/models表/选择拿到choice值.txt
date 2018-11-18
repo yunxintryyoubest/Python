@@ -1,0 +1,16 @@
+a=Course.objects.all()
+for   i in a:
+    print(i)
+    val=getattr(i,'get_level_display')()
+    print(val)
+
+
+
+linux
+容易
+Julia
+容易
+GO
+容易
+数据结构
+高级

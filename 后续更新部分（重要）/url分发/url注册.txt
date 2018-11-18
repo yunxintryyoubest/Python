@@ -1,0 +1,33 @@
+去这个数据库里面去这个表的名字
+
+Book._meta.model_name这可以拿到这个数据库里面的表的名字
+是字符串的形式
+
+
+取这个数据库里面的app的名字
+book._meta.app._label这个可以拿到这个book这个表的app的名字
+
+
+
+
+
+
+
+for  model,admin_class_obj  in admin.site._registry.items():
+    ##这个可以拿到这个全部的键值对
+app_name=model._meta.app._label
+这个是可以拿到这个对应的app的名字
+model_name=model._meta._name
+这个是可以拿到这个对应的admin的名字
+
+然后就可以进行模型分发（一级分发）
+
+
+
+
+
+
+这个第一个是这个表，第二个这个注册的admin（对应某个表的admin）
+
+
+

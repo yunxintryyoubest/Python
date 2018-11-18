@@ -1,0 +1,36 @@
+查询：
+
+
+第一种方式：
+dic={'23':'sefsf','43':'3443','233':'gdfgg','name':'ybxu'}
+models.Course.objects.filter(**dic)##条件，只能是and，中间的条件是用and里来连接的
+
+
+第二种方式：
+from   django.db.models  import Q
+Q(Q(pk=1)&Q(name='yunxin')) | Q(addr='北京') &(data_lte='2018')#小于等于
+##两种方式,先判断左边括号里面的，在进行这个或判断
+
+
+
+第三种方式：
+q=Q()
+q.connector='OR'
+
+q1=Q()
+q1.connector='AND'
+q1.children.append('id',1)
+q1.children.append('name','yunxin')
+
+
+q2=Q()
+q2.connector='AND'
+q2.children.append('pk',3)
+
+
+q.add(q1,'OR')
+q.add(q2,'OR')
+
+'''相当于是(id=1&name='yuan')   or  (pk=3)
+ 两边都是and的关系，中间是or的关系 
+ '''

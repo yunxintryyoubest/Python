@@ -1,0 +1,18 @@
+元祖（里面写的是要分配的url）
+后面是
+app的名字，命名空间的名字 
+^必须以什么开头
+
+
+
+
+
+from   app01  import    Book
+
+上面拿到的是一个类变量（是变量）
+每一个表对应的类变量
+
+Book._meta.app_label
+这个是可以拿到这个表对应的app的名字
+
+Publish._meta.model_name这个拿到的是publsh的字符串

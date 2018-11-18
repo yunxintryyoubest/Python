@@ -1,0 +1,68 @@
+settings里面配置这个mysql的语句：
+DATABASES={
+    'ENGINE':'django.db.backends.mysql',
+    'NAME':'day',
+    'USER':'yunxin',
+    'PASSWORD':'192855',
+    'HOST':'127.0.0.1',
+    'PORT':3306
+}
+
+
+然后连接这个msyql
+host   localhost
+database（连接的是哪个表）day
+user  yunxin
+pasasword  :192855
+
+
+
+
+
+mysql  -uroot  -p
+输入密码
+
+show databases
+
+
+create  database  day
+
+
+show  tables
+
+create   table  test(name  varchar(32))
+创建表，里面加字段（name的字段）
+
+
+
+create  table  test(d dtae,dt  dtatetime,t  time)
+
+desc test;
+
+insert   into  test (d,dt,t)  values( now()  ,now()  ,  now());
+
+
+
+下面的时间格式化的原因时：这个上面取的时间是到年月日小时分秒，而实际是不去那么多时间的，就到年月就可以了，下面就做了时间的格式化操作，
+只取年月   
+select data_format(dt,'xY-xm')  from  test 
+
+之前的dt是字段名字
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+user  day
+
+
+select  * from  day

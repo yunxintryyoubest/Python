@@ -1,0 +1,32 @@
+from  django.db.models.fields.related import  ForeignKey
+###上面是是有关联的表才可以往下面找的
+from  django.db.models.fields.related import   ManyToManyField
+
+
+
+
+    # a=Book._meta.get_field('id').verbose_name
+    # a=Book._meta.get_field('id').rel.to##这个是拿到所关联的表to,拿到这个示一个类对象，也就可以往下继续找了,拿到这个字段所关联的表（一个类对象）
+# a=Role._meta.get_field('role_name').rel.to.objects.all()##拿到这个类对象下面所有的数据
+a=Role._meta.get_field('role_name').to##拿到这个类对象下面所有的数据
+
+
+class='well'
+一个面板
+
+
+a=1
+if  isinstance(a,int):
+判断是不是这个后面的值是不是某一个类型
+
+
+
+
+
+字段集合：
+a=Role._meta.many_to_many
+拿到这个表所有相关联的manytomany
+
+
+fields
+拿到所有字段集合

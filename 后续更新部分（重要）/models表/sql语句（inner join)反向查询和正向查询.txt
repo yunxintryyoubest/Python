@@ -1,0 +1,32 @@
+ret.query
+
+ret=Publish.objects.filter(name='编辑出版社').values('book__title')
+反向查询
+sql语句是：
+ret.query  这个可以查看这个sql语句
+
+表  inner   join  另一个表  on  以什么方式关联着两张表的
+publish.pk=book.publish.pk
+这个是反向查询，是以所关联的另一个表的关联自己的外键进行的
+关联操作
+
+
+从另一个所关联的表里面拿到数据：
+select  book.title   from  Publish   inner  join  book on  publish.pk=book.publish.pk where   publish.name='编辑出版社'
+
+left join 是以左边的为主
+inner  join 是不以谁为主，找到就可以
+
+左边为主的话，就是左边的数据信息为主，当左边没有数据进行匹配的时候，就不匹配了
+
+inner join 是只要没有数据匹配的话，就不找了
+可以左边的表有多余的数据或者是少数据
+
+
+
+正向查询：和上面的结果一样
+Book.objects.filter(publish__name='编辑出版社').values('title')
+
+
+select  title  from book    inner  join   publish  on  book.publish.pk=book.pk    where    book.publish.name='编辑出版社'
+

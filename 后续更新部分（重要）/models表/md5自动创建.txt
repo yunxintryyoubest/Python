@@ -1,0 +1,73 @@
+from django.db import models
+
+# Create your models here.
+
+
+class  UserInfo(models.Model):
+    username=models.CharField(max_length=32,verbose_name='用户名')
+    password=models.CharField(max_length=32,verbose_name='密码')
+    uid=models.CharField(max_length=32,verbose_name='个人唯一id')
+    wx_id=models.CharField(max_length=32,verbose_name='微信id')
+
+
+    def save(self,*args,**kwargs):
+        import  hashlib
+        if   not  self.pk:
+            m=hashlib.md5()
+            m.update(self.username.encode('utf-8'))
+            self.uid=m.hexdigest()
+        super(UserInfo,self).save(*args,**kwargs)
+
+###当创建的时候，就自动生成这个md5值，后面自动补全，uid》》md5
+
+
+
+
+
+
+
+
+
+在创建的时候就可以执行save方法，把这个md5值加上去，只要是操作这个表就会执行里面的方法，创建，修改，都会创建md5值
+import  os,sys
+
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'weixin公众号.settings')
+application = get_wsgi_application()
+
+
+
+from    aoo01  import  models
+uall_data=models.UserInfo.objects.all().values('username','uid','wx_id')
+print(uall_data)
+models.UserInfo.objects.create(username='alex',password='123')
+uall_data=models.UserInfo.objects.all().values('username','uid','wx_id')
+print(uall_data)
+models.UserInfo.objects.filter(username='alex',password='123')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

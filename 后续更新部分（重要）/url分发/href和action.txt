@@ -1,0 +1,19 @@
+href='/add/'  actions='/add/'
+这个是直接把之前的路劲覆盖掉
+127.0.0.1:8080/add/
+
+
+
+上一级路径是：127.0.0.1:8080/app01/userinfo
+href='add/'  actions='add/'
+这个是在当前的路径进行的拼接，后面补上去
+127.0.0.1:8080/app01/userinfo/add/
+
+
+
+
+
+拿到当前的路径：request.path.join
+trquest.full.path
+
+
