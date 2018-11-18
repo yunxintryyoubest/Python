@@ -1,0 +1,78 @@
+当你拿这个select的值时，
+request.POST.get(name值）
+注意：
+如果是取select标签的值的时候，name是放在select这里的，select可能是对多选，也可以是单选，当是单选的时候，option取到的值只有一个
+html:
+
+
+       <select name="publish_id" id="">
+              {% for publish in publish_list %}
+                  <option value="{{ publish.pk }}">{{ publish.name }}</option>
+              {% endfor %}
+
+        </select>
+
+
+
+publish_id=requets.POST.get('publish_id')
+这个取到的值只有一个
+所以在创建数据的时候，直接可以是Book.objects.create(publish_id=publish_id)
+这个publish的字段是外键的关系（关联publish表）
+
+
+#这个创建数据的字段，如果是外键的，应该是_id,来创建的
+
+
+
+
+
+
+
+
+当这个select是多选的时候，就是在models里面的字段是manytomany的时候，应该是add操作，来创建相对应的数据进来
+html里面是：
+
+
+     <select name="author_pk_list" id="" multiple>
+              {% for author in author_list %}
+                  <option value="{{ author.pk }}">{{ author.name }}</option>
+              {% endfor %}
+
+        </select>
+
+
+obj=publish_id=requets.POST.get('publish_id',title=title)
+author_pk_list=request.POST.get('author_pk_list')
+注明一下，这个取到的是value，通过requets.POST.get的方式取到的值是values
+
+obj.author.add(*author_pk_list)
+author是manytomany的关系，所以可以通过这种方式来添加数据进去
+如果是set的话，就是编辑数据
+
+
+
+
+注意一下：
+当表里面有外键的时候，是通过_id的方式来创建数据的，不管是manytomany都是可以通过_id的来创建，因为如果直接是外键字段
+的话，这个是一个对象，也可以是通过外键的字段  =  对象来创建外键的表字段的信息
+
+两种方式
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

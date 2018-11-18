@@ -1,0 +1,5 @@
+a.txt  firsti
+git modify
+second  git  modify
+third  git
+forth  git  modify 

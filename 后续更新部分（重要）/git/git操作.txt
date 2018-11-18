@@ -1,0 +1,139 @@
+settings里面合作者
+
+合作者
+创建组织
+
+分支：
+master
+
+
+git clone
+
+git branch  dev
+git checkout dev
+git  pull origin dev
+编写文件
+
+git  add .
+
+git  commit - m ''
+git  push  origin  dev
+提交  
+
+
+$ mv  a.txt  b.txt
+将文件a.txt移动到b.txt
+名字更改，原来的a.txt名字更改为b.txt
+
+
+
+一起合并，相同的会产生冲突
+
+
+当你推送代码的时候，会产生冲突
+git  push  origin  dev
+就把最新的代码拉下来
+git pull  origin dev
+在去提交
+
+代码review
+
+
+
+
+
+
+github的ssh的连接操作：
+https://help.github.com/articles/testing-your-ssh-connection/
+
+
+
+
+
+
+步骤：
+生成密码：
+打开Git Bash。
+
+粘贴下面的文本，替换您的GitHub电子邮件地址。
+
+ssh-keygen -t rsa -b 4096 -C“ your_email@example.com ”
+这将使用提供的电子邮件作为标签创建一个新的ssh密钥。
+
+生成公钥/私钥rsa密钥对。
+当系统提示您“输入要保存密钥的文件”时，按Enter键。这接受默认文件位置。
+
+ 输入要保存密钥的文件（/ c / Users / you /.ssh/id_rsa）：[按Enter键]
+在提示符下，键入安全密码。有关更多信息，请参阅“使用SSH密钥密码”。
+输入密码短语（无密码短语为空）：[
+输入密码短语]再次输入相同的密码短语：[再次输入密码短语]
+
+
+
+
+检验是否成功连接ssh：
+
+打开Git Bash。
+
+输入以下内容：
+
+ssh -T git@github.com＃
+尝试ssh到GitHub
+您可能会看到如下警告：
+
+无法建立主机'github.com（IP ADDRESS）'的真实性。
+RSA密钥指纹是16:27：ac：a5：76：28：2d：36：63：1b：56：4d：eb：df：a6：48。
+您确定要继续连接（是/否）吗？
+或者像这样：
+
+无法建立主机'github.com（IP ADDRESS）'的真实性。
+RSA密钥指纹是SHA256：nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8。
+您确定要继续连接（是/否）吗？
+验证您看到的消息中的指纹是否与步骤2中的某条消息匹配，然后键入yes：
+
+用户名！您已成功通过身份验证，但GitHub不
+提供shell访问权限。
+验证生成的消息是否包含您的用户名。如果收到“权限被拒绝”消息，请参阅“错误：权限被拒绝（公钥）”。
+
+
+
+.设置username和email
+在把本项目上传到github之前还需要分别输入设置username和email，因为github每次commit都会记录他们。所以分别输入如下命令：
+
+$ git config --global user.name "your name"
+$ git config --global user.email "your_email@youremail.com"
+6.添加远程地址
+在与github连接成功后，如何才能让相应的项目上传到对应的仓库呢？这里就需要添加远程地址，从而让我们的本地项目顺利到达对应的仓库。
+
+打开终端，输入
+
+$ git remote add origin git@github.com:yourName/yourRepo.git
+后面的yourName和yourRepo分别是你的github的用户名和刚才新建的仓库名。
+
+上传项目
+进入项目，在终端运行
+
+$ git status
+查看要上传的文件是否正确，然后将项目下的所有文件添加到git跟踪范围。
+
+$ git add .
+记录此次提交并上传
+
+$ git commit -m 'my project push'
+$ git push origin master
+这里的master指的是主分支名，如果是其他分支，则填写相应的分支名。
+
+这样我们就将我们的项目上传到github仓库。
+
+补充
+1.Permission denied的解决：
+之前使用终端上传github的时候遇到错误
+
+
+Permission denied (publickey).
+解决办法就是直接重新生成一下公钥，然后重新更新就行，其中密码没必要设置
+
+
+
+
+

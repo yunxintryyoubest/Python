@@ -1,0 +1,10 @@
+数据存入这个session里面
+
+user=UserInfo.objects.filter(userame=usernmae).first()这个拿到的是对象
+requets.session['is_login']=1
+requets.session['user_id']=user_id
+
+取这个session的数据
+user_id=request.session.get('user_id')
+
+

@@ -1,0 +1,123 @@
+views部分：
+
+def  edit_book(request,id):
+    print('edit')
+    publish_list=Publish.objects.all()
+    author_list=Author.objects.all()
+    edit_book_obj=Book.objects.filter(pk=id).first()
+    if  request.method=='POST':
+        print(request.POST)
+        name=request.POST.get('book')
+        price=request.POST.get('price')
+        date=request.POST.get('date')
+        publish=request.POST.get('publish_pk')
+####边界页面
+        author_list=request.POST.getlist('author_pk_list')
+
+
+        book_obj=Book.objects.filter(pk=id).update(title=name,price=price,date=date,publish_id=publish)###这个是int的类型
+        ##这个后面的publish不一定是对应的字段，可以是id，因为每一根关联的字段都会有相对应的id，直接id=id就可以创建数据进去
+        # print(book_obj)
+        # print(type(book_obj))
+
+
+
+
+        # book_obj.author.set(author_list)
+        ####注意一下，这个是不用加*，如果加了的话就会报错，显示多了一个参数
+
+        ##注明一下，至于对象才可以add，set等操作，上面的是创建成功的话，那么直就是1，int类型，要修改manytomany的字段信息要通过队形.set来修改这个信息
+        book_obj=Book.objects.filter(pk=id).first()
+        book_obj.author.set(author_list)
+
+
+
+        return   redirect('/index/')
+###如果是render的话，那么就会ziaurl里面重新渲染，如果是redirct的话，那么就直接到indedx的页面
+
+    return  render(request,'edit.html',locals())
+
+
+
+
+
+
+
+
+html部分：
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/mystyle.css">
+</head>
+<body>
+<h4>添加书籍</h4>
+<form method="post">
+
+
+    {% csrf_token %}
+
+    <ul class="add_book_menus">
+        <li>
+            <label>书籍名称
+                <input name="book" type="text" value="{{ edit_book_obj.title }}">
+            </label>
+        </li>
+        <li>
+            <label>日期
+                <input name="date" type="date" value="{{ edit_book_obj.date|date:'Y-m-d'  }}">
+            </label>
+        </li>
+        <li>
+            <label>作者
+
+{#            //requets.POST直接是通过上面的select来取下面的option的值的#}
+                <select name="author_pk_list" multiple>
+                    {% for author   in   author_list %}
+{#                        //注意一下，这个author是一个一个的在author表里面的对象（数据），因为下面不知取一个字段信息，还要相对应的pk主主键信息#}
+                        {% if    author  in      edit_book_obj.author.all   %}
+{# /自己选中的编辑的数据也应该是一个对象，而不是一个字段信息,自己的u暗中的这个可能有多个作者，所以是在这里进行判断，看这个作者对象在不在里面#}
+                        <option selected value="{{ author.pk }}">{{ author }}</option>
+                        {% else %}
+                            <option value="{{ author.pk }}">{{ author }}</option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select>
+            </label>
+        </li>
+        <li>
+            <label>价格
+                <input name="price" type="text" value="{{ edit_book_obj.price }}">
+            </label>
+        </li>
+        <li>
+            <label>出版社
+                <select name="publish_pk">
+                    {% for  publish  in publish_list %}
+{#                        //这个是单选#}
+                        {% if   publish.name   == edit_book_obj.publish.name %}
+{#                        {% if   publish   == edit_book_obj.publish %}#}
+                            <option selected value="{{ publish.pk }}">{{ publish }}</option>
+                        {% else %}
+                            <option value="{{ publish.pk }}">{{ publish }}</option>
+                            {#                        //注明一下如果不去是select的话，取到的值是里面的values#}
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </label>
+        </li>
+
+        <li>
+            <button>提交</button>
+        </li>
+    </ul>
+
+
+</form>
+
+
+</body>
+</html>

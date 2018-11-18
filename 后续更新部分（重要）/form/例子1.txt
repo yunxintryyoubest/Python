@@ -1,0 +1,88 @@
+from django import forms
+from app01.models import *
+#####这个在模型表里面都有这些字段
+from django.forms import widgets
+from  app01 import models
+
+class BookForm(forms.Form):
+    title = forms.CharField(max_length=11,label='书籍名称')
+    price = forms.DecimalField(max_digits=8, decimal_places=2)
+    ####最大是8位，整数6位，浮点数是2位
+    date = forms.DateTimeField(
+        widget=widgets.TextInput(
+            attrs={  'type': 'date'})
+    )
+
+    ####两种方式来实现这个下拉框
+    # publish=forms.ChoiceField(choices=((1,'男'),(2,'女')))
+
+    # publish=forms.ChoiceField(choices=models.Publish.objects.all().values_list('pk','name'))
+    #####下面的这种不用自己写什么pk，name等字段值，必须要两个参数传进去
+    publish=forms.ModelChoiceField(queryset=models.Publish.objects.all())
+    ###这个在前端渲染出来的是models里面的__str__的方法
+    author=forms.ModelMultipleChoiceField(queryset=models.Author.objects.all())
+
+
+html部分，直接渲染出来，不用挨个写字段信息：
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link  rel="stylesheet"  href="/static/mystyle.css">
+</head>
+<body>
+
+
+<form method="post"  novalidate>
+    <ul class="add_book_menus">
+        {%  for  form in obj %}
+        <li>
+{#            <label>{{ form.name}}#}
+            <label>{{ form.label}}
+                {{ form }}
+{#                //循环这个obj，取到里面的每一个字段，在前端进行渲染出来#}
+            </label>
+        </li>
+        {%  endfor %}
+        {% comment %}<li>
+            <label>{{ obj.price.label }}
+                {{ obj.price }}
+            </label>
+
+        </li>
+
+        publish
+        <li>
+            <label>{{ obj.date.label }}
+                {{ obj.date }}
+            </label>
+        </li>
+        <li>
+            <label>{{ obj.publish.label  }}
+                {{ obj.publish  }}
+            </label>
+        </li>
+        <li>
+             <label>{{ obj.author.label  }}
+                {{ obj.author  }}
+            </label>
+        </li>
+{% endcomment %}
+        <li>
+        <button  type="submit">提交</button>
+        </li>
+    </ul>
+</form>
+
+</body>
+</html>
+
+
+
+

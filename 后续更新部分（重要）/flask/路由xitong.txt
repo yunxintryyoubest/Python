@@ -1,0 +1,53 @@
+@app.route('/index',method=['GET','POST'])
+
+
+url_for  这个是可以反向拿这个路劲的
+endpoint='n1'
+url_for('n1')
+结果：
+ /login
+
+
+反向拿这个路劲：
+from   flask  import Flask,render_template,request,redirect,session,url_for
+app=Flask(__name__,static_folder='static')
+######这一般写这个__name__，配置这个信息,这个app这里是可以配置着信息的,template_folder这个是配置在这个template的
+app.secret_key='asdfffa'
+####这个是进行加密处理
+
+
+##这个是进行这个路由匹配部分,注明一下，这个默认只有这个get的请求，这个post的请求是可以加上去的
+@app.route('/login',methods=['GET','POST'],endpoint='n1')#############原理讲解：这个是路由匹配，进行访问这个url的index
+def login():
+
+    print('这个n1是:',url_for('n1'))
+    ######这个是可以反向拿到这个路劲的
+
+    return   render_template('login.html',error='用户名或者密码错误')
+
+
+
+
+
+
+
+
+这个反向取这个访问的url部分：
+@app.route('/index/<int:nid>',methods=['GET','POST'])######这个是url的路由管理系统，匹配相对应的url
+def index(nid):
+print(nid)
+
+访问的url是：
+http://127.0.0.1:5000/index/1
+
+后面是加的一个nid，打印的结果就是这个1
+
+
+这个url可以反向生成这个url之后的nid
+url_for("index",nid=999)
+这个是可以生成这个url的nid为999
+
+
+
+
+

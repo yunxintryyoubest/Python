@@ -1,0 +1,29 @@
+gitlab的完整步骤
+命令行指令
+
+Git全球设置
+git config --global user.name“yunxin”
+git config --global user.email“2693917459@qq.com”
+
+创建一个新的存储库
+git clone https://gitlab.com/yunxin/python-.git
+cd python-
+触摸README.md
+git add README.md
+git commit -m“add README”
+git push -u origin master
+
+现有文件夹
+cd existing_folder
+git init
+git remote add origin https://gitlab.com/yunxin/python-.git
+git add。
+git commit -m“初始提交”
+git push -u origin master
+
+现有的Git存储库
+cd existing_repo
+git remote rename origin old-origin
+git remote add origin https://gitlab.com/yunxin/python-.git 
+git push -u origin --all
+git push -u origin --tags

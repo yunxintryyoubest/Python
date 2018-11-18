@@ -1,0 +1,92 @@
+git
+
+
+git  init  会生成一个.git的隐藏文件（管理初始化）
+git  status  查看当前文件夹目录的一个状态
+当显示红色的时候，说明还没有管控起来
+git  add manage.py 当执行这步操作的时候，已经把manage.py管控起来了
+就显示绿色了，还没有保存起来
+git add .把这个文件夹下所有的文件管控起来（当显示绿色，说明已经被管控起来了）
+git commit -m '创建'  开始创建版本了
+git  config --global  user.email ''.com''
+git  config  --global user.name  ''xx''  
+
+
+修改某个文件的内容
+git status  如果下面没有东西的话，代表全部已经被管控起来了，放在了一个版本里面（透明的状态了）
+当某一个文件有变动的时候，执行git  status的时候，该文件就会变红（显示出红色）
+git add .(提交所有的文件）
+git  commit  -m   '修改文件的内容'   提交的描述
+这时候，提交的东西放在了一个版本里面了（不会重复提交之前的，只提交修改的部分）
+
+
+git  log可以查看提交的记录(commit)
+ commit xxxxxxxxxxxxxxx提交的日志中的版本号，唯一标识 
+
+git  reset  --hard  版本号(xxxxxxxxxxxxxx)回滚到哪一个版本 
+
+git   reflog  可以查看所有已经操作的记录 
+
+
+
+总结：
+git  init  初始化管理
+git  status(查看文件的状态，当是红色的时候，说明没有被控制）
+git  add  文件 （对指定文件进行控制）
+
+git  add .  （对指定的文件夹下面的所有进行控制）
+准备就绪git  add .
+
+git  commit  -m  ''   注意：要把文章的描述信息写的完整，更好的回滚（和查看文件）
+创建提交记录（也是版本）
+
+git log可以查看提交的记录
+git refl og  更详细
+
+git reset  --hard 版本号    可以回滚到哪里
+
+
+
+git   reflog  可以查看所有已经操作的记录 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

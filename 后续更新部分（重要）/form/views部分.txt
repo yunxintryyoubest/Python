@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+# _*_coding:utf-8 _*_
+#@Time    :2018/10/5 下午 05:41
+#@Author  :yunxin
+#@FileName: courses.py
+#@Project名称: django_apifrom   django.shortcuts import   render,HttpResponse,redirect
+from  django.contrib.auth import authenticate,login
+from  django.contrib  import auth
+
+
+
+from  django.shortcuts import  render,HttpResponse,redirect
+from   django.contrib.auth.decorators import  login_required
+#####加了一个装饰器
+from  django.contrib.auth.models import  User
+##这个是原来的auth的表
+'''
+r如果要往自己的表里面取认证的话，
+auth_obj=models.userInfo.objects.create_user(uername='yunxin',password=122）
+这个是往自己的表取做认证
+'''
+
+
+
+def  login(request):
+    print('进行认证')
+    if  request.method=='GET':
+        print('是get的请求方式')
+        return   render(request,'login.html')
+    if  request.method=='POST':
+        username = request.POST.get('username')
+        passwd = request.POST.get('password')
+        user = auth.authenticate(username=username, password=passwd)
+######################假如这个验证成功的话，这个user就有值，就可以进行登录
+        auth.login(request, user)####这个依赖于session，将验证过的用户赋值给request.user属性
+        ########################这个是把这个user封装进这个requets里面，下面既可以直接进行调用了，通过requets.user进行调用，进行登录验证
+        print('已经封装成功')
+
+        print(request.user.username)
+
+
+
+        '''
+        原理讲解：
+        这个是将这个user封装进这个request里面，就是将这个user和密码写进这个sessions里面，下次过来的时候就可以直接进行访问了，带着这个cookies进行匹配
+        
+        '''
+        if user:
+            print('这个user是',user)
+            return redirect('/index/')
+        else:
+
+            return render(request, 'login.html')
+
+
+#加了装饰器的话，不知道要跳转到那个页面，所以要先在settings里面加上这个路劲，指定要跳转的页面
+'''
+原理讲解：
+当要到这个index的页面的话，加了装饰器的话，就可以指定跳转到那个页面，在settings里面加了一个login_url的路劲
+这个当访问这个index的url的时候，就会跳转到这个login的页面,然后登陆成功的话，就可以到这个index的页面
+settings里面的配置:
+
+#############配置这个url，如果没有登陆成功的话，就跳转到那个页面
+LOGIN_URL="/login/"
+'''
+
+
+@login_required
+def index(request):
+    print('先进入到这个login的主页面，登录成功才可以进入到这个index的页面')
+    print('进入这个首页的页面')
+    # ret=request.user.is_authenticated()##这个是判断这个用户在不在这里面
+    ###这个是判断是否是这个用户已经注册过的
+    print(request.user.username)##这个request里面的user里面有这个username
+    #################这个是已经封装到requets的模块里面了，所以可以直接进行调用,在这个request里面有这个user，可以直接进行调用里面的user
+
+    ##接收到上传的文件
+    file=request.POST.file('file')
+
+    print('接收到的文件是:',file)
+
+
+
+
+    return   render(request,'index.html')
+
+
+def logout(request):
+    print('进入注销页面')
+    # auth.logout(request)
+    #######这个相当于把这个requets里面的user给清除掉，清除掉session_id,注销掉用户
+
+    request.session.flush()
+    #将session的数据都删除,并且cookies也失效
+
+    print(request.user.username)
+    print('这个注销之后的sesssion的用户是:',request.user.username)
+    print('判断是不是存在此用户')
+    return  redirect('/logout/')
+
+
+
+def register(request):
+    print('注册')
+
+    user_obj=User.objects.create(username='yunxin2',password=123)##这设置的明文
+    # user_obj.set_password(123)
+    print('进行设置这个密码')
+    ret=user_obj.check_password(123)
+    ########这个是验证密码，注册的时候进行的二次的验证
+    print('进行注册成功，看这个用户是否存在')
+    # print(ret)
+    ###修改密码
+    # user_obj.set_password(1234)
+    #这个是重新设置这个密码
+    # user_obj.save()
+    ##保存这个密码
+    print('修改密码成功')
+    return   HttpResponse('修改密码成功')
+
+
+
+from api.forms import  User
+
+# def reg(requets):
+#     print('进行form的表单的验证')
+#
+#     if  requets.method=="GET":
+#         print('进行这个get的方式的验证')
+#
+#     else:
+#
+#         print('进行post的表单的验证')
+#         form_obj=forms.User(requets.POST)
+#         ###这个是进行form的表单的验证,把责怪前端提提交的数据到后端form里面进行验证
+#         if form_obj is_valid():
+#             form_obj.cleaned_data.pop('')
+#             ##这个是移除某一个元素
+#             UserInfo.objects.create_user(**form_obj.cleaned_data)##这个是在django自带的user的表里面进行的注册
+#             ##这是创建这个用户进来，已经移除这个里面的这个元素
+#
+#     return  render(requets,'index.html',locals())
+
+
+def regisrter(requets):
+
+    if requets.method=='POST':
+        ret={'sattus':0,'msg':""}
+        user_obj = User.objects.create(username='yunxin2', password=123)  ##这设置的明文
+
+        if user_obj is_valid():
+            print('验证通过')
+            user_obj.cleaned_data.pop('')
+            ##这个手动取这个文件过来
+            avatar_img=requets.FILES.get('avatar')
+
+
+            ##这个就是取到了这个文件过来
+
+
+            UserInfo.objects.create_user(**form_obj.cleaned_data,avatar_img)##这个是在django自带的user的表里面进行的注册
+
+            ret['msg']='/index/'
+####这个会是返回的msg
+
+        else:
+            print('验证不通过')
+            ret['status']=1
+            ret['msg']=user_obj.errors
+            ##如果不通过的话就打印出这个错误出来
+            print(ret)
+
+            return   HttpResponse(ret)
+
+

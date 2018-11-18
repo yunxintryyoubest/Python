@@ -1,0 +1,151 @@
+
+总结：
+git  init  初始化管理
+git  status(查看文件的状态，当是红色的时候，说明没有被控制）
+git  add  文件 （对指定文件进行控制）
+
+git  add .  （对指定的文件夹下面的所有进行控制）
+准备就绪git  add .
+
+git  commit  -m  ''   注意：要把文章的描述信息写的完整，更好的回滚（和查看文件）
+创建提交记录（也是版本）
+
+git log可以查看提交的记录
+git reflog  更详细
+
+git reset  --hard 版本号    可以回滚到哪里
+
+回滚：
+git  check  out文件
+git  reset  head文件
+git  reset  --soft版本号
+git  reset   --mix  版本号
+
+
+
+git  stash 暂时放到某一个文件里面
+暂时存储的地方有这个文件，注意：这个只存红色的标记的文件，就是没有add提交的数据，暂时缓存到这里
+
+git  stash  pop  自动监测，合并，这个是将你之前暂时缓存的数据合并一起
+
+
+
+
+
+git  stash临时做操作的时候缓存起来到某一个地方，已经把临时修改的拿走了 
+git  stash  list  查看某个地方临时存储起来的而所有数据
+git  stash   clear  清空某个地方
+git  stash   pop  将第一个记录从某个地方重新拿到工作区（可能有冲突）
+git  stash   apply  编号，将指定编号，从指定编号记录从某个地方重新拿到工作区，而不是临时区域
+（编号是0,1,2等）
+git   stash  drop    编号，删除指定编号的记录
+
+
+
+
+
+
+
+
+
+branch（分支）
+
+
+git  branch  dev 创建分支dev（在当前的分支上创建爱你分支)
+git  branch   开发功能dev 做（可以查看当前有多少分支)
+git  checkout  dev  跳到dev分支了,切换分支 
+
+
+在分支修改完数据之后
+在dev分支中提交数据
+git  add .
+git  commit   -m  ''
+git  status  查看当前的状态
+
+git merge  分支名字   合并到master分支上
+git  branch   -d  分支名字 删除某分支名字
+
+创建一个bug的分支，当你临时修改完的时候，在合并一下 
+
+
+.git 隐藏文件
+
+
+
+
+代码托管：github
+自己创建代码托管：gitlab
+
+git  push  -u  origin   master
+把这个代码的分支推向master
+
+
+git  init
+
+
+
+$ git  remote  add origin  https://github.com/yunxintryyoubest/-.git
+
+$ git  push  origin master
+
+
+
+
+echo "# -octo-parakeet" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/yunxintryyoubest/-octo-parakeet.git
+git push -u origin master
+
+
+
+
+
+
+git remote add origin https://github.com/yunxintryyoubest/-octo-parakeet.git
+git push -u origin master
+
+
+git push  origin  dev
+把子分支推上去,推到github上面 
+
+$ git  clone  https://github.com/yunxintryyoubest/-octo-parakeet.git
+把代码拿过来,在当前的github里面的代码拿过来  
+
+当拿过来的时候，要进这个文件夹里面才可以master
+默认只把master拿过来了
+但是可以切换到dev的分支
+
+git pull  origin  dev  把dev分支的的内容拿过来  ##注意，一定要推到云端，才可以在不同的地方拿下代码
+
+touch  a.txt
+
+git  add .
+git  commit  -m  'commit a'
+git  push  origin   dev  提交到dev分支上面 
+
+
+git  fetch  origin  dev  把远程仓库的代码拿下来，并没有全部
+git   merge  origin/dev   从远程仓库拿下来代码 ##如果之前的出现分叉的话，可以改为git  rebase origin/dev
+这两条命令等于是git  pull  origin  dev  
+
+git  rebase的作用？
+git  fetch加git  merge会出现分叉的记录，如果要保持提交记录的整洁
+就可以把这个merge改成后面的rebase，就不会出现分叉的现象了，保持提交记录的整洁 
+
+
+
+
+
+
+完整步骤：
+git  clone   https://github.com/yunxintryyoubest/web.git
+cd web
+git  branch
+git  checkout   dev
+ll
+vim  文件
+git  add .
+git  commit -m  'xxxx'
+git  push   origin   dev

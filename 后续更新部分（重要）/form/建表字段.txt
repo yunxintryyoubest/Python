@@ -1,0 +1,12 @@
+price=models.DecimalField(max_digits=8,decimal_places=2)
+最大8位，有两个浮点数,999999.99后面是浮点数 
+
+
+book_obj=models.Book.create()
+book_obj.author.set()
+把之前obj相关的id给清空掉
+编辑的时候应该设置set
+add是添加的意思，book_obj.author.add()
+authors.add(*author_pk_list)
+
+positive='fix'这个是固定什么位置

@@ -1,0 +1,3 @@
+a.txt  firsti
+git modify
+second  git  modify

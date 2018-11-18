@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+# _*_coding:utf-8 _*_
+#@Time    :2018/10/6 上午 10:11
+#@Author  :yunxin
+#@FileName: forms.py
+#@Project名称: django_api
+
+
+from   django import forms
+# from  django
+
+class  User(forms.Form):
+    username=forms.CharField(max_length=16,
+                             label='用户名',
+                             error_messages={
+                                 "max_length":'最多16位',
+                                 "required":'用户名不能为空'
+                             }
+
+
+                             )
+    password=forms.CharField(min_length=6,label='密码',
+                             ##这个是可以往这个密码加属性
+                             widget=forms.widgets.PasswordInput
+                             (
+                                     attrs={'class':'form-control'},
+                                     render_value=True
+                             )
+
+                             )
+    re_password=forms.CharField(max_length=32)
+    widget=forms.widgets.TextInput("class":'form_control')
+    ##这个是可以加属性的
+
+
+
+    email=forms.EmailField(
+
+            label='邮箱',
+            widget=forms.widgets.EmailInput( ),
+            error_messages={
+                "invalid": "邮箱格式不正确",
+
+            }
+    )
+
+
+
+    def clean(self):
+        password=self.cleaned_data.get('password')
+        re_password=self.cleaned_data.get('re_password')
+
+        if  re_password and re_password!=password:
+            self.add_error("re_password",ValidationErroe("两次密码不一样那个"))
+        else:
+
+            return
+
+        ##通过这个clean的方法可以定制这个错误的方法
+
+    def clean_email(self):
+        emal=self.cleaned_data.get('email')
+
+        is_exist=models.UserInfo.objects.filter(email=emal)
+        if  is_exist:
+
+            self.add_error('email',ValidationError("邮箱已经别注册"))
+

@@ -1,0 +1,75 @@
+app=Flask(__name__,static_folder='static')
+这个app里面是配置这个文件的，相当于settings
+就相当于这个flask的settings，里面可以配置这个静态文件的信息和
+template的信息，就是可以更改这个名字，就想到于这个新建得文件是
+可以更改名字的 
+
+session是以加密的方式保存进了cookies里面流浪器里面
+
+
+
+
+
+
+
+###########flask
+
+from   flask  import Flask,render_template,request,redirect,session
+app=Flask(__name__,static_folder='static')
+######这一般写这个__name__，配置这个信息,这个app这里是可以配置着信息的,template_folder这个是配置在这个template的
+app.secret_key='asdfffa'
+####这个是进行加密处理
+
+
+##这个是进行这个路由匹配部分,注明一下，这个默认只有这个get的请求，这个post的请求是可以加上去的
+@app.route('/login',methods=['GET','POST'])#############原理讲解：这个是路由匹配，进行访问这个url的index
+def login():
+    # return  'gello'
+######这个是返回这个hello
+    '''原理讲解：
+    要拿请求相关得东西，是通过这个上下文管理取的
+    '''
+
+    print(request.method)
+    #########这个是通过导入这个request来取的
+    if  request.method=='GET':
+        print('r这个是get的请求的方式')
+        return   render_template('login.html')
+    ##############否则的话，就是这个post的请求
+    user=request.form.get('username')
+    pwd=request.form.get('password')
+    ###########这样就是拿到了这个username和password
+
+    if  user=='alex'  and   pwd=='123':
+        print('验证通过')
+
+        session['user']=user
+        ####这个是设置这个session
+        return  redirect('/index')
+
+    return   render_template('login.html',error='用户名或者密码错误')
+#########这个h是返回这模板语言
+
+
+#######没有写的话，默认是只支持这个get的请求
+@app.route('/index')######这个是url的路由管理系统，匹配相对应的url
+def index():
+##########在下面那这个session
+
+    user=session['user']
+##########这个user已经存入这个session里面
+
+    ####打印出这个user出来
+    print('*'*1000)
+    print(user)
+    if  user:
+        print('存在这个用户')
+        return  render_template('index.html')
+
+    return  render_template('login.html',error='用户名和密码错误')
+
+
+if __name__ == '__main__':
+    app.run()
+    ####下面是执行这个run函数
+
