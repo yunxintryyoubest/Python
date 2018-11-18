@@ -1,0 +1,15 @@
+
+评论：
+根评论
+render显示
+ajax显示
+
+评论数
+
+
+<p>
+<testarea  cols='60' rows='10'><textarea>
+
+清除浮动:
+class="pol clearfix"
+这个是可以清除浮动
