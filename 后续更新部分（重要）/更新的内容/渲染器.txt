@@ -1,0 +1,9 @@
+rest  framework  框架渲染器
+
+
+按照注册的顺序一个一个找
+会把这个内容先到嵌入frameork里面  
+
+
+uploadjson
+指定上传的路劲

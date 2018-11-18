@@ -1,0 +1,104 @@
+
+
+from django.db import models
+
+# # Create your models here.
+# from   django.contrib.auth.models import  User
+# #从额外的包里面导入一个User
+#
+#
+class User(models.Model):
+    username=models.CharField(max_length=16)
+    password=models.CharField(max_length=32)
+
+#
+#
+# class  UserDetil(models.Model):
+#     phone=models.CharField(max_length=11)
+#     user=models.OneToOneField(to="User")##在当前文件夹定义的时候，要加双引号，就是说在这个文件下面有这个User的这个表的时候,否则的话就不用加这个引号
+#     user=models.OneToOneField(to=User)#这个是在导入的这个包里面可以拿到这个User，是不用加引号
+#     ##这个加双引号就相当于这个user的表
+#
+#
+#
+# from   django.contrib.auth.models import  User,AbstractBaseUser
+
+第一种方法:
+# class Userinfo(models.Model):
+phone=model.Charfield(max_Length=32)
+user=model.Charfield(max_length=32)
+
+
+from django.db import models
+
+# # Create your models here.
+# from   django.contrib.auth.models import  User
+# #从额外的包里面导入一个User
+#
+#
+class User(models.Model):
+    username=models.CharField(max_length=16)
+    password=models.CharField(max_length=32)
+
+#
+#
+# class  UserDetil(models.Model):
+#     phone=models.CharField(max_length=11)
+#     user=models.OneToOneField(to="User")##在当前文件夹定义的时候，要加双引号，就是说在这个文件下面有这个User的这个表的时候,否则的话就不用加这个引号
+#     user=models.OneToOneField(to=User)#这个是在导入的这个包里面可以拿到这个User，是不用加引号
+#     ##这个加双引号就相当于这个user的表
+#
+#
+#
+
+
+
+第一种方法：
+新建一个表，一对一的关联上面的auth_user表
+from   django.contrib.auth.models import  User,AbstractBaseUser
+
+
+第二种方法:继承的方法
+要继承这个abstractBaseuser
+# class Userinfo(AbstractBaseUser):
+ 	phone=models.CharField(max_length=11)
+	user=models.OneToOneField(to="User")
+相当与把这个内置的auth给覆盖了
+
+
+
+如果使用继承的方法使用了内置了auth，要在setting里面配置
+默认用户认证使用的是哪个表
+
+settings里面配置
+AUTH_USRT_MODEL="app01.UserInfo"
+默认会取这个setting里面取找这个自己配置的auth的表
+
+'''
+原理讲解：
+这个相当于继承了这个父类，就当这个用户进行认证的时候，就会往这个自己写的这个表里面取找，不是父类里面取找
+
+
+
+
+注意：一定在settings里面加上这个AUTH_USER_MODEL=‘app名字.类名’
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,12 @@
+验证码:
+
+滑动验证码
+引入：https://docs.geetest.com/install/deploy/server/python#%E5%BC%95%E5%85%A5SDK
+
+
+在你的项目下面导入这个sdk：
+from geetest import GeetestLib
+
+
+
+from组件和文件上传

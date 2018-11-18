@@ -1,0 +1,92 @@
+poject下面的__init__里面：
+############################在这里面可以添加这个信号量
+
+from   django.db.models   import  signals
+###############################导入这个信号量的模块
+print('执行这个singal的信号量的操作')
+
+############这个是一开始就会执行的操作
+def before_save(*args,**kwargs):
+    print('开始执行这个信号量的操作了',args,kwargs)
+'''
+() {'signal': <django.db.models.signals.ModelSignal object at 0x0000022947A93080>, 'sender': <class 'app01.models.Booke'>, 'instance': <Booke: Booke object (None)>, 'raw': False, 'using': 'default', 'update_fields': None}
+执行操作
+
+'''
+
+# //这个会答应这个日志出出来
+
+
+
+def  on_save(*args,**kwargs):
+    print('执行操作')
+
+    print(args,kwargs)
+
+
+def  after_save(*args,**kwargs):
+    print('执行完成')
+    print(args,kwargs)
+
+
+
+signals.pre_save.connect(before_save)
+    ##############这个是连接这个信号量
+signals.pre_save.connect(on_save)
+signals.pre_save.connect(after_save)
+
+
+
+
+
+
+
+
+models：
+from django.db import models
+
+# Create your models here.
+
+
+class   fun(models.Model):
+    fun_name=models.CharField(max_length=32,verbose_name='fuc名字')
+
+
+
+
+class  Booke(models.Model):
+    book_name=models.CharField(max_length=32)
+
+
+views：
+from django.shortcuts import render
+
+# Create your views here.
+from   django.shortcuts import  HttpResponse
+from   app01.models import    *
+from   app01  import models
+
+
+def fun1(request):
+    print('开始执行这个fun1的函数了')
+    models.fun.objects.update(fun_name='alxe',fun_num=21)
+    # fun.objects.update(fun_name='alex',fun_num=12)
+    # fun.objects.update(fun_name='alex')
+    # fun.objects.create(fun_name='alex')
+
+
+    return  HttpResponse('fun1')
+
+
+
+def fun2(requets):
+    print('开始执行这个fun2的函数了')
+    models.fun.objects.update(fun_name='alxe')
+
+    # fun.objects.update(fun_name='alex',fun_num=12)
+    # fun.objects.create(fun_name='alex')
+
+    return HttpResponse("fun2")
+
+
+

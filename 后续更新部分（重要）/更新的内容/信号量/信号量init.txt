@@ -1,0 +1,37 @@
+############################在这里面可以添加这个信号量
+
+from   django.db.models   import  signals
+###############################导入这个信号量的模块
+print('执行这个singal的信号量的操作')
+
+############这个是一开始就会执行的操作
+def before_save(*args,**kwargs):
+    print('开始执行这个信号量的操作了',args,kwargs)
+'''
+() {'signal': <django.db.models.signals.ModelSignal object at 0x0000022947A93080>, 'sender': <class 'app01.models.Booke'>, 'instance': <Booke: Booke object (None)>, 'raw': False, 'using': 'default', 'update_fields': None}
+执行操作
+
+'''
+
+# //这个会答应这个日志出出来,这个有对哪一个表进行的操作
+
+
+
+def  on_save(*args,**kwargs):
+    print('执行操作')
+
+    print(args,kwargs)
+
+
+def  after_save(*args,**kwargs):
+    print('执行完成')
+    print(args,kwargs)
+
+
+
+signals.pre_save.connect(before_save)
+    ##############这个是连接这个信号量
+signals.pre_save.connect(on_save)
+signals.pre_save.connect(after_save)
+
+

@@ -1,0 +1,61 @@
+原理讲解:
+
+这个相当于在session里面记录一个session_id
+request.session['user_id']=user[0].id
+生成特殊的字符串
+特殊字符串生成key的时候，在数据库里面对应一个session_value
+在响应的向这个写了一个cookies，cookies的值就是这个特殊的字符串
+
+
+拿到这个uer_id
+在这个session里面拿到这个user_id
+user_obj=request.session.get('user_id')
+拿到这个user_id，在已经写进这个session里面的用户拿到这个user_id
+
+
+
+
+
+user=auth.authenticate(username=username,apsswd=passwd)
+这个是用户认证
+auth.login(reqeust,user)
+当用户认证成功的话就有这个user
+if user:
+print('suc')
+else:
+print('fail')
+
+
+
+from  django.contrib.auth import authenticate,login
+from  django.contrib  import auth
+
+
+
+from  django.shortcuts import  render,HttpResponse,redirect
+def  login(request):
+    print('进行认证')
+    if  request.method=='POST':
+        username = request.POST.get('username')
+        passwd = request.POST.get('passwd')
+        user = auth.authenticate(username=username, password=passwd)
+######################假如这个验证成功的话，这个user就有值，得到的是一个用户对象,否则的话就是一个匿名用户,就可以进行登录  
+        auth.login(request, user)
+        ########################这个是把这个user封装进这个requets里面，下面既可以直接进行调用了，通过requets.user进行调用，进行登录验证
+        '''
+        原理讲解：
+        这个是将这个user封装进这个request里面，就是将这个user和密码写进这个sessions里面，下次过来的时候就可以直接进行访问了，带着这个cookies进行匹配
+        
+        '''
+        if user:
+            return redirect('/index/')
+        else:
+
+            return render(request, 'login.html')
+
+
+def index(request):
+    print('进入这个首页的页面')
+    print(request.user.username)
+    #################这个是已经封装到requets的模块里面了，所以可以直接进行调用,在这个request里面有这个user，可以直接进行调用里面的user
+

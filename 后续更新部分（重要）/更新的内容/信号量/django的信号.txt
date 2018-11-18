@@ -1,0 +1,19 @@
+在添加和修改这个django的数据库之前记录这个日志
+用这个信号来做(这个就是提交的时候预留的信号）
+触发器 
+
+这个信号量，是你执行这个数据库之后才会触发这个信号量
+
+
+singals.pre_save.connect()
+
+
+pre_init  这个是在django实例haul之前
+post_init  在django实例化之后
+
+pre_save  这个是在这个保存之前 
+post_save  这个是在这个保存之后
+
+
+
+https://pan.baidu.com/mbox/homepage?short=hufRr2s
