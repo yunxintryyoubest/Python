@@ -1,0 +1,28 @@
+from   twisted.web.client import  reactor,defer,getPage
+class  FOO():
+    def  fun1(self):
+        a=[2,43,54,54,5,56,6,54]
+        for  i in  a:
+            self.get_fun1(i)##多次执行
+
+    @defer.inlineCallbacks#循环调用，可以拿到回调函数的值，打印出值出来
+    def  get_fun1(self,data):
+        yield  self.fun2(data)
+    @defer.inlineCallbacks
+    def  fun2(self,data):
+        yield  self.fun3(data)
+    def fun3(self,data):
+        print(data)
+FOO().fun1()
+
+
+
+结果：
+2
+43
+54
+54
+5
+56
+6
+54

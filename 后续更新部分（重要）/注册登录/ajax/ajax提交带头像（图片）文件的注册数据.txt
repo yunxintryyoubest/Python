@@ -1,0 +1,72 @@
+ajax传送带文件的数据：
+首先ajax要加这两个：
+processData:false,
+contentType:false,
+
+data必须是fromData
+就是from表单里面一定要设置enctype:'multipart/from-data'
+
+
+步骤：
+在models里面的操作：
+class  Userinfo(AbstractBaseUser):
+    nid=models.AutoField(primary_key=True)
+    phone=models.CharField(max_length=11)
+    avatar=models.FileField(upload_to='/avatar/',default='avatar/默认.png')
+    ##这个upload_to是上传的路径，可以上传到哪里，后面是默认的头像文件 
+    create_time=models.DateTimeField(auto_now_add=True)
+    ##这个是创建的时间
+
+
+
+
+
+
+
+这个是在views里面：
+from   app01.form.form import    Register
+##导入这个form自定制的模块
+
+def   login1(request):
+    form_obj=forms.Register()
+    ##这个是在前端生成这个input框和其他的
+    print('进入这个登录页面')
+    data={'status':0,'msg':''}
+    if  request.method=='GET':
+        print('是get的请求')
+        return  render(request,'input_file.html')
+
+    elif  request.method=='POST':
+        print('是post的请求')
+        form_obj=forms.Register(request.POST)
+        ##这个是在form里面进项校验
+        if  form_obj.is_valid():
+            form_obj.pop('re_password')
+    ##这个是移除这个form_data里面的re_password（字典），不需要在进行写入数据库里面
+
+            ##拿到这个图像文件
+            img=request.FILES.get('img_name')
+
+#####这个就拿到这个头像的文件了
+
+
+
+
+            UserInfo.objects.create_user(**form_obj.cleaned_data,avatar=img)
+            ###这个是自己写的一个注册的表，把这个img传进去，就是你的头像文件了
+            data['msg']='/index/'
+            ##这个是ajax跳转的页面，在后端决定跳转的页面
+            #前端  location.href=data.msg
+            ##这个就是ajax跳转的页面
+
+            return  JsonResponse(data)
+        ##返回jsno的数据类型
+
+        else:
+            print('验证不通过')
+            data['status']=1
+            ##这个就会进行赋值，status=1这个就会在前端起作用
+            data['msg']=form_obj.errors
+            ##把这个错误的信息赋值到这个msg里面
+
+            return   JsonResponse(data)

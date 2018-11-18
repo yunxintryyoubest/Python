@@ -1,0 +1,8 @@
+model.CustomerInfo._meta.model_name
+这个可以拿到个表名字
+
+注明一下，这个移除掉自己的话，就可以这样写
+$('.right').remove()
+
+这个是移除自己的孩子节点
+$('.right').children().remove()

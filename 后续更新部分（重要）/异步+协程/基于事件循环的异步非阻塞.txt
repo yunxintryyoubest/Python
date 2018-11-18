@@ -1,0 +1,33 @@
+####基于事件循环的异步非阻塞
+
+from   twisted.internet import  reactor
+from   twisted.web.client import   getPage,defer
+def  start_loop():
+    reactor.stop()
+
+
+def   callback(content):
+    print(content)
+
+
+
+defered_list=[]
+
+
+url_list=[
+    'https://www.cnblogs.com/yunxintryyoubest/category/1338759.html',
+    'https://www.cnblogs.com/',
+    'http://www.baidu.com'
+]
+
+
+for   url  in   url_list:
+    defered=getPage(bytes(url,encoding='utf-8'))
+    defered.addCallback(callback)##每一个加一个回调函数
+    defered_list.append(defered)##把全部的加进列表里面来
+
+def  stop_loop():
+    reactor.stop()
+dlist=defer.DeferredList(defered_list)##把全部的加进dlist里面
+dlist.addBoth(stop_loop)##每一个加上loop停止事件
+reactor.run()##启动全部的reactor

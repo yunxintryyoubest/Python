@@ -1,0 +1,13 @@
+from django.middleware.csrf   import   CsrfViewMiddleware
+'''
+这个是从请求里面找到相对应会的csrf，去你的session的大字典里面取找到这个session，匹配相对应的csrf
+
+'''
+
+
+csrf的中间件原理讲解:
+
+这个会把这个csrf的这个保存进session这个大字典里面，当你下次
+过来的时候就可以带着这个csrf过来，进行匹配，如果匹配成功的话
+就可以进行通过，如果请求提交的数据里面没有csrf的话，或者匹配不上的
+话，具直接返回403保错

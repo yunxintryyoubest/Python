@@ -1,0 +1,29 @@
+import  importlib
+这个是可以根据这个字符串来导入这个模块的
+
+
+a=importlib.import_module('xx.oo')
+print(a.Person（）)
+这个里面也可以传参数进去
+
+
+这个上面就相当于from  xx import oo
+后面就是实例化这个这个person这个类（这个person类在这个oo这个py文件里面）
+
+
+
+
+
+例子：
+import  importlib
+a=importlib.import_module("tets.test1")
+a.fun1('yun')#这个a是一个test下面的test.py的文件模块  
+
+
+the_class=getattr(a,'fun1')这个可以得到这个fun1类
+的函数
+b=the_class('yunxin')##这个是传参数进去
+print(the_class) 
+# print(b)
+
+print('执行')

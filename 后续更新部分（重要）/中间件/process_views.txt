@@ -1,0 +1,46 @@
+django调用注册的中间件的五个方法的顺序:
+
+process_request 
+process_view
+process_response
+
+这个是settings里面写的中间件:
+my_middleware.ooxx
+my_misleware.md2
+这个是自定义的中间件  
+
+
+class  md2(middlewareMinxin):
+
+
+print(view_func,type(ciew_func))
+
+return Httpresponse('')
+
+
+def process_view(self,request):
+print("处理这个views的部分')
+
+这个是在请求url之前，在响应这个views之前
+就是在url对应相对应的函数之前进行的中间件的操作
+
+
+这个就是在处理到process_view这里之后
+就返回一个响应，就不执行下面的部分
+
+
+讲解：
+就是说，当执行到这个process_view部分的时候，就执行这个process-response的中间件部分,就返回，不执行下面的部分
+
+
+process_response必须要有返回值，不能为none
+
+
+
+
+
+
+process_response永远是最后又响应的时候，才执行
+
+
+

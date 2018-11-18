@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+# _*_coding:utf-8 _*_
+#@Time    :2018/10/6 下午 03:24
+#@Author  :yunxin
+#@FileName: my_middleware.py
+#@Project名称: django_singal
+
+
+from   django.utils.deprecation   import   MiddlewareMixin
+
+from  django.shortcuts import   render,HttpResponse
+
+class  ooxx(MiddlewareMixin):
+    print('执行这个ooxx的函数')
+
+    # def  process_request(self,request):
+    #     print('这是我的第一个中间件')
+    #     print('这个request的请求是：',request)
+    #
+    #
+    #     return   HttpResponse('第一个中间件')
+    #
+    #
+    #
+    # def  process_response(self,request,response):
+    #     print('执行这个response的方法')
+    #     print(response)
+    #
+    #
+    #     return   HttpResponse('这个是xxoo的函数的response')
+
+    def  process_view(self,request,view_func,view_args,view_kwargs):
+        print('执行view方法')
+
+
+
+        # return   HttpResponse('views')
+
+##当前面有这个返回值的时候，就不会执行下面的步骤
+
+#########当这个views里面抛出异常的时候，这里面就拿到这个异常，就可以执行这个中间件部分
+    def process_exception(self,request,exception):
+        print('exection')
+        return   HttpResponse('异常')
+
+
+class fun1(MiddlewareMixin):
+    print('执行fun1')
+
+
+
+    def  process_request(self,request):
+        print('这是我的fun1中间件')
+        print('这个request的请求是：',request)
+
+
+
+'''
+原理讲解:
+这个是按照这个settings里面的倒叙的顺序执行的，就是这个response的执行的顺序
+讲解一下，这个response的执行的顺序是倒叙执行的
+'''
+
+        # return   HttpResponse('fun1中间件')

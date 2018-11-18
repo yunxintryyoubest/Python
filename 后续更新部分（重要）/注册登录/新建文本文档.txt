@@ -1,0 +1,21 @@
+讲解：
+就是当这个光标点击这个标签名字的时候，就会自动将这个焦点移动到这个input框里面，这个是实现这个联动的效果
+
+
+方式1：
+<label>用户名
+<input  type='text'>
+</label>
+
+
+方式二
+<label  for='pwd'>密码</label>
+<input  type='text'  id='pwd'>
+
+
+
+
+
+
+注明一下：label标签绑定这个input框是通过这个id来绑定的
+而这个取这个头像是通过这个name来取的

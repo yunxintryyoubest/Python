@@ -1,0 +1,10 @@
+        <label> 用户名
+            <input type="text"  name="name">
+        </label>
+
+{#        //注明一下，这个是绑定这个input的标签到这个label的标签这里，就是说当这个光标点击这个label的时候也可以点击这个input的标签#}
+
+        <label   for="passwd"></label>
+{#        注明一下，这个label标签是绑定了下面的id为passwd的标签，就是和上面的功能是一样的#}
+
+        <input  type="text"  id="passwd"  name="password">

@@ -1,0 +1,45 @@
+settings里面：
+
+'django.contrib.sessions.middleware.SessionMiddleware'
+
+这个是session的中间件，想当与把这个session封装
+进了requets里面
+
+
+sessions里面：
+    def process_request(self, request):
+        ##从你请求的cookies里面根据session_id找到这个值,给他赋值到session_key里面
+        session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME)
+        request.session = self.SessionStore(session_key)
+    #这个相当远去后台拿到这个大字典，拿到这键值对，把他放进这个requets里面,就是把这个cookie封装进这个reuqest里面
+    ##可以在views里面直接进行调用
+
+
+
+
+在views里面：
+request.session
+这个就可以拿到这个session
+
+
+
+
+
+
+def  process_request(self,request):
+       request.s='alex'####注意一下，这可以在request里面封装值进去
+
+        return   HttpResponse('第一个中间件')
+
+
+##在request这个中间件里面封装值进去之后就可以在views里面取
+到这个request的值来，就可以直接进行调用
+
+
+def  process_response(self,request,response):
+  	print('这个里面封装的值是:',request.s)
+
+
+
+
+

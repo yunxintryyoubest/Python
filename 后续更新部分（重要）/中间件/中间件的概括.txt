@@ -1,0 +1,21 @@
+首先这个middleare的文件新建在project下面
+
+
+之后:
+在settings里面配置这个导入这个模块 
+'my_middleware.ooxx'
+
+在之后再这个middleware.py文件里面导入模块，中间件的模块
+
+
+from   django.utils.deprecation   import   MiddlewareMixin
+导入这个中间件的模块
+
+class  ooxx(MiddlewareMixin):
+    print('执行这个ooxx的函数')
+
+    def  process_request(self,request):
+        print('这是我的第一个中间件')
+
+
+

@@ -1,0 +1,183 @@
+html部分：
+<form novalidate action="/reg/" method="post" class="form-horizontal reg-form" enctype="multipart/form-data">
+                {% csrf_token %}
+
+
+
+
+//注明一下，这个id_for_label这个是当点击这个名字的时候（就是标签名字  的时候，这个焦点会自动那个聚焦到这个input框里面）
+                <div class="form-group">
+                    <label for="{{ form_obj.username.id_for_label }}"
+                           class="col-sm-2 control-label">{{ form_obj.username.label }}</label>
+                    <div class="col-sm-8">
+                        {{ form_obj.username }}
+                        <span class="help-block">{{ form_obj.username.errors.0 }}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form_obj.password.id_for_label }}"
+                           class="col-sm-2 control-label">{{ form_obj.password.label }}</label>
+                    <div class="col-sm-8">
+                        {{ form_obj.password }}
+                        <span class="help-block">{{ form_obj.password.errors.0 }}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form_obj.re_password.id_for_label }}"
+                           class="col-sm-2 control-label">{{ form_obj.re_password.label }}</label>
+                    <div class="col-sm-8">
+                        {{ form_obj.re_password }}
+                        <span class="help-block">{{ form_obj.re_password.errors.0 }}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form_obj.email.id_for_label }}"
+                           class="col-sm-2 control-label">{{ form_obj.email.label }}</label>
+                    <div class="col-sm-8">
+                        {{ form_obj.email }}
+                        <span class="help-block">{{ form_obj.email.errors.0 }}</span>
+                    </div>
+                </div>
+ <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" class="btn btn-success" id="reg-submit">注册</button>
+                    </div>
+                </div>
+</form>	
+
+
+
+
+
+// AJAX提交注册的数据
+    $("#reg-submit").click(function () {
+        // 取到用户填写的注册数据，向后端发送AJAX请求
+        var formData = new FormData();
+        formData.append("username", $("#id_username").val());
+        formData.append("password", $("#id_password").val());
+        formData.append("re_password", $("#id_re_password").val());
+        formData.append("email", $("#id_email").val());
+        formData.append("avatar", $("#id_avatar")[0].files[0]);
+        formData.append("csrfmiddlewaretoken", $("[name='csrfmiddlewaretoken']").val());
+
+        $.ajax({
+            url: "/reg/",
+            type: "post",
+            processData: false,
+            contentType: false,
+            data: formData,
+            success:function (data) {
+                if (data.status){
+                    // 有错误就展示错误
+                    // console.log(data.msg);
+                    // 将报错信息填写到页面上
+                    $.each(data.msg, function (k,v) {
+
+
+
+//这个是循环每一个键值对，进行操作，key和value，循环的是之前的data.msg的键值对，这个data在views里面应该是{status:'',msg:{'alex':123,'yunxin':123}}这样的形式
+
+
+
+//下面的原理讲解：就是循环遍历每一个input标签，每一个input标签的id都可以设置为id_password或者其他的，就是说对每一个标签的text赋值和它的父类加上has_error的类，就可以实现当有错误的时候就变红，这个input框和错误的信息
+
+
+
+
+
+                        // console.log("id_"+k, v[0]);
+                        // console.log($("#id_"+k));
+                        $("#id_"+k).next("span").text(v[0]).parent().parent().addClass("has-error");
+                    })
+
+                }else {
+                    // 没有错误就跳转到指定页面
+                    location.href = data.msg;
+
+//原理讲解：这个上面的ajax没有写这个url的路径，就是说当这个注册有错误的话，就显示错误，当没有错误的时候，就进行跳转到指定的data.msg的页面，location.href这个就相当于这个ajax的url部分  
+
+                }
+            }
+        })
+    });
+
+
+
+//原理讲解：这个input获取焦点的时候，这个父类就不在显示红色，后面的错误信息也就会清空
+
+
+
+ // 将所有的input框绑定获取焦点的事件，将所有的错误信息清空
+    $("form input").focus(function () {
+        $(this).next().text("").parent().parent().removeClass("has-error");
+    })
+
+
+
+
+
+
+
+processData: false,这个是告诉这个jquery不要处理我的数据data，这个data是formdata的形式，这个是是上传头像文件的时候加的
+contentType: false,这个是告诉jquery不要设置content类型
+提交data部分：
+csrfmiddlewaretoken:$("[name='csrfmiddlewaretoken'").val
+
+
+$.each(data.msg, function (k,v) 
+这个相当于是for  key,v    in data.msg:
+就是相当于是循环了一个字典的形式
+
+
+
+
+
+
+
+
+//注明一下，这个data.msg是动态变化的，在views和form里面动态生成
+所以当这个status是0的时候，是没有错误的，就进行跳转到index的页面，当为1的时候，循环遍历每一个字段，进行校验，当这个字段有错误的时候就，就显示出相对应的字段的错误
+$("#id_"+k).next("span").text(v[0]).parent().parent().addClass("has-error");
+这个就是相对应的字段加上相对应的错误信息
+
+
+
+
+
+
+这个是当光标移动到其他字段（除了username和密码）的时候就立马进行的校验
+后面还可以加上当这个用户名和密码失去焦点时候进行的校验，就是自己定制
+这个data.msg，为用户名已经存在,返回这个错误信息给前端
+$('#id_username').blur(function){
+}
+
+
+第二种方式：
+用on绑定input事件：
+$('#id_username').on('input',function())
+
+
+
+
+$('#id_username').next().text(data.msg).parent().parent().addClass('has-error')
+这个是ajax的请求，是get的请求方式
+
+
+
+
+
+<input  accept:'image/*'  type:'file'  >
+这个前面是可以接受的类型  后面是可以指定什么个数的类型
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,211 @@
+
+from twisted.web.client import  reactor,getPage,defer
+import  queue
+
+
+
+class  HttpResponse():
+    pass
+
+
+
+class Scheduler():
+    def  __init__(self):
+        self.Q=queue.Queue()
+
+    def  open(self):
+        pass
+
+    #处理请求部分
+    def   enqueue_request(self,spider_url):
+        pass
+
+    def size(self):
+        return self.Q.qsize()
+    def   next_request(self):##注意，这队列里面放的是url
+        try:
+            req=self.Q.get(block=False)##如果队列没有值
+        except  Exception  as e:
+            req=None
+        return   req
+
+
+###引擎：调度部分
+class  ExcutionEngine():
+    def  __init__(self):
+        self.max_start_url=5
+        self._close=None
+        self.crawlling=[]##一次
+        self.scheduler=None##设置这个调度器的是：当父类调度器里面没有url的时候，就在这里进行查找,None
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ###拿到响应结果
+    def  get_response_callback(self,content,url):
+        print(content)
+        self.crawlling.remove(url)
+        response=HttpResponse(content,url)
+        result=response.callback(response)###拿到响应结果
+        import  types
+        if isinstance(response,types.GeneratorType):
+            for  req in result:
+                self.scheduler.enqueue_request(req)####执行
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def  _next_request(self):##第一个是调度器里面队列的值
+        print('执行下一个next_requets')
+        if  self.scheduler.size()==0 and  len(self.crawlling)==0:
+            self._close.callback(None)##假如没有的haul就置空
+            return
+        while  len(self.crawlling)<self.max_start_url:####当这爬虫小于最大的限制的爬虫时候，可以继续爬
+            req=self.scheduler.next_request()
+            if not  req:
+                return
+            self.crawlling.append(req)
+            url_callback=getPage(req.encode('utf-8'))##
+            print(url_callback)########回调函数
+            url_callback.addCallback(self.get_response_callback,req)#加上响应结果
+            url_callback.addCallback(lambda _:reactor.callLater(0,self._next_request))
+
+
+
+
+
+
+    @defer.inlineCallbacks
+    def  open_spider(self,spider_url):#['http://www.baidu.com/']
+        print(spider_url)
+        self.scheduler_obj=Scheduler()##开始调度,主要是为了判断父类的调度器里面队列的值size,qsize()
+        # #####循环拿到所有的url，取放到调度器里面取执行
+        # self.scheduler
+        self.scheduler_obj=Scheduler()
+        yield  self.scheduler_obj.open()##循环打开爬虫调度器
+
+
+        req=next(spider_url)
+        self.scheduler_obj.enqueue_request(spider_url)####放到调度器里面去执行
+        reactor.callLater(0,self._next_request)##加回调函数,下一个请求,later执行
+
+
+
+
+
+
+
+    def   start_spider(self):
+        pass
+
+
+######创建引擎和爬虫
+class  Crawler():
+    def  _create_engine(self):
+        return  ExcutionEngine()##创建引擎
+
+
+    ##拿到里面的爬虫url，start_url='xx'>>>>>>>>>>>>scrapy1.scrapy1.spiders.baidu.BaiduSpider>>>>拿到这个Baiduspider对象出来
+    def   _create_spider(self,spider_path):##spider.baidu.baiduspider
+        import  importlib
+        k,v=spider_path.rsplit('.',1)
+        func=importlib.import_module(k)
+        spider_obj=getattr(func,v)#爬虫对象，》》可以取里面的开始url
+        #####可以返回的生成器或者是可迭代对象
+        spider_start_url=spider_obj.start_urls##返回开始url，也就可以返回方法会回去
+        spider_func=getattr(func,v)
+        return   spider_func()##返回实例对象，可以取里面的开始url和其他的内容
+
+
+
+    ##处理所有的爬虫对象,循环,路径
+    @defer.inlineCallbacks##需要生成器才可以返回，加上了这个可以拿到返回的消息出来
+    ##这个装饰器可以在这里拿到打印的值出来，并且可以循环拿出迭代器
+    def  crawler(self,spider_path):
+        engine=self._create_engine()
+        spider_obj=self._create_spider(spider_path)
+        # start_requests=iter(spider_obj.start_urls)##循环拿到所有的开始url
+        start_requests=spider_obj.start_urls
+
+        # print(next(start_requests))###如果没有加上@defer.inlineCallbacks装饰器的话，yeild有的话是打印不出结果来的
+        yield   engine.open_spider(start_requests)##start_requey有多个值的话也可以yield
+        yield   engine.start_spider()##循环
+
+
+        # yield
+
+
+
+
+#####拿到所有传过来的爬虫
+class  CrawlerProcess():
+    ##存放所有传过来的爬虫
+    def  __init__(self):
+        self._active=set()###存放所哟的爬虫路径
+
+
+    ##开始爬虫,传进爬虫的路径进来,》》》》把全部的爬虫对象加进来
+    def  crawl(self,spider_path):
+        # print(spider_path)
+        crawl=Crawler()
+        req=crawl.crawler(spider_path)##已经处理好的
+        self._active.add(req)
+
+    def  satrt(self):
+        defer_handler=defer.DeferredList(self._active)##把全部的爬虫路径给hang主，一直在这里
+        defer_handler.addBoth(lambda xx:reactor.stop())
+        reactor.run()
+
+
+'''执行命令'''
+class Command():
+    def run(self):
+        all_spider_list=['scrapy1.scrapy1.spiders.baidu.BaiduSpider','scrapy1.scrapy1.spiders.baidu.BaiduSpider','scrapy1.scrapy1.spiders.baidu.BaiduSpider']
+        # all_spider_list.append(spider_path)##[''xx,xx]\
+        for  spider_path  in all_spider_list:
+            CrawlerProcess().crawl(spider_path)
+
+
+
+Command().run()
+
+
+
+
+# from   scrapy1.scrapy1.spiders.baidu import  BaiduSpider
+# import  importlib
+# path='scrapy1.scrapy1.spiders.baidu'
+# k,v=path.rsplit('.',1)
+# a=importlib.import_module(k)
+# val=getattr(a,v)
+# Command().run(val)
+
+
+
+
+
+
+

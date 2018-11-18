@@ -1,0 +1,30 @@
+
+'''讲解一下原理：这里面不听的切换，在单线程下面不停的切换
+内部调配，但是事件循环是外部调配'''
+from   greenlet  import  greenlet
+
+def   fun1():
+    print(1)
+    test2.switch()
+    print(3)
+    test2.switch()
+    ##自己内部做切换，遇到io请求，就执行切换
+    print(5)
+
+def  fun2():
+    print(2)
+    test1.switch()
+    print(4)
+    test1.switch()
+
+test1=greenlet(fun1)
+test2=greenlet(fun2)
+test1.switch()
+'''会有一个额外的东西进行检测和切换'''
+
+
+
+'''阻塞的是当上一步完成之后才会执行下一步操作
+而非阻塞是当上一步没有完成也会往下走
+
+'''

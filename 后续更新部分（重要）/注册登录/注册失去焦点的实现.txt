@@ -1,0 +1,93 @@
+原理讲解：
+当这个光标移动到其他的位置的时候，就会进行判断看这个用户名和密码是否是正确的  
+
+代码：
+$("#id_username').blur(function(){
+取到用户填写的值
+var username=$(this).val()
+
+这个blur和change都可以实现这个效果
+
+
+
+
+
+
+
+
+$.ajax({
+url:'',
+type:'post',
+data:{'username':username},
+success;function(data){
+if (data.status){
+用户名已经别注册
+显示错误
+$(this).next().text(data.msg).parent().parent().add_class('has_error')
+});
+
+})
+
+
+
+views部分:
+专门用来校验用户名是否已经被注册
+首先去这个前端拿到这个用户名和密码
+然后去再这个数据库里面进行查看这个用户名是否已经存在
+如果已经存在的话，就显示错误，在前端渲染出来
+专门写check_username_exist(request)的部分
+这个前端的username通过resquest.post.get('username')
+这个数据库里面的数据通过model.UserInfo.filter(username=username)
+的方法来查看
+
+如果为空的话，就可以在前端渲染出来,显示出这个错误出来，这个用户名已经存在
+
+
+if is_exist:
+ret['statas']=1
+ret['msg']='用户名已经被注册'
+return  Jsonresponse(ret)
+
+
+
+
+html部分
+上传文件的部分:
+<label for='id_avatar'>
+<input type="file"  acept="image/png"  id='id_avatar'>
+这个后面的accept就是只接受这个png的格式的图片格式的文件
+image/* 这个也可以为*，默认图片都可以
+
+
+
+
+$('$id_usernmae').blur(function(){
+console.log(username)
+$.ajax({
+url:'',
+type:'',
+data:'',
+success:function(data){
+if (data.status){
+
+$(this).next().text(data.msg)
+}
+
+})
+
+
+
+
+
+
+自动填写个去掉(这个下面的自动填写部分，就是回自动查找部分给自动去掉)
+只需在input里面加一个autocomplete="off"就可以了
+novalidate  这个是可以实现这个不自动校验的功能（浏览器自带的功能）
+在这个input的标签里面加上去
+
+
+
+
+
+
+
