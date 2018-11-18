@@ -1,0 +1,7 @@
+##url的格式化处理，将字典的格式转化为url的格式
+from   urllib.parse import  urlencode
+v={
+    'k1':'v1',
+    'k2': 'v2',
+}
+print(urlencode(v))

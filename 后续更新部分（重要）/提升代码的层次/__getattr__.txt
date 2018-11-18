@@ -1,0 +1,22 @@
+这个是一调用这个类下面没有的属性的时候，就执行的方法
+
+
+当这个类下面有这个属性或者方法，就不会执行的
+只有没有这个属性的时候，才会执行
+
+
+class  FOO():
+    def  __init__(self,name):
+        self.name=name
+
+    def  fubn1(self):
+        print('fun1')
+
+    def __getattr__(self, item):
+        print('getattr',item)
+
+a=FOO('dsds')
+a.dfed##当一执行这个类对象下面的属性的时候执行getattr dfed
+#####给他一个其他的值，都会执行这个getattr的方法，自己的方法是不会执行的，自己没有的方法的话，就会触发这个getattr的方法的执行
+
+print(a.name)##dsds

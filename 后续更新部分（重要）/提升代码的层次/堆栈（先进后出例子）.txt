@@ -1,0 +1,38 @@
+class  B():
+    def  __init__(self):
+        # self.dic=set()
+        self.dic=[]##定义一个全部的列表，入口是从下面进来，不是先执行init构造方法
+
+    def   add_url(self,add_url):
+        print('添加进url[%s]进来'%add_url)
+        if  add_url  in  self.dic:
+            print('存在此url')
+            return  True
+        self.dic.append(add_url)
+
+
+    def  get_url(self):
+        print('取url')
+        print('取出全部的url',self.dic)
+        for   i in  range(1,len(self.dic)+1):
+            index=len(self.dic)-i
+            yield  self.dic[index]
+        # return  self.dic
+
+'''
+从里面的方法进行入手，不是先init构造方法来执行，就会一直往里面添加值进去，从类下面的其他方法入口，注意，重点
+'''
+obj=B()
+add_obj=obj.add_url(2354235)
+add_obj1=obj.add_url(535)
+add_obj2=obj.add_url(25)
+add_obj3=obj.add_url(322)
+add_obj4=obj.add_url(435)
+add_obj5=obj.add_url(6334543)
+
+
+
+get_obj1=obj.get_url()
+for  i in get_obj1:
+    print(i)
+# print(get_obj1)

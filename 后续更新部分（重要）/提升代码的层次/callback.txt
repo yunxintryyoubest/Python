@@ -1,0 +1,102 @@
+callback判断一个字段是函数还是字符串
+
+def  fun():
+    print('a')
+if callable(fun):
+    print('suc')
+else:
+    print('fail')
+打印的结果：suc
+
+这个是判断是函数还是字符串
+
+
+
+def FOO(self):
+    a=self
+    return  a
+
+
+
+if callable(FOO):
+    val=FOO('adfs')
+    print(val)
+else:
+pass
+
+当这个是一个函数的话，就可以传参数进去调用，然后拿到这个返回的值
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

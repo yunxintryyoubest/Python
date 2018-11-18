@@ -1,0 +1,28 @@
+当自己没有init方法接受到参数的时候，有几次父类的话，那么父类就会接受
+到这个参数过来
+
+
+class  A():
+    def __init__(self,anme):
+        print(anme)
+        print('A')
+        # print('A')
+
+
+
+
+class B(A):
+    # def __init__(self):
+    #     print('B')
+        # print(arg1)
+    def  fun(self,anme):
+        print('B')
+
+
+
+B('afsf')
+直接用类来传入参数是调用这个init的方法，类里面的init的方法
+
+
+afsf
+A

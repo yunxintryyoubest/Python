@@ -1,0 +1,171 @@
+__具有唯一性，不同类下面得相同__函数名字，是不同的，这个是有自己的作用域的，当你继承父类的时候，是不可以调用父类里面的这个方法的，
+
+继承：当子类没有这个方法或者属性的时候，就去父类里面找，__函数名字
+具有唯一性
+
+
+
+继承的用法：
+例子1：
+class  A():
+    def  __edit(self):
+        print('A的edit方法')
+        return   'A的edit'
+class  B(A):
+    print('B')
+    def __edit(self):
+        print('B的edit方法')
+        return  'B的edut'
+
+##第一种调用的方法
+obj=B().__edit()
+print(obj)
+##执行报错，调用不了父类的__的方法（内置的方法）报错
+
+
+
+
+讲解：
+这个__edit在这个类下面是有自己的作用域的，外部是调用不了的
+
+例子2：在自己的作用域下面尽进行调用这个类下面内置的方法（特殊）
+
+class  A():
+    def  __edit(self):
+        print('A的edit方法')
+        return   'A的edit'
+class  B(A):
+    print('B')
+    def __edit(self):
+        print('B的edit方法')
+        return  'B的edut'
+
+    def  fun(self):
+        a=self.__edit()
+        # print(a)
+        return  a
+
+##通过调用B下面的fun方法来调用__edit
+obj=B().fun()
+print(obj)
+
+##通过init来调用这个内置的方法
+class  B(A):
+    print('B')
+    def __init__(self):
+        self.__edit()
+##第二种
+        # a=self.fun()
+        # print(a)
+    def __edit(self):
+        print('B的edit方法')
+        return  'B的edut'
+
+    def  fun(self):
+        a=self.__edit()
+        # print(a)
+        return  a
+B()
+
+
+
+例子3：
+继承调用父类的方法：（不是内置的方法）
+class  A():
+
+    def __init__(self):
+        self.__edit()
+    def  __edit(self):
+        print('A的edit方法')
+        return   'A的edit'
+
+    def  fun2(self):
+        print('A的fun2')
+class  B(A):
+    print('B')
+    def __init__(self):
+        self.fun2()
+        
+    # def __edit(self):
+    #     print('B的edit方法')
+    #     return  'B的edut'
+
+    def  fun(self):
+        a=self.__edit()
+        # print(a)
+        return  a
+B()
+
+
+
+##继承调用父类的:(__edit作用域在父类那里，子类不能调用）
+报错
+class  A():
+
+    def __init__(self):
+        self.__edit()
+    def  __edit(self):
+        print('A的edit方法')
+        return   'A的edit'
+
+    def  fun2(self):
+        print('A的fun2')
+class  B(A):
+    print('B')
+    def __init__(self):
+        self.__edit()
+
+    # def __edit(self):
+    #     print('B的edit方法')
+    #     return  'B的edut'
+
+    def  fun(self):
+        a=self.__edit()
+        # print(a)
+        return  a
+B()
+
+
+
+
+
+
+
+
+
+
+1：函数的实例化：
+class  A():
+    def  edit(self):
+        print('A的edit方法')
+        return   'A的edit'
+class  B(A):
+    # def __init__(self):
+    #     self.fun()
+    print('B')
+    def edit1(self):
+        print('B的edit方法')
+        return  'B的edut'
+    def  fun(self):
+        a=self.edit1()
+        return  a
+
+
+
+
+# obj=B().fun()
+##这个是函数的调用，2种方法，一种自己这个类当做参数传进去
+# obj=B().edit()
+# print(obj)
+#
+#第二种调用是调用类下面的函数，自己传参进去
+# obj=B.edit('dssd')
+# print(obj)
+
+# obj=B().edit()
+# print(obj)
+
+#通过fun函数拿到edit方法里面返回的值：
+# a=B().fun()
+# print(a)
+

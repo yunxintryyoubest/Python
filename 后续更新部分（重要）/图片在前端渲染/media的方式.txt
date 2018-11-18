@@ -1,0 +1,32 @@
+配置路径：
+
+ 
+
+方法一：通过创建media的文件（图片文件放在media下面），在settings里面配置这个media的路径来在前端渲染出这图片文件来
+
+首先在这个settings里面配置上传文件的路径：
+##用户上传的图片文件是可以放在media下面，上传文件默认是放在这个路径下面
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')
+MEDIA_URL='/media/'
+
+然后在urls里面配置这个media的访问路径：
+from django.views.static import serve
+from django.conf import settings
+
+##media需要制定这个上传的文件在哪里
+url(r'media/(?P<path>.*)$',serve{'document_root':settings.MEDIA_ROOT}),
+#这个是默认去这个settings里面取找
+
+ 
+
+之后再html里面就可以渲染出media下面头像文件了
+<img class="media-object" src="/media/{{ user.avatar }}" alt=" ">
+
+ 
+
+ 
+
+ 
+
+在浏览器也可以进行访问这个路径下面的图片：
+

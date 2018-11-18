@@ -1,0 +1,112 @@
+##3如果是加了静态方法的话，就要传参数进去
+    def  list(self,request):
+        model_name=self.model._meta.model_name
+        model=self.model.objects.all()##这个是个类对象
+        dic=[]
+        list_display=admin.book_admin.list_display
+        for  model_obj  in  model:
+            field_dic = []
+            for field in list_display:
+                if callable(field):
+                    print('是函数')
+                    # val=field(self.model)
+                    val=field.__name__
+                    # field_dic.append(field.__name__)
+                    ##这个可以拿到这个函数的名字，如果不加后面的话，就拿到的就是一个函数的方法
+                else:
+                    val=getattr(model_obj,field)
+                field_dic.append(val)
+            dic.append(field_dic)
+
+        # for field  in model:
+
+        print(dic)
+
+        return  render(request,'admin_html/admin_field.html',locals())
+
+
+
+
+
+
+
+最后的dic是这样的是
+[[1, <UserInfo: yunxin>, <Room: 腾讯>, 'action'], [4, <UserInfo: alex>, <Room: 腾讯>, 'action'], [5, <UserInfo: yuan>, <Room: 雨欣教育>, 'action']]
+
+
+每一个用户就占一个元祖，多个用户就占多个元祖
+最外层循环可以知道多少个用户，第二层循环是拿到每一个用户里面
+的信息
+
+在前端：
+
+
+    <table class="table table-condensed">
+        <thead>
+            {%  for  model_obj in  dic %}
+        <tr>
+        {%  for  field_obj  in model_obj %}
+            <th>{{ field_obj }}</th>
+            {%  endfor %}
+
+        </tr>
+
+            {%  endfor %}
+        </thead>
+
+
+
+第一层是每一个用户的话就换行<tr>
+第二层的是每一行就是一个用户的全部信息 ，所以可以拿到全部的用户信息
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

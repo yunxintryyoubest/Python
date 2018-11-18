@@ -1,0 +1,14 @@
+val='alexfsf'.join('fsfsf')
+print(val)
+
+
+falexfsfsalexfsffalexfsfsalexfsff
+
+
+
+val1=(21,34,34,34)
+a=val1.index(34)
+print(a)
+
+
+1

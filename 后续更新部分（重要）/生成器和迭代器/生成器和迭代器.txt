@@ -1,0 +1,33 @@
+一个对象怎么可以for循环呢，生成一个可以迭代的对象
+就
+
+先执行new在执行init的方法
+类下面的方法
+
+
+##两种方式可以生成可以迭代的对象，就是可以for循环遍历这个对象,下面的名字不能更改
+class  Foo():
+    # def __iter__(self):
+        # return  iter([11,33,55])
+        ##生成可以迭代的对象,__iter__方法
+    
+    def  __iter__(self):
+        yield 1
+        yield 2
+        yield 3
+
+    
+
+obj=Foo()
+for  i in obj:
+    print(i)
+
+
+
+itervalue(slef._field)取到这个里面的值
+迭代器取到这个里面的值，在返回
+
+
+
+
+

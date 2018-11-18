@@ -1,0 +1,204 @@
+from  django.shortcuts import   render,redirect,HttpResponse
+from   django.conf.urls   import url
+from  self_admin import admin
+
+
+class  Self_Modeladmin(object):
+    def __init__(self,model,site):
+        self.model=model###传过来的类
+        self.site=site
+
+        # print('则site是',site)
+        # print('modelstack里面'*1000)
+        ##########<class 'app01.models.Room'>
+        # print(model)
+        # print('*'*1000)
+    def __add(self,request):
+        # return  HttpResponse(self.model._meta.model_name)
+        return  HttpResponse('add')
+
+
+##3如果是加了静态方法的话，就要传参数进去
+    def  __list(self,request):
+        print('这个self是：',self)
+
+
+###下面执行的一定是父类里面的静态方法，拿到这个self.model这个类对象
+        model_name=self.model._meta.model_name
+        model=self.model.objects.all()##这个是个类对象
+        dic=[]
+
+
+        ##判断这个函数下面有没有这个自定义的类
+        if  not  hasattr(self,'list_display'):
+            return  HttpResponse('{}表没有配置display'.format(model_name))
+        list_display=self.list_display
+        # except  Exception as e:
+        #     return  HttpResponse('{}表没有配置display'.format(model_name))
+        for  model_obj  in  model:
+            field_dic = []
+            for field in list_display:
+                if callable(field):
+                    # print('是函数')
+                    val=field(self.model,model_obj)#$###把当前这个对象传进去
+                    #########这个是循环的每一个数据的对象，可以往每一个数据里面传一个相对应的字段对象过去，可以拿到里面的id值，在edit，action里面调用
+
+
+                    # val=field.__name__
+                    # field_dic.append(field.__name__)
+                    ##这个可以拿到这个函数的名字，如果不加后面的话，就拿到的就是一个函数的方法
+                else:
+                    val=getattr(model_obj,field)
+                field_dic.append(val)
+                # print(field_dic)
+            dic.append(field_dic)
+            # print(dic)
+
+        # for field  in model:
+
+        # print(dic)
+
+        return  render(request,'admin_html/admin_field.html',locals())
+
+
+
+    def  __edit(self,request,id):
+
+        return   HttpResponse(self.model._meta.model_name)
+
+
+##通过传参数进来调用的时候，不用在加参数进来了，否则会重复
+    def   __delete(self,request,id):
+
+        return  HttpResponse('delete')
+
+
+
+###########进行增删改查操作
+    '''
+    当是加静态方法进行调用的时候，没有传了一个参数进来，当没有加这个静态方法的时候，你会传参数进来，所以就可以在add函数
+    里面少传一个参数进来，注意区别
+    '''
+
+    '''
+        原理讲解：总之记住传过来有2个，一个是self是自定义的类，一个是自定义的父类，当子类没有这个方法的话，取父类找
+    '''
+    @property
+    def  get_url3(self):
+
+        print('最外层的self',self)##当有自定义的类的时候，slef是自定义的类，下面的models是父类的model（子类没有）
+        dic=[]
+        print(self.model)
+        print('*'*1000)
+        ##注明一下，这个传过来的self是Self_Modeladmin类
+        app_name=self.model._meta.app_label
+        model_name=self.model._meta.model_name
+
+
+##注明一下，下面的self有的有自定义的类，有的没有，当没有自定的类的时候，self就是modelsadmin，调用的是modeladmin下面的方法，当有自定义的类对象的时候
+        ##调用的是自己自定义的的方法，而自己自定义的类self.model是没有的，所以传不了参数
+        ##类下面的每一个实例对象都有一块独立的内存空间，这个增删改查是独立开来的
+        dic.append(url(r'^(\d+)/delete/$',self.__delete,name="%s_%s_delete"%(app_name,model_name)))
+        # dic.append(url(r'^delete/$',self.delete,name="%s_%s_delete"%(app_name,model_name)))
+        dic.append(url(r'^(\d+)/edit/$',self.__edit,name="%s_%s_change"%(app_name,model_name)))##注意这个self是谁,当有自定义的类的时候，这个self是
+        ##自定义的类，所以不能在admin和这里取相同的名字，当自定义的类没有这个__edit的时候，就走父类的__edit,__是可以不同的，父类和子类的__edit是不同的
+        dic.append(url(r'^add/$',self.__add,name="%s_%s_add"%(app_name,model_name)))
+        dic.append(url(r'^list/$',self.__list,name="%s_%s_list"%(app_name,model_name)))
+        #####名字要唯一性，反向解析的时候才可以确定是哪个url在访问，不唯一的话，这个url会冲突，多个url相同名字
+        # dic.append(url(r'^list/',self.list,name="%s_%s_list"%(app_name,model_name)))
+        return  dic,None,None
+
+
+
+
+
+class Self_AdminSite():
+    def  __init__(self):
+        self._register={}
+
+###这里面传入两个参数，后面的这个参数可以为空
+    def register(self,model,stark_class=None):
+        if  not  stark_class:
+            # print('看看有没有自定义的类')
+            # print(stark_class)
+            # print(self,model)##UserInfo没有自定义的类
+            #####假如没有自定义的类的话，就用父类方法
+            stark_class=Self_Modeladmin
+            #########下面在吧这个注册的表和自定义的类（默认的）写入字典里面
+        self._register[model]=stark_class(model,self)#在这里已经传了两个参数进去，在了一个了里面可以直接进行调用
+#############注明一下，后面的这个模型类对象是有参数的（adminbook(book))这个是有传参数过去的  self.model=book这个是可以直接去取这个里面的数据的
+#上面的传参数是传到了父类那里，自己没有传到，没有接受的init的方法
+
+
+    @property
+    def  get_urls(self):
+        dic = []
+        ##注明一下，这个第一个是model表，第二个是自定义的类，字典里面哟这两个值
+        for  model,admin_class in  self._register.items():
+            app_name=model._meta.app_label
+            model_name=model._meta.model_name##这个是字段的名字
+            # dic.append(url(r'^%s/%s/'%(app_name,model_name),(admin_class.get_url2,None,None)))
+#######在下面注明，当这个model有自定义部分的时候，这就是这个于自定义的类，当没有自定义的时候，这个就是默认的继承的父类的部分，样式（部分）
+            # dic.append(url(r'^%s/%s/'%(app_name,model_name),admin_class.get_url3))
+            print('这个admin_class是,',admin_class)
+            dic.append(url(r'^%s/%s/'%(app_name,model_name),admin_class.get_url3))
+
+
+            '''
+         重点：
+         admin_class：当这个传过来的没有自定义的样式类的时候，就使用父类的modeladmin方法
+         传了两个参数到modeladmin里面，每一个表（不管是自定制的还是没有自定制的都传了参数到admin-class里面)
+         当你有自定制的类的时候，就使用自己的，没有就父类,
+           self._register[model]=stark_class(model,self)#这个参数传到了父类那里，自己没有init方法接受到这个参数，init的方法里按接收
+           到传过来的参数，没有的话，父类可以接受
+         
+            当有自定制的类的时候，就是自己，当没有的时候，就还是父类
+            '''
+
+
+
+
+
+
+
+
+
+
+            ######上面的两种方法是一样的，这个之前调用的都是同一个类进行的调用
+
+            # dic.append(url(r'^%s/%s/'%(app_name,model_name),
+            #                ([ url(r'^delete', ModelStark.list)],None,None
+            #                )))
+
+
+        return  dic
+
+
+    ###如果不加静态方法的话，那么这个在urls里面就拿到一个方法，拿不了这个对象（报错，缺少了参数，应该是返回3个参数）
+    @property
+    def urls(self):
+        # return  self.get_urls(),None,None
+
+        # a = []
+        # b = url(r'^delete', self.list)
+        # a.append(b)
+
+        # c=(a,None,None)
+
+        # print('这个a的url是:',a)
+        return   self.get_urls,None,None
+site=Self_AdminSite()
+
+
+
+
+'''
+url('',(get_url(
+[url(r'^',self.,
+url
+
+
+),None,None),
+
+
+'''

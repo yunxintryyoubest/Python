@@ -1,0 +1,18 @@
+from django.contrib import admin
+from django.urls import path
+from  app01 import views
+from  django.conf.urls  import url
+from  self_admin.server.self_admin import  site
+
+
+
+##所有的程序执行起来都是一个单例对象，一直都是一个程序在执行
+urlpatterns = [
+    # path('admin/', admin.site.urls),
+    url(r'^self_admin/',site.urls),
+
+    # url(r'^login',views.login),
+    # url(r'^index/',views.index),
+]
+
+

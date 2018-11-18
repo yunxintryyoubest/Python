@@ -1,0 +1,16 @@
+tmp=[1,32,3]
+add_tmp=[4,5,5]
+tmp.append(add_tmp)
+print(tmp)
+
+结果：
+[1, 32, 3, [4, 5, 5]]
+
+
+extend往里面扩展的方法
+
+
+tmp.extend(add_tmp)
+
+结果：
+[1, 32, 3, 4, 5, 5]

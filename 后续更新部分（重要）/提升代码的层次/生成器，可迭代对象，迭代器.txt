@@ -1,0 +1,39 @@
+列表：可迭代对象,[]
+生成器：yield
+迭代器：iter(里面可以放生成器也可以是可迭代对象)，可以通过.__next__来取值
+
+##生成器
+
+# def  fun1():
+#     for i  in  range(0,10):
+#         yield   i
+
+##生成器
+# obj1=fun1()
+# for  i in  obj1:
+#     print(i)
+
+##生成器》》迭代器
+# obj1=iter(fun1())
+# for  i in  obj1:
+#     print(i)
+
+
+
+
+
+
+def  fun2(list_arg):
+    list=[]
+    list.extend(list_arg)
+    return  list
+
+
+li_arg=[3,43,4,6,65]
+# li_arg=232
+##可迭代对象转化为迭代器
+obj=iter(fun2(li_arg))
+print(obj.__next__())
+print(obj.__next__())##只想买那个一个next是拿一个值出来
+# for  i  in  obj:
+#     print(i)

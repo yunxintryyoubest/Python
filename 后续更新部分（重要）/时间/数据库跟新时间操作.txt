@@ -1,0 +1,56 @@
+import  datetime
+now=datetime.datetime.now()
+delay_time=now-datetime.timedelta(days=1)
+userinfo.objects.filter(date=now,外_id=xx_id,xx__lt=delay_time)
+
+
+# print(datetime.timedelta(days=4))时间片切片
+
+
+from django.db.model  imoport  Q
+a=UserInfo.objects.filter(Q(id=1)|Q(username='alex')|Q(delay_time=now-delay))
+
+中间是或的关系
+
+
+判断是否是跟进成功
+
+if   a:
+print('suc')
+userinto.obejcts.create(xxxx,status='跟进成功')
+else:
+print('fail')
+
+可以动态变化
+
+
+
+linux：
+crontab定时的跟新时间，修改这个数据的跟新状态，是正在跟新，还是已经过期
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,92 @@
+class  Animal(object):
+    hob1='aasa'
+    def  run(self):
+        print('这个slef是',self)
+        print(self.hob1)
+        #####执行这个self.hob1的时候，不一定是自己这个animal，就是说谁调用了这个方法run，谁就是self，这个hob1就是谁
+        print('执行run')
+class  Dog(Animal):
+    hob1='dog'
+
+    def  run1(self):
+        print(self.hob1)
+        # print('dog')
+
+###讲解：当你自己没有这个方法的时候，就去父类里面去找
+
+
+
+alex=Dog()
+alex.run1()
+
+
+alex.run()
+#####谁调用了这个Animal类里面的run方法的时候，self就是那个对象
+
+
+
+
+
+
+
+
+
+class  A():
+
+    def __init__(self):
+        # self.__edit()
+        self.model='aex'
+    def  __edit(self):
+        print('A的edit方法')
+        return   'A的edit'
+
+    def  fun(self):
+        print('A的fun2')
+
+
+
+
+class  B(A):
+    print('B')
+    def __init__(self):
+        self.a=self.fun()
+        # print(a)
+
+    def __edit(self):
+        print('B的edit方法')
+        return  'B的edut'
+
+    def  fun1(self):
+        a=self.__edit()
+        # print(a)
+        return  a
+B().a
+##当自己没有这个方法的时候，就去父类里面找
+
+
+
+
+
+重点：
+调用的self是一直不会变化的
+
+
+class fun():
+    def fun1(self):
+        print(self)
+        print('fun1')
+
+
+class  fun2(fun):
+
+    def fun3(self):
+        print('sas')
+
+
+
+obj=fun2()
+obj.fun1()
+
+结果：
+<__main__.fun2 object at 0x000002BFE6B63E10>
+fun1

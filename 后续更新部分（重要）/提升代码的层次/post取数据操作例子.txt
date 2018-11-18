@@ -1,0 +1,14 @@
+    def __list(self, request):
+
+        if  request.method=='POST':
+            print('++++++' * 1000)
+            print(request.POST)###如果没有values的话，就拿到这个文本值
+
+            func_name=request.POST.get('action_choice')
+            print(func_name)###取到函数字符串名字
+            chocie_checkbox=request.POST.getlist('dev_choice')##取到列表形式的里面的值，checkbox多个值
+            print(chocie_checkbox)
+            print('()'*1000)
+            fun=getattr(self,func_name)##取到函数方法
+            queryset=self.model.objects.filter(pk__in=chocie_checkbox)##in是在这个列表里面的全部id
+            fun(queryset)##已经是方法了，self已经传了进去，所以只需要传一个参数就可以了

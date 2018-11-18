@@ -1,0 +1,19 @@
+class  foo():
+    st='sas'
+    def  fun1(self):
+        print('as')
+a={}
+print(foo.fun1.__name__)
+name=foo.fun1.__name__
+print(type(name))
+print(type(getattr(foo,name)))
+
+
+
+fun1
+<class 'str'>
+<class 'function'>
+
+
+上面取到的是字符串，也就是类下面的函数
+后面getattr取到的是方法了，可以实例化操作

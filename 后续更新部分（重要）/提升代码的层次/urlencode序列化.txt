@@ -1,0 +1,32 @@
+urlencode将字典转化成url的格式
+
+import   ujson
+import urlencode
+import  multidimensional_urlencode
+
+要序列化的话要导入上面个模块ujson和urlencode模块
+第一种方式：
+d={}
+d[2]='axa'
+
+a=multidimensional_urlencode.urlencode(d)
+print('&&'+a)
+
+
+结果：
+&&2=axa
+
+
+
+
+
+下面：
+
+d={}
+d[2]='axa'
+
+print(urlencode.create_JSON_dict.json.encode(d))
+创建json类型的字典'{"2":"axa"}'
+
+
+

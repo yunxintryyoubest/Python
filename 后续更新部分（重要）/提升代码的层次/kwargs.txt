@@ -1,0 +1,15 @@
+all_dic_data={
+    'anme':'xx',
+    'age':323
+}
+class get_dic():
+    def   stance(self,value):
+        default=None
+        data=all_dic_data.copy()
+        return   get_data(**data)
+def  get_data(**kwargs):
+    print(kwargs)
+
+
+½á¹û£º
+{'anme': 'xx', 'age': 323}

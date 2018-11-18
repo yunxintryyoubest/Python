@@ -1,0 +1,13 @@
+Book._meta.app_label
+Book._meta.model_name
+Book._meta.get_field('id')
+
+第一个是拿到当前的这个类对象的app的名字，字符串
+第二个是拿到这个类对象的名字（表名字）
+第三个是拿到这个表下面的字段对象，是在model里面的类对象下面的字段对象，拿到字段对象可以取里面方法和属性,就是某一个字段
+
+
+
+a=Book.objects.all()
+for  i in a:
+这个是拿到这个表下面的所有的数据对象，每一条数据有全部的字段，是一个数据对象

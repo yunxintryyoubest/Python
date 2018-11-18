@@ -1,0 +1,10 @@
+class  fun():
+    def  __init__(self,rere):
+        print(self)
+        print(rere)
+        print('fum')
+    def fun1(gdg):
+        print('gdg')
+@fun##多传了一个参数进来,fun(fun2),想当于是在外层加了修饰的功能
+class  fun2():
+    print('fun2')

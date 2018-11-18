@@ -1,0 +1,4 @@
+1.
+del_name_list=[shopping%(user_id,    i  )  for  i in course_id_list]
+2.
+conn.delete(*del_name_list)

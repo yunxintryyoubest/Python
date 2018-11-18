@@ -1,0 +1,16 @@
+提交的形式：
+默认是这样的形式：
+ enctype="application/x-www-form-urlencoded"
+
+有form_data的形式
+注意事项：
+form表单一定要设置form_data的形式
+
+拿到的东西是一个文件的
+
+注意：这个form的表单一定要设置enctype='form_data'的形式
+
+视图函数中，取数据：
+request.FILES.get("name")
+这个拿到的是一个文件对象
+

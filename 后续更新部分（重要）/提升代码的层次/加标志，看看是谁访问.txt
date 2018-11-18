@@ -1,0 +1,41 @@
+class A():
+    def   tag(self,tag=False):
+        if  tag:
+            print('有标志，是表头访问')
+            return 'header'
+        else:
+            print('是表单访问')
+            return '是表单访问'
+
+
+    def    header(self):
+        print(self.tag(tag=True))
+
+    def body(self):
+        self.tag(tag=False)
+        ##print(self.tag())
+
+
+
+
+
+# a=A().header()
+有标志，是表头访问
+header
+
+A().body()
+a=A().tag()
+是表单访问
+
+
+
+
+
+
+后面的tag名字可以自己取，注意：
+这个标志和你要访问的函数是要相同的，不能不同，否则是判断不了的，实例化的函数可以不加，默认是false，不加的话是false，没有这个tag的
+
+
+
+
+

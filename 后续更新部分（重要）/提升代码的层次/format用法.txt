@@ -1,0 +1,14 @@
+val='{a}gfsfgdfg{b}fgfgdfg{c}'
+
+a=12
+b=34
+c=56
+val1=val.format(
+    a=a,
+    b=b,
+    c=c
+)
+print(val1)
+
+½á¹û£º
+12gfsfgdfg34fgfgdfg56

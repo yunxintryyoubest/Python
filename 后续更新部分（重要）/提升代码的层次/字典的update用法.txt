@@ -1,0 +1,7 @@
+dic1={'anme':'alex'}
+dic2={'age':20}
+dic1.update(dic2)
+print(dic1)
+
+½á¹û£º
+{'anme': 'alex', 'age': 20}

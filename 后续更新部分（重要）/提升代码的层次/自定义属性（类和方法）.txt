@@ -1,0 +1,21 @@
+第一种：
+def  a():
+    print('dsd')
+
+print(type(a))
+a.name='aex'
+print(a.name)
+
+
+<class 'function'>
+aex
+方法可以在下面自定义属性，之后可以直接调用他
+
+
+
+第二种：
+class
+
+类下面创建属性和方法也可以
+
+

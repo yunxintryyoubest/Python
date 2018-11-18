@@ -1,0 +1,40 @@
+在自定义的那里可以加一个字段，判断是不是这个函数的方法
+这个意思就是进行循环这个表，把里面的额全部字段渲染出来，如果呀自己条字段进来，比如是可以编辑的额按钮的话，就可以加一个函数，def  edit(slef):
+return   make_safe("")，这个就可以在前端生成编辑的按钮
+如果在后端渲染出来这个函数的话，就可以使用这个callable
+
+data_list=self.objects.all()
+这个就是拿到这个全部的表
+
+for obj in data_list:
+循环全部得表，拿到里面的全部的字段
+temp=[]
+
+for  field  in self.list_display:
+["pk","name","age","edit"]  
+
+
+if callable(field):
+这个进行这个判断，看是不是这个函数，如果h是这个函数的话
+val=field(self)这个字段是edit
+else：否则的话，这个字段是其他内容
+val=getattr(obj,field)
+temp.append(val)
+如果是这个字段的话 ，就加进列表里面
+
+
+
+
+
+
+
+href:/userinfo/1/detail  如果加了/的话，就表示这个是按这个127.0.0.1:8080 后面拼接上你写的这个路劲来询问的
+如果是没有加/的话，就按照后面的访问呢的路劲来执行的
+href="%s/detail" 这个会自动在前面加上这个userinfo再这个字段
+注意区分两个区别,这个后面就是你愿意放什么表都可以是什么表，只需要在后面加上这个detail就可以动态的查询每一个表的数据了
+
+
+
+
+
+

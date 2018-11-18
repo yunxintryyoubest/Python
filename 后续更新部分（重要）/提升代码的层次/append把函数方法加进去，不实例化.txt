@@ -1,0 +1,21 @@
+class  FOO():
+    def __init__(self,asd,dfs):
+        self.a=asd
+        self.b=dfs
+
+    def __fun1__(self,fsdd,fgsdf,fsdf):
+        print('asas')
+
+    def fun2(self):
+        tmp=[1,3,4,5]
+        tmp.append(FOO.__fun1__)
+#####这个是把这个函数下面的的某一个方法加进去，不管这个__fun__有多少个位置参数，没有实例化的话都可以拿到这个函数的方法，当实例化的时候，就要加参数进去
+        print(tmp)
+
+
+
+FOO('fds','fsd').fun2()
+
+
+结果：
+[1, 3, 4, 5, <function FOO.__fun1__ at 0x000001CC1CE56B70>]

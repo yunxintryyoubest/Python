@@ -1,0 +1,131 @@
+这个可以返回类里面的方法和静态方法，当你一执行这个类的话，这个__str__就已经在执行了
+
+例子1：
+class   FOO():
+    def  __init__(self):
+        self.name='aexf'
+    def __str__(self):
+        return  self.name
+
+
+print(FOO())
+
+结果是：
+aexf
+
+
+
+class   FOO():
+    def  __init__(self,anme):
+        self.name=anme
+    def __str__(self):
+        return  self.name
+
+
+print(FOO('dfs'))
+
+
+
+例子2：
+class   FOO():
+    def __str__(self):
+        return  self.fun1()
+
+    def   fun1(self):
+        return  'fun1函数'
+
+
+print(FOO())
+
+结果：
+fun1函数
+
+
+
+例子3：通过类来取这个__str__的方法：
+class   FOO():
+
+    def  __init__(self,name):
+        self.name=name
+    def __str__(self):
+        # print('str')
+        return  self.name
+
+    def   fun1(self):
+        return  'fun1函数'
+
+
+print(FOO('asdfd').__str__())
+
+
+不取返回值：
+class   FOO():
+
+    def  __init__(self,name):
+        self.name=name
+    def __str__(self):
+        print('str')
+        # return  self.name
+
+    def   fun1(self):
+        return  'fun1函数'
+
+
+# print(FOO('asdfd').__str__())
+print(FOO.__str__('dfsf'))
+
+
+
+
+
+
+原理讲解：
+通过表的类对象来拿这个返回的值
+obj=Book.objects.first()
+getattr(obj,'__str__')
+这个就拿到了这个返回的值
+
+
+
+
+
+
+
+在django中，如果没有配置这个__str__的话（models里面）,那么就会返回一个对象回来，如果配置了的话，就会用你的返回的值
+就想下面一样
+实际拿到这个配置的值是通过
+getattr(obj,'__str__')
+的方式来拿到返回的值
+
+
+
+
+
+
+自己的在django中取到相对应的值：
+
+class   Book():
+
+    filed='agd'
+    def __init__(self):
+        self.name='alex'
+
+    def __str__(self):
+        return  self.filed
+
+
+print(Book())
+
+
+
+def __str__(self):
+        return  'ok'
+这个返回的值可以自己配置
+
+
+
+
+
+
+
+

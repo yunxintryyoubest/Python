@@ -1,0 +1,17 @@
+
+imortlib模块：
+
+
+path='auth.cors.cla'
+import  importlib
+
+rsplit是从右边开始分割，最大分割次数为1
+model_name,class_name=path.rsplit('.',maxsplit=1)
+m=importlib.import_module(model_name)
+#导入这个路径
+
+cls=getattr(m,class_name)
+#在之前的模块里面拿到这个类的名字
+
+obj=cls()实例化
+

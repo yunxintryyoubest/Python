@@ -1,0 +1,8 @@
+dic=[21,4]
+x=copy.deepcopy(dic)
+print(x)
+
+
+½á¹û£º
+
+[21, 4]

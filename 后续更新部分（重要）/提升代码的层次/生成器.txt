@@ -1,0 +1,18 @@
+ret=Book.objects.all().iterator()#这个是一个生成器
+
+print(type(ret))
+for i in ret:
+    print(i)
+    print(type(i))
+
+结果：
+<class 'generator'>
+客户号为[1]的客户[yunxin]预定腾讯的会议地点
+<class 'app01.models.Book'>
+客户号为[2]的客户[alex]预定腾讯的会议地点
+<class 'app01.models.Book'>
+客户号为[3]的客户[yuan]预定雨欣教育的会议地点
+<class 'app01.models.Book'>
+
+如果不加后面也是可以的：
+每一个i也是一个对象

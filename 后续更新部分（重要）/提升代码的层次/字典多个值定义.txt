@@ -1,0 +1,9 @@
+dic={}
+dic[1]='aex'
+dic[2]='rff'
+dic[3]='352'
+print(dic)
+
+
+½á¹û£º
+{1: 'aex', 2: 'rff', 3: '352'}

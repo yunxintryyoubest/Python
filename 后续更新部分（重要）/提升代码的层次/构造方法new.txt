@@ -1,0 +1,23 @@
+new方法(构造方法)是在函数一加载的时候就被执行,在init方法执行之前被执行
+
+
+new方法，在函数一加载的时候，就被执行
+
+def   __new__(cls,*args，**kwargs):
+
+if  kwargs.pop('many',False)##判断many是true还是flase
+return  cls.many_init(*args,**kwargs)##如果是false的话，就返回当前类的方法
+判断这个是true还是false
+
+return  super(Base,cls).__new__(cls,*args,**kwargs)否则的话，就返回父类的new方法
+就是listserializer方法
+
+
+
+在init方法执行之前，先执行了__new__方法
+
+xx(obj,many=False)上面返回的是xx，当前的对象进行序列化操作（当前类的序列化对象)
+xx(queryset,many=True)下面返回的是listserializter（对每一个对象进行序列化操作)
+
+
+

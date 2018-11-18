@@ -1,0 +1,21 @@
+class  Foo():
+
+    def   fun1(self):
+        print('fun1')
+        Foo1().fun2(self)
+
+##当这个Foo1实例对象的时候，调用这个了类下面的方法，传了
+两个参数进来，一个是自己，一个是fun2(）里面的参数
+
+
+class  Foo1(Foo):
+    def  fun2(self,request):
+        print(self)
+        print(request)
+
+
+Foo().fun1()
+
+
+实例对象，后面在传参
+

@@ -1,0 +1,7 @@
+app_name=Book._meta.model_name,
+print(app_name)
+print(type(app_name))
+
+('book',)
+<class 'tuple'>
+在后面加个,就自动生成元祖的形式

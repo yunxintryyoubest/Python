@@ -1,0 +1,12 @@
+class  FOO1():
+    def  __init__(self):
+        pass
+
+    def  fun1(self,data):
+        print(data)
+        return   None
+
+class  FOO2(FOO1):
+    def   fun2(self):
+        super(FOO2,self).fun1('hello')##子类，传参到父类里面
+FOO2().fun2()

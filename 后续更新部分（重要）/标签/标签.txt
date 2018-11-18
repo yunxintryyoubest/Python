@@ -1,0 +1,41 @@
+<div  class='col-md-8'></div>
+这个是往右边移动了8位，就是距离左边8位,就是在这个container的div盒子里面占了8位的距离，宽度
+
+
+
+<div  class='col-md-2'>
+<div class="panel-heading">左侧广告位一</div>
+</div>
+这个是嵌套在一个div里面就是这个广告位的宽度是2，这个是占了2位的宽度
+
+
+
+<hr>这个是加一个横线
+
+
+
+这个是bootstrp里面带的方法
+负极塌陷
+class 里面加上clearfix
+这个标签加个父类的标签，和其他标签错开
+
+
+
+
+p标签是可以从往下的
+
+
+
+
+display: inline-block    块状水平排列
+<div class="head_main"   >
+           <a style="display: inline-block"><h4>{{ model_name }}表</h4></a>
+               <a href="{{ add_url }}">添加</a>
+
+</div>
+
+
+
+class='pull-right'     放在最右边
+
+form-control本身就是独占一行的意思

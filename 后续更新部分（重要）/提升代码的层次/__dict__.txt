@@ -1,0 +1,79 @@
+class  Foo():
+    def __init__(self):
+        self.name=None
+        self.age=19
+        self.addr='上海'
+
+obj=Foo()
+print(obj.__dict__)
+
+
+{'name': None, 'age': 19, 'addr': '上海'}
+
+
+
+
+
+对象以字典的形式打印出来
+如果没有加__dict__的话，那么就是对象的形式打印出来
+
+
+
+
+下面的结果是一样的 
+
+
+class  Foo():
+    def __init__(self):
+        self.name=None
+        self.age=19
+        self.addr='上海'
+
+    @property
+    def  dict(self):
+        #传过来的self是对象，Foo，直接__dict_-就是打印出字典的形式
+        return  self.__dict__
+
+obj=Foo()
+# print(obj.__dict__)
+print(obj.dict)
+
+
+
+
+
+
+
+
+
+例子：
+
+
+class  Foo():
+    def __init__(self):
+        self.name=None
+        self.age=19
+        self.addr='上海'
+
+    @property
+    def  dict(self):
+        #传过来的self是对象，Foo，直接__dict_-就是打印出字典的形式
+        return  self.__dict__
+
+
+obj=Foo()
+# print(obj.__dict__)
+# print(obj.dict)
+class  Foo2():
+    def   fun(self):
+        obj.name='yunxin'
+        obj.age=20
+        obj.addr='江西'
+        return   obj.dict
+##在下面已经全部重新构造了这个字典里面的值
+
+
+
+obj1=Foo2()
+print(obj1.fun())
+'''{'name': 'yunxin', 'age': 20, 'addr': '江西'}'''

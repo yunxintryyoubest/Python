@@ -1,0 +1,16 @@
+##下面是队列，一个一个的放值进去，一个一个的拿值出来，先进先出
+import   queue
+q=queue.Queue()
+for  i in  range(0,10):
+    print(i)
+    q.put(i)
+#
+print(q.get())
+print(q.get())
+print(q.get())
+print(q.get())
+
+# for i in range(0,10):
+#     print(q.get())
+#
+#

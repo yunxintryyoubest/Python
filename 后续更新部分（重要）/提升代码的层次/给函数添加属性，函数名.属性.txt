@@ -1,0 +1,29 @@
+函数和类都可以赋属性
+
+class  Foo():
+    def fun(self):
+        print('ds')
+
+
+
+Foo.fun1='34234'
+print(Foo.fun1)
+
+结果：自定义函数属性
+34234
+
+
+
+
+
+在函数下面添加属性
+def  foo():
+    a=21
+    b='323'
+
+
+obj=foo.c='212'
+print(obj)
+
+foo.fun1='34234'
+print(foo.fun1)

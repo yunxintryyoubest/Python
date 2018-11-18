@@ -1,0 +1,23 @@
+{% load  staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+{#    上面都可以#}
+        <script  src="/static/qrcodejs-master/jquery.min.js"></script>
+    <script  src="/static/qcode/jquery.qrcode.min.js"></script>
+{#    不可以缺少#}
+</head>
+<body>
+<h1>测试生成二维码</h1>
+<div id="qrcode" style="width: 250px;height: 250px;background-color: white;margin: 100px auto;"></div>
+</body>
+{#<script src="{% static "qcode/jquery.min.js" %}"></script>#}
+{#<script src="{% static "qcode/jquery.qrcode.min.js" %}"></script>#}
+{#<script src="{% static "qcode/qrcode.js" %}"></script>#}
+<script>
+    var  data='http://www.chouti.com'
+    $('#qrcode').empty().qrcode({text:data})
+</script>
+</html>

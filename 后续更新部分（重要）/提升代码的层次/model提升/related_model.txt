@@ -1,0 +1,4 @@
+a=Role._meta.get_field('role_name').related_model.objects.all()
+
+
+<QuerySet [<UserInfo: yunxin>, <UserInfo: alex>, <UserInfo: yuna>, <UserInfo: yuan>]>

@@ -1,0 +1,31 @@
+'''
+如果是**kwargs的话，是  什 么=什么   的形式，或者是**什么的形式传进来的参数cla(name=yunxin)或者是cla(**dic())
+如果是*args的话，那么是列表，字典，元祖等的形式传进来的参数
+'''
+
+
+
+
+dic={'name':'alex','age':32}
+# cla(dic,(1,3,4),{'sarary':2122})##args
+# cla(**dic)##**kwargs
+cla('alex',many=True)##**kwargs，后面的是字典的形式
+''''
+当是字典的时候，就传入的参数是args
+arg的情况：
+当是字典，列表，多个值传入的时候，都是args
+当是**args的话，就是**kwargs
+cla(many=False)
+**什么
+在后面进行匹配
+'''
+
+
+
+结果：
+cls <class '__main__.cla'>
+('alex',)
+{'many': True}
+
+alex放在args里面，**kwargs里面存放的是many=True或者可以
+**dic

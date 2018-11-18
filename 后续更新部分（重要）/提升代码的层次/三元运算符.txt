@@ -1,0 +1,65 @@
+
+dic=[2,2,3,5]
+print('suc')if   len(dic)  else  print('fail')
+
+suc
+
+将if和else放在最右边，进行判断,打印什么内容出来
+
+
+
+
+
+    ###注意一下，这个下面传过来的是是一个对象，是那一条数据的对象
+    def   get_relatedcourse(self,obj):
+        ###第一种方式，三元运算符
+        return   [{"id":item.pk,'related_name':item.course_course}  for  item  in  obj.remmod_course.all() ]
+###第二种方式
+        # temp = []
+        # for  item  in  obj.remmod_course.all():
+        #     dic = {}
+        #     dic['id']=item.pk
+        #     dic['related_name']=item.course_name
+        #     temp.append(dic)
+        # return   temp
+
+
+
+
+
+
+
+
+
+
+
+for循环的三元运算符：
+[{"id":item.pk,'related_name':item.course_course}  for  item  in  obj.remmod_course.all() ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

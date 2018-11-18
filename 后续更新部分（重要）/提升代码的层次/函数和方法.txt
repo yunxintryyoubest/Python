@@ -1,0 +1,25 @@
+
+
+
+class  Person():
+
+def _init__(self,name):
+pass
+
+
+def  eat(self):
+print ('ok')
+
+
+obj=Person('l')
+obj.eat()
+这个是当成一个函数来执行,传入的self是obj
+
+Person.eat('dsds')
+当成类里面的一个方法来执行，传入的是dsds
+
+
+
+print(Person.__name__)
+可以拿到这个函数的名字，如果没有加后面的__name__的话，这个就拿到的是
+一个函数的方法  

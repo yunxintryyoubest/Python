@@ -1,0 +1,88 @@
+继承：当自己没有这个方法的时候，就去父类里面找，如果父类有的话，就执行父类的方法，没有的话就报错
+取一个类下面的方法：
+
+class A():
+　　model='aee'
+　　def __init__(self,model):
+　　　　# self.__edit()
+　　　　self.model='aex'
+　　def __edit(self):
+　　　　print('A的edit方法')
+　　　　return 'A的edit'
+
+　　def fun(self):
+　　　　fun='2121'
+　　　　print('A的fun2')
+
+a=A().fun()
+print(a)
+
+取一个类下面的静态方法；
+class B(A):
+　　print('B')
+　　a='dsd'
+　　def __init__(self):
+　　　　# self.a=self.fun()
+　　　　self.a=self.model
+　　　　# print(a)
+
+　　def __edit(self):
+　　　　print('B的edit方法')
+　　　　return 'B的edut'
+
+　　def fun1(self):
+　　　　# a=self.__edit()
+　　　　a='221'
+　　　　# print(a)
+　　　　# return a
+static_obj=B().a
+print(static_obj)
+
+
+继承的方式取父类的静态方法：（方法也是一样的）
+class A():
+model='aee'
+　　def __init__(self,model):
+　　　　self.model=model
+
+　　def __edit(self):
+　　　　print('A的edit方法')
+　　　　return 'A的edit'
+
+　　def fun(self):
+　　　　fun='2121'
+　　　　print('A的fun2')
+
+class B(A):
+　　print('B')
+　　a='dsd'
+　　def __init__(self):
+# self.a=self.fun()
+　　　　self.a=self.model
+
+　　def fun1(self):
+　　　　a='221'
+
+static_obj=B().model
+print(static_obj)
+
+ 
+
+ 
+
+注明一下：
+不能取父类，或者自己类下面方法里面的静态方法或者方法
+class B(A):
+　　print('B')
+　　a='dsd'
+　　def __init__(self):
+# self.a=self.fun()
+　　self.a=self.model
+
+def fun1(self):
+　　a='221'
+　　def fun2():
+　　　　print('dfsdsdd')
+
+obj=B().fun1().fun2()
+print(obj)

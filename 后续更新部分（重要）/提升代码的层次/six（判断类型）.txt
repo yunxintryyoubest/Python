@@ -1,0 +1,16 @@
+value=1221
+if isinstance(value,str):
+        print('suc')
+else:
+    print('fail')
+
+之前的判断类型的用法
+
+
+import  six
+value=1221
+
+if isinstance(value, six.string_types):
+        print('suc')
+else:
+    print('fail')

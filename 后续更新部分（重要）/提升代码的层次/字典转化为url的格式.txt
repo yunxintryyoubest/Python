@@ -1,0 +1,11 @@
+import  copy
+
+self.params=copy.deepcopy(parms)
+复制一份
+
+
+self.params.urlencode()
+转化为&的形式
+字典的形式{id:1,pk:2}
+id=1&pk=2
+这样的url的格式

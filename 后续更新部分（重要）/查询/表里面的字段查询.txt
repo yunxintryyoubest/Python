@@ -1,0 +1,41 @@
+res=Book.objects.filter(user_id__gt=2).all()
+for  i in res:
+    print(i)
+
+查询所关联的表的id大于2的所有的数据
+
+
+例子2：
+res=Book.objects.filter(room_name__caption__startswith='腾').first()
+print(res)
+查询出以什么开头的数据，字段数据里面
+
+
+例子3：
+res=Book.objects.filter(room_name__caption__endswith='巴').first()
+print(res)
+
+以什么结尾的，这个字段数据
+
+
+例子4：
+res=Book.objects.filter(room_name__caption__contains='里').first()
+print(res)
+
+
+字段数据里面包含什么的
+客户号为[2]的客户[alex]预定阿里巴巴的会议地点
+
+
+
+例子5：
+res=Book.objects.filter(pk__in=[1,6]).all()
+print(res)
+
+
+查询这个外键pk在某个值内的
+结果：
+<QuerySet [<Book: 客户号为[5]的客户[yuan]预定雨欣教育的会议地点>]>
+
+
+range也是在什么范围之内

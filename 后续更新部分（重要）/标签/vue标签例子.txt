@@ -1,0 +1,36 @@
+*{
+margin：0px;//外部边距
+padding:0px//内部边距
+}
+
+ border-bottom: 1px solid  gray;上下加一个横线<hr>
+list-style:none
+
+
+audio 是播放音乐
+
+
+link
+a
+script
+img图片
+audio音乐
+
+
+
+
+
+box-shadow 背景阴影
+
+
+float：left是让里面的内容浮动起来，然后外面在清除浮动，在左边浮动
+
+float:hidden;清除浮动
+
+textarea文本区域
+
+
+
+
+
+

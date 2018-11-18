@@ -1,0 +1,39 @@
+原理讲解：
+当执行这个类的时候，就执行这个init的方法，当执行这个对象的时候
+就执行里面的call的方法
+
+###############如果是类的话，就先执行这个init的方法，如果是对象的话，就执行 这个call的方法
+
+class Foo(object):
+    def __init__(self,name):
+        print('ds')
+
+    def __call__(self, *args, **kwargs):
+        print('call')
+
+
+# Foo('akd')##当执行这个类的就是执行这个init的方法，这个是执行这个init的方法
+
+obj=Foo('alex')##下面是对象，执行这个call的方法
+
+obj()
+
+执行的结果：
+ds
+call
+
+
+
+
+
+
+
+class  foo():
+    st='sas'
+    def  fun1(self):
+        print('as')
+print(foo)
+##<class '__main__.foo'>
+
+
+当打印出foo的时候，是拿到这个方法，并没有执行

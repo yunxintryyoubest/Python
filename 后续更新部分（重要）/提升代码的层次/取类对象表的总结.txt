@@ -1,0 +1,11 @@
+user=Book._meta.get_field('user')
+print(user)
+print(type(user))
+#######这个拿到的是类下面的字段后面的<class 'django.db.models.fields.related.ForeignKey'>字段类型的对象，里面还可以取值，取这个字段类型里面的值出来
+
+print(user.verbose_name)######这个可以去到这个字段类(字段对象）下面的方法和属性
+print(type(user.verbose_name))
+
+
+
+get_field这个是去到某一个表的那个字段数据的后面的对象类型

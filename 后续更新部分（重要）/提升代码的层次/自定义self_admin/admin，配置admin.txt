@@ -1,0 +1,101 @@
+from django.contrib import admin
+from  app01.models import *
+# Register your models here.
+from   self_admin.server  import   self_admin
+from  django.utils.safestring import   mark_safe
+from django.urls import reverse
+
+
+'''
+原理讲解：
+不管下面你注册的是表后面有没有自定义的admin样式的时候，都存在注册的表的样式的类
+当你没有配置这个样式的时候，就使用默认的样式类对象ModelAdmin
+当你自己配置了这个样式的话，就使用你配置的样式，这个样式类对象可以为空
+'''
+
+
+
+class  book_admin(self_admin.Self_Modeladmin):
+    # def  __init__(self,model,self_admin):
+    #     self.model=model
+    #     print('在admin里面',self.model)
+    #     self.model=self_admin
+
+    def edit(self,obj):
+        ###注明一下，这个obj是当这个循环创建这个标签的时候传进的参数，就是每一个数据对象
+        '''
+                if callable(field):
+            # print('是函数')
+            val=field(self.model,model_obj)#$###把当前这个对象传进去,第一个是类对象(Book)，第二是具体的某个对象数据（filte之类的）
+        :param obj:
+        :return:
+        '''
+        # print('这个slef是',self)
+        app_name = self._meta.app_label
+        model_name = self._meta.model_name
+#
+# #####反向解析拿到这个路径，里面放你的别名
+        _url=reverse("%s_%s_change"%(app_name,model_name),args=(obj.pk,))
+        ####后面是是可以传的参数,args=(obj.pk,)
+        # _url=reverse('a')
+        # print(_url)
+        ##/self_admin/app01/book/add/
+
+        ####每一个数据都是对应一条url路径
+        # return   '<a  href="/self_admin/%s/%s/%s/">编辑</a>'%(app_name,model_name,obj.pk)
+        return   '<a  href="%s">编辑</a>'%(_url)
+#
+#
+    def   add(self,obj):
+
+
+        print('add的slef是',self)######传过来的slef是modesl是类对象
+        app_name = self._meta.app_label
+        model_name = self._meta.model_name
+        _url=reverse("%s_%s_add"%(app_name,model_name))
+
+        # _url = reverse("%s_%s_add" % (app_name, model_name))
+        # print('add',_url)
+        return '<a  href="%s">添加</a>'%_url
+
+        #####反向解析拿到这个路径，里面放你的别名
+        # _url = reverse("%s_%s_add" % (app_name, model_name))
+        # print(_url)
+        # ##/self_admin/app01/book/add/
+        # ####每一个数据都是对应一条url路径
+        # return '<a  href="%s">添加</a>' % (_url)
+
+
+
+    ##不管下面有没有这个这个自定义的了，都会有这个自定义的类，因为已经继承了
+    def  delete(self,obj):
+        # return mark_safe('<a href="">删除</a>')
+        app_name = self._meta.app_label
+        model_name = self._meta.model_name
+        _url=reverse("%s_%s_delete"%(app_name,model_name),args=(obj.pk,))
+
+        print('这上拿出的eurl是',_url)
+        return  '<a href="{}">删除</a>'.format(_url)
+
+    def  list(self,obj):
+        print('这个list的self是',self)
+        app_name = self._meta.app_label
+        model_name = self._meta.model_name
+        _url = reverse("%s_%s_list" % (app_name, model_name))
+        return '<a href="%s">详细信息</a>' % _url
+
+    # def  choice_checkbox(self,obj):
+
+    list_display=['pk','user','room_name',delete,edit,list,add]
+    # list_display=['pk','room_name','user',edit]
+#
+
+
+self_admin.site.register(Book, book_admin)
+self_admin.site.register(Room)
+self_admin.site.register(UserInfo)
+
+
+
+# print('*'*1000)
+# print(self_admin.site._register)

@@ -1,0 +1,36 @@
+class  FOO(): 
+
+   def get_action(self):
+  	
+	actions=[1,4]
+        return  actions
+
+ @property
+def   list(self,request):传进的self是FOO类
+	dic=[1,3]
+return  render(request,'list.html',local())
+##注意：在这里不仅传了dic到前端，还传了self，和request到前端
+看谁 调用了你self就是谁
+
+
+site=FOO()
+一个单例对象
+
+
+url实例化执行这个单例对象里面的方法，调用这个self里面的方法，拿到这个值
+url(r'^list/$',site.list)
+
+
+
+前端部分：
+
+这个self是传过来的类，取到的是get_action里面的值
+相当于是FOO().get_actions
+拿到这个类下面的actions，已经返回了，所以可以拿到这个
+返回的值，不能直接拿函数下面的静态方法，会报错，只能是通过返回拿到函数下面的静态方法，类下面就可以直接拿里面的静态和属性.....
+
+{% for  item  in  self.get_action%}
+<p>{{item}}</P>
+{% endfor%}
+
+

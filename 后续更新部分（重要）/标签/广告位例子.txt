@@ -1,0 +1,38 @@
+<div  class="container">
+    <div class="row">
+    <div  class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">左侧广告位一</div>
+            <div class="panel-body">
+                            .........
+            </div>
+    </div>
+        <div class="panel   panel-info">
+            <div  class="panel-heading">左侧广告位一</div>
+        <div class="panel-body">
+                        内容
+        </div>
+        </div>
+    </div>
+
+
+
+
+        <div  class="col-md-8"></div>
+{#        ###这个可以让下面的右侧往右边靠，距离左边多少位置#}
+        <div class="col-md-2">
+             <div class="panel panel-primary">
+            <div class="panel-heading">右左侧广告位一</div>
+            <div class="panel-body">
+                            .........
+            </div>
+    </div>
+        <div class="panel   panel-info">
+            <div  class="panel-heading">右左侧广告位二</div>
+        <div class="panel-body">
+                        内容
+        </div>
+    </div>
+</div>
+</div>
+</div>

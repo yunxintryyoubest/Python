@@ -1,0 +1,5 @@
+a='dfsdf_gsd_fg_dg'
+k=a.rsplit('_',2)##后面是切割的次数,以右边进行切割
+print(k)
+
+以右边进行切割

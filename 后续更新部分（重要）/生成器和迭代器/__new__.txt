@@ -1,0 +1,17 @@
+类下面的init的方法执行之前，就会先执行__new__方法
+new方法返回什么，就会是什么
+
+class  Foo():
+    def __new__(cls):
+
+        return  super(Foo,cls).__new__(cls)##返回的是父类对象
+
+
+##cls是当前赋的这个类
+        ##super是执行obj里面的view
+        # return 12##返回的12也是一个对象，是int的对象
+
+
+obj=Foo()
+print(obj)
+##结果12，new方法返回的，new在init执行之前

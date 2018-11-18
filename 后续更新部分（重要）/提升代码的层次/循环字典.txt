@@ -1,0 +1,43 @@
+处理数据：
+vaa=conn.hgetall('User_Shop_Car_1_2')
+print(vaa)
+vaa=conn.hget('User_Shop_Car_1_2','pricepolicy_list')
+print(json.loads(str(vaa,encoding='utf-8')))
+for  i in  json.loads(str(vaa,encoding='utf-8')):#处理好之后就是最前面的键
+    print(i)
+	
+			
+
+结果：
+[b'pay_course_coupon_1_1', b'User_Shop_Car_1_4', b'User_Shop_Car_1_3', b'User_Shop_Car_1_2', b'test', b'pay_course_coupon_1_3', b'global_course_coupon_1', b'pay_course_coupon_ds_gsg', b'User_Shop_Car_1_1']
+{b'img': b'1.png', b'pricepolicy_list': b'{"4": {"price": 212.0, "expire_time": "\\u4e00\\u4e2a\\u6708\\u65f6\\u95f4", "course_perid": "1\\u4e2a\\u6708\\u65f6\\u95f4", "diff_level": "\\u5bb9\\u6613", "course_level": "\\u514d\\u8d39\\u8bfe\\u7a0b"}, "6": {"price": 3232.0, "expire_time": "\\u4e00\\u4e2a\\u6708\\u65f6\\u95f4", "course_perid": "\\u4e00\\u4e2a\\u661f\\u671f\\u65f6\\u95f4", "diff_level": "\\u4e2d\\u7b49", "course_level": "vip\\u8bfe\\u7a0b"}, "8": {"price": 212.0, "expire_time": "5\\u4e2a\\u6708\\u65f6\\u95f4", "course_perid": "\\u4e00\\u4e2a\\u661f\\u671f\\u65f6\\u95f4", "diff_level": "\\u4e2d\\u7b49", "course_level": "svip\\u8bfe\\u7a0b"}}', b'name': b'C\xe8\xaf\xad\xe8\xa8\x80', b'default': b'8'}
+
+
+
+
+
+{'4': {'price': 212.0, 'expire_time': '一个月时间', 'course_perid': '1个月时间', 'diff_level': '容易', 'course_level': '免费课程'}, 
+'6': {'price': 3232.0, 'expire_time': '一个月时间', 'course_perid': '一个星期时间','diff_level': '中等', 'course_level': 'vip课程'}, 
+'8': {'price': 212.0,'expire_time': '5个月时间', 'course_perid': '一个星期时间', 'diff_level': '中等', 'course_level': 'svip课程'}}
+4
+6
+8
+	
+	
+字典循环打印出来的是每一个键
+当是items的时候，就是键值对（包含后面的值）
+for  k,v  in dic.items():
+print(k,v)
+
+for  i in dic:
+print(i)打印出来的是每一个键
+
+
+
+
+
+
+(json.loads(str(vaa,encoding='utf-8'))
+字节转化为字符串，在序列化一下，json.loads
+
+

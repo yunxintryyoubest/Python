@@ -1,0 +1,67 @@
+如果你已经执行到列下面的方法的时候，就可以少传一个参数进去了
+如果你拿到这个类下面的方法的话，就可以直接执行了
+
+
+class  foo():
+    def  fun1(self):
+        print(self)
+        print('fun1')
+
+
+
+第一种方式拿类下面的方法：
+
+
+name=foo.fun1.__name__
+a=getattr(foo,name)
+print(type(a))
+a('yunxin')#a已经是一个方法了
+
+结果
+'''
+<class 'function'>
+yunxin
+
+'''
+
+
+
+
+第二种方式拿类下面的方法：
+a=foo.fun1
+print(type(a))
+'''
+<class 'function'>
+yunxin
+
+'''
+
+
+
+
+第三种：
+
+
+class  foo():
+    sta='ass'
+    def  fun1(self):
+        print(self)
+        print('fun1')
+    list_display=[fun1,sta]
+
+for  i  in foo.list_display:
+    print(type(i))
+    if  callable(i):
+        i('me')
+    else:
+        print(i)
+
+
+结果：
+<class 'function'>
+me
+fun1
+<class 'str'>
+ass
+
+

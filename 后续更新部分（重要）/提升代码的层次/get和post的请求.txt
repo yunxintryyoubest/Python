@@ -1,0 +1,58 @@
+当是post的请求的时候
+可以取form表单里面的数据：
+拿到的是里面的values值，重点
+
+
+
+
+select 单选框和多选框（下拉）
+<form  method='post'>
+<select  name='choice'>
+<option  value=''></option>
+.....
+</select>
+</form>
+
+可以通过request.POST.get('choice')取到这个option选择的值
+
+
+
+
+<form  method='get'>
+<select  name='choice'>
+<option values=''></option>
+</form>
+
+上面的choice会出现在地址栏那里，可以直接去取到
+request.GET.get('choice')  
+
+
+
+
+
+
+
+get和post请求的表单不要重合了，否则会发生数据的错误
+注意：
+当你没有配置input标签或者是select标签
+的values值的话，就会取这个文本值出来
+
+
+
+
+
+列表的形式：
+chocie_checkbox=request.POST.getlist('dev_choice')
+当里面的值是列表类型的时候，getlist方法
+request.get.getlist()
+
+
+
+
+
+3种取法：
+select的话，是在select里面取值name（也是取value值）
+select下面有option选择框
+
+input的话，在input里面取name（就是取value值）
+checkbox的话，是取checkbox里面的name值（取里面的value值）

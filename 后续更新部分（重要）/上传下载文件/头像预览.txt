@@ -1,0 +1,35 @@
+    <div class="form-control">
+    <label  for="id_avatar1"><img  name="image" style="width: 100px;  height: 100px;" id="avatar_img" src="/static/img/默认.jpg" alt=""></label>
+    <input  type="file" name="avatar" id="id_avatar1"  class="choice_file" style="display: none">
+        <span  class="help-block"></span>
+</div>
+
+
+
+
+
+
+
+{###找到当前头像的input标签，绑定change 事件，当这个input的文件有选择的时候，就触发事件#}
+        $('.choice_file').change(function () {
+        console.log(this.files[0])
+
+        {#$('.choice_file').val()#}
+            {###这个拿到的是一个假的路径C:\fakepath\180px-比尔盖茨.jpg"#}
+        {####创建一个读取文件的对象#}
+
+        {#var  FileReader=new  FileReader();#}
+        var file = new FileReader();
+        {###取到当前选中的头像文件，这个名字什么都可以，不能同名#}
+        {###读取文件是需要时间的#}
+        file.readAsDataURL(this.files[0]);
+
+        file.onload=function () {
+                   {###把图片加载到img的标签中#}
+        $('#avatar_img').attr("src",file.result)
+        }
+    })
+
+
+
+

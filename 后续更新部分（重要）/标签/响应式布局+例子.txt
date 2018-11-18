@@ -1,0 +1,61 @@
+前端：
+响应式布局：
+根据什么的不同来看到不同的效果
+
+例子：
+如果浏览器的宽度等于100%的话，那么就占满整一行，col-md-12
+如果是小于100%的话，那么就是块级标签，占一部分
+根据浏览器宽度来动态变化的
+
+
+
+更具浏览器窗口大小的不同来做出不同的效果
+@media
+
+
+数据库：
+引擎：注意
+--innodb:支持事务
+--mysain：不支持事务
+
+
+
+例子：
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            margin: 0px;
+        }
+        .response{
+            width: 100%;
+            background-color: beige;
+        }
+        /*原理解析，针对这个浏览器的宽度来做操作，当浏览器的宽度大于600px的时候，显示什么颜色，当浏览器的宽度大于800px的时候,xxx,其余原来的颜色*/
+        @media (min-width: 600px) {
+            .response{
+                background-color: aquamarine;
+            }
+        }
+            @media (min-width: 800px) {
+        .response{
+                background-color: darkblue;
+            }
+        }
+
+
+
+    </style>
+</head>
+
+<body>
+
+
+<div  class="response">响应式布局</div>
+
+
+</body>
+</html>

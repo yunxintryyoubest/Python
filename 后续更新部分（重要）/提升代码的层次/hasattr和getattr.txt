@@ -1,0 +1,15 @@
+
+a=Book.objects.first()
+#
+# val=getattr(a,'__str__')
+# print(val)
+
+
+print(hasattr(a,'add_filed'))
+print(getattr(a,'add_filed')())
+这样就可以取到里面的方法了，后面加()是为了实例化这个对象
+
+print(getattr(a,'add_filed'))
+取到了这个类里面的方法
+
+类和类对象有差别

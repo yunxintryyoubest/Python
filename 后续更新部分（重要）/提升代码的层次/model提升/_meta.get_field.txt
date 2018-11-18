@@ -1,0 +1,8 @@
+a=Role._meta.get_field('role_name').related_model.objects.all()
+
+首先是拿到这个类对象下面的的字段对象role_name，这个是一个manytomany的关系，所以可以拿到这个所关联的表model，userinfo，这个拿到的是一个类对象class  useinfo
+所以可以直接去里面的数据，
+a.objects.all() 
+related_model.objects.all()
+结果：
+<QuerySet [<UserInfo: yunxin>, <UserInfo: alex>, <UserInfo: yuna>, <UserInfo: yuan>]>

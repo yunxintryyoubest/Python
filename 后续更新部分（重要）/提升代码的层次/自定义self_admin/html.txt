@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"  href="/static/bootstrap-3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"  href="/static/mystyle.css">
+</head>
+<body>
+<div>
+<h4  style="text-align: center">{{ model_name }}±í</h4>
+
+    <table class="table table-condensed">
+        <thead>
+            {%  for  model_obj in  dic %}
+        <tr>
+        {%  for  field_obj  in model_obj %}
+            <th>{{ field_obj|safe }}</th>
+            {%  endfor %}
+
+        </tr>
+
+            {%  endfor %}
+        </thead>
+{#    <tbody>#}
+{#    {%  for obj   in  model %}#}
+{#<tr>#}
+{#{%  for  i  in  dic %}#}
+{#    <td>{{ obj.user }}</td>#}
+{#    <td>{{ obj.pk }}</td>#}
+{#    {%  endfor %}#}
+{#</tr>#}
+{#    {%  endfor %}#}
+
+
+
+
+{#    </tbody>#}
+
+</table>
+
+
+
+</div>
+
+
+
+
+
+
+</body>
+</html>

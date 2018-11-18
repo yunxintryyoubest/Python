@@ -1,0 +1,23 @@
+dic={'name','alex'}
+print(dic['name'])
+
+print(dic.get('name'))
+这两种方式都可以取到值
+
+将值存入字典里面
+os.environ.setdefault('set','set')
+print(os.environ)
+# print(os.environ['set'])
+print(os.environ.get('set'))
+
+
+
+
+set的方式可以将值存入字典里面
+两种方式存入字典的而操作：
+dic['xx']=xx
+dic.setdefault('xx','xx')
+
+取值的两种方式：
+dic['xx']
+dic.get('xx')

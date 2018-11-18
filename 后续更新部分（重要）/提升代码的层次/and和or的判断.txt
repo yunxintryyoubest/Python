@@ -1,0 +1,47 @@
+print（0 and 9）这个当前面已经判断好了的话，就已经可以给出答案0
+print( 9 and  0) 当前面判断好了，右边为0的时候，也可以得到结果
+
+print（1  and 4） 结果4
+print(0  or  1)这个是只要有一个有结果就可以得出结论1
+
+print(8 or  1)这个结果8
+
+
+and是前面和后面都看
+or是当前面有值的话，就不看右边了，直接是结果
+当前为0的时候，就看右边，得到右边的结果
+
+
+
+
+
+
+
+
+
+auth()  for  auth  in  self.authenticaation_class
+循环每一个认证的类，生成实例对象
+
+开始authenction_class=[authen,]
+执行完之后是[authen(),]
+
+
+
+
+
+
+实例对象调用自己的方法不用加self进去
+
+
+实例对象里面也就可以传入参数，形参，在views里面可以直接进行调用
+
+foo().auth(self)传入的是形参，request类下面的，然后在auth里面可以直接进行调用
+
+class  Publish:
+def  auth(self,request):
+后面的request
+
+
+
+
+

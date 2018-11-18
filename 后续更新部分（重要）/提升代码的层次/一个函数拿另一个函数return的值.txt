@@ -1,0 +1,76 @@
+class  F(object):
+    def __init__(self):
+        pass
+        # self.test()
+    def  func2(self):
+        print('*'*1000)
+        print('func2')
+        print(self)
+        ########<__main__.F object at 0x000002D503521FD0>
+        return  'ok'
+
+
+
+    def  test(self):
+        a=self.func2()
+        print(a)
+
+    # @property
+    def fun1(self):
+        print('*'*1000)
+        print('fun1')
+        # print(self)
+        # a=F.func2(self)
+        ##一直利用这个F类来进行调用这个fun2
+        # a=self.func2()
+        # return  self.func2
+##############<bound method F.func2 of <__main__.F object at 0x0000015852AB80B8>>
+        '''
+        当你没有加括号的话就是一个方法，就是fun2是的一个方法
+        '''
+        return self.func2()
+    '''
+    这个结果是在fun2里面的
+    func2
+    <__main__.F object at 0x0000019AC30C80B8>
+    ok
+    '''
+    ####当你没有加（）的话，就没有进行实例化操作，拿到只是一个fun2的方法，当你加括号的化啊，就进行了实例化的操作了，下面写一个接受的参数
+    #####就可以拿到这个return返回的值了（  在fun2里面返回的值）
+
+
+# F()
+
+
+
+
+
+
+######这个是通过调用这个fun1的方法来调用这个fun2的方法，来拿到这个fun2的返回值，写一个接受的变量来拿到这个return返回的值
+obj=F()
+a=obj.fun1()
+print(a)
+###这样就拿到了这个fun2里面return的值，当你前面不写一个接受的变量的话，就拿不了这个接受到的值出来,只是进行了一步调用
+#
+# obj=F.fun1(121)
+# print(obj)
+
+
+
+
+
+
+
+
+
+##实例化对象的方法，之前的作为参数传进入
+# obj=F()
+# a=obj.func2()
+# print(a)
+
+
+
+####直接传参数进去进行调用的方法
+# obj=F.func2('wqw')
+# print(obj)
+#####如果是下面的这种方法的啊，这个slef是直接当成一个参数传了进去,这个slef就是wqq
