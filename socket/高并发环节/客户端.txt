@@ -1,0 +1,38 @@
+QQ_IP=input('请输入ip:')
+
+
+class normal_user_main:
+    try:
+        def __init__(self):
+            print('欢迎进入消息页面')
+            # print('QQ用户【{}】已经上线..................................'.format(QQ_ID))
+            self.start()
+        def start(self):
+            try:
+                client_main_menus = '''
+                           1,选择已经发送消息的好友
+                           2,搜索（个人，群，公众号等anything）
+                            '''
+                # msg = input('输入：')
+                print(client_main_menus)
+                client_main_choice = input('请输入你的选择（1-2）:').strip()
+                import socket
+                sk = socket.socket()
+                self.sk = sk
+                sk.connect((QQ_IP, 8080))
+                while True:
+                    print('开始运行客户端了')
+                    msg = input('输入:').strip()
+                    # tcp_client.sendto(client_main_choice.encode('utf-8'), ip_port)
+                    print('已经发送消息给服务端了')
+                    sk.send(client_main_choice.encode('utf-8'))
+                    print('已经发送')
+                    data = sk.recv(1024)
+                    print(data.decode('utf-8'))
+
+            except Exception as e:
+                print(e)
+    except Exception as e:
+        print(e)
+
+normal_user_main()

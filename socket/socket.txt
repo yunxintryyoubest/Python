@@ -1,0 +1,53 @@
+AF_INET 套接字家族
+socket.socket(socket.AF_INET,socket.sock_STREAM)#网络通信基于TCP协议，基于流式的
+phone.bind(('127.1.1.1',8000))IP地址加端口，唯一标识的机器
+phone.listen(5)
+conn,addr=phone.accept()等电话,电话连接和手机号
+
+msg=conn.recv(1024）接收（二进制形式）
+print('客户端发来的消息是:',msg)
+conn.send(msg)
+conn.close()断开链接
+phone.close()光机
+
+
+
+Tcp基于双向链接通信
+
+
+客户端找到服务端 IP
+
+端口，这台机器上唯一的程序
+
+开机：
+
+半链接池（挂起的链接数）
+SYN_SENT 
+SYN seq=x（）BACK_LOG半链接池 我要建立一条客户端到服务端的线
+SYN_REVD
+SYN seq=y.ACK=x+1服务端回应ACK
+建链接3次握手
+数据传输
+断链接4次握手 (还有一个数据传输要断开)当一个ack信息准确无误的到达后
+FIN_WAIT_1
+FIN_WAIT_2
+TIME_WAIT
+
+
+
+
+客户端：
+from socket import  *
+tcp_client=socket(AF_INET,SOCK_STREAM)#套接字家族，套接字类型，socket层
+tcp_client.connect(('127.5.7.9',8000))#拨号码，建立连接
+tcp_client.send('hello'.encode('utf-8'))
+print('客户端发送了消息')
+data1=tcp_client.recv(1024)
+print('收到服务器的消息:',data1)
+tcp_client.close()
+
+
+
+
+
+

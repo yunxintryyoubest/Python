@@ -1,0 +1,66 @@
+基于udp的并发操作
+request返回的是元组形式的，request【0】是客户端发来的消息
+request【1】是套接字对象
+
+addr是客户端的地址
+
+服务端：
+import  socketserver
+import  subprocess
+#基于udp通信，返回的request为元组形式的，第一个是客户端发送的消息，得个是套接字对象，最后一个是客户单的ip地址，addr
+class Myserver(socketserver.BaseRequestHandler):
+    def handle(self):
+        print('接收到客户端的命令是',self.request[0].decode('utf-8'))  # 接收的是客户端的消息
+        print(self.request[1])  # 接收的是客户端的socket对象
+        print(self.client_address)  # 接收的客户端的地址
+        while True:
+            try:
+            #发消息给客户端
+                data=self.request[0].decode('utf-8')
+                res=subprocess.Popen(data,shell=True,
+                             stdout=subprocess.PIPE,
+                             stdin=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+                cmd_res=res.stdout.read()
+                if cmd_res:
+                    content=cmd_res
+                else:
+                    content=res.stderr.read()
+                self.request[1].sendto(content,self.client_address)
+                print('服务端已经发送消息给客户端')
+                break
+            except Exception as e:
+                print(e)
+                break
+
+        # msg=input('输入:').strip()
+        # self.request[1].sendto(msg.encode('utf-8'),self.client_address)
+        # print('已经发送消息给客户端了',msg)
+
+
+
+#建立udp链接循环
+if __name__ == '__main__':
+    s=socketserver.ThreadingUDPServer(('127.1.1.1',8080),Myserver)#传入的第一个参数是ip地址，第二个参数是通信循环
+    s.serve_forever()
+
+
+客户端：
+import  socketserver
+import subprocess
+from socket import *
+ip_port=('127.1.1.1',8080)
+buffer_size=10240
+back_log=5
+tcp_client=socket(AF_INET,SOCK_DGRAM)
+tcp_client.connect(ip_port)
+
+while True:
+    print('开始运行客户端了')
+    msg=input('输入:').strip()
+    tcp_client.sendto(msg.encode('utf-8'),ip_port)
+    print('已经发送消息给服务端了')
+    data,addr=tcp_client.recvfrom(buffer_size)
+    print('已经接收服务端发来的消息了',data.decode('gbk'))
+
+
