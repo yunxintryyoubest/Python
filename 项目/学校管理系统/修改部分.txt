@@ -1,0 +1,114 @@
+import time
+import json
+
+
+class modify_manage_data:
+    def __init__(self):
+        fq = open('学校.txt', 'r')
+        modify_data = json.loads(fq.read())
+        print(modify_data)
+        m_choice=input('请输入你想修改的名字或学号(id)：')
+        i=0
+        for i in range(0,len(modify_data)):
+            if m_choice in modify_data[i]['name']or modify_data[i]['id']:
+      # print(modify_data[i]['name'])
+                print(modify_data[i])
+                name_choice=input('您是否要修改此【{}】的信息y/n:'.format(m_choice))
+                if name_choice=='y':
+                    m_name = input('请输入你想修改的名字：')
+                    m_id = input('请输入你想修改的学号：')
+                    m_sys = input('请输入你想修改【{}】的所在系：'.format(m_choice))
+                    m_cla = input('请输入你修改【{}】的所在班级:'.format(m_choice))
+                    m_age=input('请输入你想修改的年龄：')
+                    m_phone=input('请输入你想修改的电话号码:')
+                    m_score=input('请输入你想修改的成绩：')
+                    modify_data[i]['name']=m_name
+                    modify_data[i]['age']=m_age
+                    modify_data[i]['phone']=m_phone
+                    modify_data[i]['score']=m_score
+                    modify_data[i]['class'] = m_cla
+                    modify_data[i]['id']=m_id
+                    modify_data[i]['sys']=m_sys
+                    print(modify_data[i])
+                    mo_choice=input('请确认是否要更改此信息y/n:')
+                    if mo_choice=='y':
+                        dic = json.dumps(modify_data)
+          #保存数据进去
+                        with open('学校.txt', 'w')as fh:
+                            fh.write(dic)
+                            fh.close()
+                        print('输出修改后的数据')
+                        print('='*100)
+          #读取数据出来
+                        dic1 = open('学校.txt', 'r')
+                        all_data = json.loads(dic1.read())
+                        print(all_data[i])
+                        time.sleep(1)
+                        print('修改【{}】的信息成功'.format(modify_data[i]['name']))
+                        con_choice = input('是否继续修改信息y/n:')
+                        if con_choice == 'y':
+                            modify_manage_data()
+                        elif con_choice == 'n':
+                            print('您选择取消了再次修改信息')
+                            break
+                        else:
+                            print('输入错误')
+                            continue
+                    elif name_choice=='n':
+                        print('您选择了取消修改{}的信息记录'.format(modify_data[i]['name']))
+                        break
+                    else:
+                        print('非法输入，退出')
+                        break
+                elif name_choice == 'n':
+                    m_sys = input('请输入你想修改【{}】的所在系：'.format(m_choice))
+                    m_cla = input('请输入你修改【{}】的所在班级:'.format(m_choice))
+                    m_id = input('请输入你想修改的学号:')
+                    m_age = input('请输入你想修改的年龄：')
+                    m_phone = input('请输入你想修改的电话号码:')
+                    m_score = input('请输入你想修改的成绩：')
+                    modify_data[i]['name'] = m_choice
+                    modify_data[i]['age'] = m_age
+                    modify_data[i]['phone'] = m_phone
+                    modify_data[i]['score'] = m_score
+                    modify_data[i]['id'] = m_id
+                    modify_data[i]['sys'] = m_sys
+                    modify_data[i]['class']=m_cla
+                    print(modify_data[i])
+                    mo_choice = input('请确认是否要更改此信息y/n:')
+                    if mo_choice == 'y':
+                        dic = json.dumps(modify_data)
+                        with open('学校.txt', 'w')as fh:
+                            fh.write(dic)
+                            fh.close()
+                        print('打印出修改后的数据')
+                        print('=' * 100)
+                        dic1 = open('学校.txt', 'r')
+                        all_data = json.loads(dic1.read())
+                        print(all_data)
+                        print('修改【{}】的信息成功'.format(modify_data[i]['name']))
+                        con_choice = input('是否继续修改信息y/n:')
+                        if con_choice == 'y':
+                            modify_manage_data()
+                        elif con_choice == 'n':
+                            print('您选择取消了修改信息')
+                            break
+                        else:
+                            print('非法输入，退出')
+
+                    else:
+                        print('您选择了取消修改{}的信息记录'.format(modify_data[i]['name']))
+                        break
+                else:
+                   print('输入错误')
+        else:
+            print('未能找到你要修改的名字信息,请查看是否输入错误')
+            modify_choice = input('是否继续进入修改信息界面y/n:')
+            if modify_choice == 'y':
+                modify_manage_data()
+            elif modify_choice=='n':
+                print('您选择了取消')
+            else:
+                print('非法输入')
+
+modify_manage_data()

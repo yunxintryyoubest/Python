@@ -1,0 +1,65 @@
+import json
+import  time
+class del_manage_data:
+#   def read(self):
+#
+#     dic1=open('学校.txt','r')
+#     all_data=json.loads(dic1.read())
+#     print(all_data)
+# # read()
+#   def save(self):
+#     dic=json.dumps()
+#     with open('学校.txt','w')as fh:
+#         fh.write(dic)
+#         fh.close()
+  def __init__(self):
+    f = open('学校.txt', 'r')
+    before_del_data = json.loads(f.read())
+    print(before_del_data)
+    print('-------------------------------------------------欢迎来到删除界面----------------------------------------------------------------')
+    i = 0
+    del_name = input('请输入你想删除的名字:')
+    for i in range(0, len(before_del_data)):
+      # print(before_del_data[i]['name'])
+      if del_name in before_del_data[i]['name']:
+        # print(before_del_data[i]['name'])
+        print('检索出{}的全部信息'.format(del_name))
+        print(before_del_data[i])
+        d_choice = input('确认删除{}的全部信息记录y/n:'.format(before_del_data[i]['name']))
+        if d_choice == 'y':
+          print('您已经选择确认')
+          del before_del_data[i]
+          dic = json.dumps(before_del_data)
+          with open('学校.txt', 'w')as fh:
+            fh.write(dic)
+            fh.close()
+          dic1 = open('学校.txt', 'r')
+          all_data = json.loads(dic1.read())
+          print(all_data)
+          print('已经删除{}的记录'.format(del_name))
+          print('=' * 100)
+          del_choice = input('是否继续删除:y/n:')
+          if del_choice == 'y':
+            del_manage_data()
+          elif del_choice == 'n':
+            print('您选择退出')
+          else:
+            print('输入错误，非法输入')
+        elif d_choice == 'n':
+          print('您选择取消删除{}的全部信息记录'.format(before_del_data[i]['name']))
+        else:
+          print('输出错误，非法输入')
+          break
+      else:
+        continue
+    else:
+      print('未能检索出{}的信息记录'.format(del_name))
+      con_choice = input('是否继续进入删除界面y/n:')
+      if con_choice == 'y':
+        print('您选择继续')
+        del_manage_data()
+      elif con_choice=='n':
+        print('您选择取消')
+      else:
+        print('输入错误,非法输入')
+del_manage_data()

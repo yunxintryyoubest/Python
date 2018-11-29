@@ -1,0 +1,56 @@
+#----------------------------开始添加数据到数据库里面---------------------------------------------------------------------------------
+f_open=open('学校.txt','r')
+all_dic_data=json.loads(f_open.read())
+# print(all_dic_data)
+Dicyionary=all_dic_data
+print(Dicyionary)
+
+import json
+def save():
+    dic=json.dumps(Dicyionary)
+    with open('学校.txt','w')as fh:
+        fh.write(dic)
+        fh.close()
+# save()
+def read():
+    dic1=open('学校.txt','r')
+    all_data=json.loads(dic1.read())
+    print(all_data)
+    # Dicyionary=all_data
+    # print(Dicyionary)
+    # return all_data
+i=0
+# # for i in range(0,10):
+
+def add():
+    while True:
+        add_choice=input('是否添加信息到数据库里面y/n:')
+        if add_choice=='y':
+            stu_name_info=input('请输入你想添加的学生姓名：')
+            stu_phone_info=input('请输入你想添加的学生电话号码：')
+            stu_age_info=input('请输入你想添加的学生年龄:')
+            stu_info={}
+
+            stu_info['name']=stu_name_info
+            stu_info['age']=stu_age_info
+            stu_info['phone']=stu_phone_info
+            Dicyionary.append(stu_info)
+            save()
+            read()
+
+        if add_choice=='n':
+            print('您选择了取消')
+            break
+add()
+
+
+
+
+# print(Dicyionary)
+i=0
+print('输出数据库的所有名字:')
+a=0
+for i in range(0,len(Dicyionary)):
+      print(Dicyionary[i]['name'])
+      a+=1
+print('已经找到{}条数据'.format(a))

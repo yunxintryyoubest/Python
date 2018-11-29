@@ -1,0 +1,11 @@
+i=0
+stu=[]
+stu.append(data[0]['sys'])
+# print(stu)
+for i in range(0,len(data)):
+    if data[i]['sys'] not in stu:
+        stu.append(data[i]['sys'])
+
+    else:
+        continue
+print(stu)

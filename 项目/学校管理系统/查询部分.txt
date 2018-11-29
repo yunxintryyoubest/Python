@@ -1,0 +1,188 @@
+#----------------------------------------------查询某个值完整查询过程--------------------------------------------------
+import json
+import  time
+import re
+class search:
+    def __init__(self):
+        fh = open('学校.txt', 'r')
+        all_dic_data = json.loads(fh.read())
+        print(all_dic_data)
+        j = 0
+        s = input('请输入你想要查询的值:')
+        z = 0
+        for j in range(0, len(all_dic_data)):
+        # for j in range(0,10):
+            if s in all_dic_data[j]['phone']:
+                print('正在检索电话号码')
+                print(all_dic_data[j])
+                print('成功找到电话号码为【{}】的信息'.format(s))
+                z += 1
+                continue
+            elif s in all_dic_data[j]['id']:
+                print('正在检索学号')
+                print(all_dic_data[j])
+                print('成功找到学号为【{}】的信息'.format(s))
+                z += 1
+                continue
+            elif s in all_dic_data[j]['sys']:
+                print('正在检索系')
+                print(all_dic_data[j])
+                print('成功找到系为【{}】的信息'.format(s))
+                z += 1
+                continue
+            elif s in all_dic_data[j]['score']:
+                print('正在检索成绩')
+                print(all_dic_data[j])
+                print('成功找到成绩为【{}】的信息'.format(s))
+                z += 1
+                continue
+            elif s in all_dic_data[j]['addr']:
+                print('正在检索地址')
+                print(all_dic_data[j])
+                print('成功找到地址为【{}】的信息'.format(s))
+                z += 1
+                continue
+
+            elif s in all_dic_data[j]['name']:
+                print('正在检索姓名')
+                print(all_dic_data[j])
+                print('成功找到姓名为【{}】的信息'.format(s))
+                z += 1
+                continue
+            elif s in all_dic_data[j]['age']:
+                print('正在检索年龄，请等待')
+                print(all_dic_data[j])
+                print('成功找到年龄为【{}】的信息'.format(s))
+                z += 1
+                continue
+            elif '全部' in s:
+                pat='[全部信息]'
+                print('正在为您找到全部信息')
+                print(all_dic_data)
+                print('成功找到【{}】'.format(s))
+                z += 1
+                break
+            elif   '绩'  in s:
+                # print('正在检索{}'.format(s))
+                pat='(.*?)的[成绩]'
+                temp1=re.findall(pat,s)[0]
+                if temp1 in  str(all_dic_data[j]['id']):
+                    print('正在检索{}'.format(s))
+                    print(all_dic_data[j]['score'])
+                    print('成功找到【{}】'.format(s))
+                    z += 1
+                    break
+                elif temp1 in str(all_dic_data[j]['name']):
+                    print('正在检索{}'.format(s))
+                    print(all_dic_data[j]['score'])
+                    print('成功找到【{}】'.format(s))
+                    z += 1
+                    break
+                else:
+                    continue
+            elif '系' in s:
+                pat2='(.*?)的[所在系]'
+                temp2=re.compile(pat2,re.S).findall(s)[0]
+                print(temp2)
+                if temp2 in all_dic_data[j]['name']:
+                    print('正在检索{}'.format(s))
+                    print(all_dic_data[j]['sys'])
+                    print('成功找到【{}】'.format(s))
+                    z += 1
+                    break
+                elif temp2 in str(all_dic_data[j]['id']):
+                    print('正在检索{}'.format(s))
+                    print(all_dic_data[j]['sys'])
+                    print('成功找到【{}】'.format(s))
+                    z+=1
+                    break
+
+                else:
+                    continue
+            elif '年龄' in s:
+                pat = '(.*?)的[年龄]'
+                temp = re.findall(pat, s)[0]
+                if temp in all_dic_data[j]['name']:
+                    print('开始检索{}的年龄'.format(temp))
+                    print(all_dic_data[j]['age'])
+                    print('成功找到【{}】'.format(s))
+                    z += 1
+                    break
+                elif temp in str(all_dic_data[j]['id']):
+                    print('正在检索{}'.format(s))
+                    print(all_dic_data[j]['age'])
+                    print('成功找到【{}】'.format(s))
+                    z+=1
+                    break
+                else:
+                    continue
+            elif '址'in s:
+                pat='(.*?)的[地址住址]'
+                temp=re.findall(pat,s)[0]
+                if temp in all_dic_data[j]['name']:
+                    print('开始检索{}'.format(s))
+                    print(all_dic_data[j]['addr'])
+                    print('成功找到{}'.format(s))
+                    z+=1
+                    break
+                elif temp in str(all_dic_data[j]['id']):
+                    print('正在检索{}'.format(s))
+                    print(all_dic_data[j]['addr'])
+                    print('成功找到【{}】'.format(s))
+                    z+=1
+                    break
+            elif '班'in s:
+                pat='(.*?)的[班级]'
+                temp1=re.findall(pat,s)
+                if temp1 in all_dic_data[j]['name']:
+                    print('开始检索{}'.format(s))
+                    print(all_dic_data[j]['class'])
+                    print('成功找到{}'.format(s))
+                    z+=1
+                    break
+                elif temp1 in str(all_dic_data[j]['id']):
+                    print('正在检索{}'.format(s))
+                    print(all_dic_data[j]['class'])
+                    print('成功找到【{}】'.format(s))
+                    z+=1
+                    break
+            elif s == 'exit':
+                print('您已经选择退出，将退回到主菜单')
+                # z=1
+                break
+            elif '电话' in s:
+                pat = '(.*?)的[电话号码]'
+                temp = re.compile(pat,re.S).findall(s)[0]
+                if temp in all_dic_data[j]['name']:
+                    print('开始检索{}'.format(s))
+                    print(all_dic_data[j]['phone'])
+                    print('成功找到{}'.format(s))
+                    z+=1
+                    break
+                elif temp in str(all_dic_data[j]['id']):
+                    print('正在检索{}'.format(s))
+                    print(all_dic_data[j]['phone'])
+                    print('成功找到【{}】'.format(s))
+                    z+=1
+                    break
+                else:
+                    continue
+            # elif s=='exit':
+            #     print('您已经选择退出，将退回到主菜单')
+            #     break
+            # else:
+            #     print('识别不出来')
+            else:
+                continue
+            break
+        if z==0:
+            print('输入不存在，请重新输入')
+        else:
+            print('已为您找到{}条记录'.format(z))
+            print('='*300)
+            se_choice=input('是否重新进入搜索界面y/n:')
+            if se_choice=='y':
+                search()
+            if se_choice=='n':
+                print('您选择了取消')
+search()
