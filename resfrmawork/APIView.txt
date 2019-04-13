@@ -1,12 +1,4 @@
-要显示出相对应的页面在resframework里面的话，要在settings里面配置这个rest_frmework就可以在浏览器显示出页面出来
+瑕佹樉绀哄嚭鐩稿搴旂殑椤甸潰鍦╮esframework閲岄潰鐨勮瘽锛岃鍦╯ettings閲岄潰閰嶇疆杩欎釜rest_frmework灏卞彲浠ュ湪娴忚鍣ㄦ樉绀哄嚭椤甸潰鍑烘潵
 'rest_framework'
-
-
-
 from  rest_framework.views import   APIView
-
-
-
-
-
 http://127.0.0.1:8000/apiview/?format=json
